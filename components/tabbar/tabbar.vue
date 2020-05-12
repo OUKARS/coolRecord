@@ -33,7 +33,7 @@ export default {
 				return require("../../static/icon/"+icon+"-active.png");
 			else return require("../../static/icon/"+icon+".png");
 		}
-	}
+	},
 }
 </script>
 
@@ -56,8 +56,8 @@ export default {
 			box-sizing: border-box;
 			border:6rpx solid rgb(255,227,108);;
 			background: rgb(255,227,108);
-			width: 95rpx;
-			height: 95rpx;
+			width: 98rpx;
+			height: 98rpx;
 		}
 	}
 	.tabbar-icon{
@@ -69,8 +69,8 @@ export default {
 		padding: 14rpx;
 		border-radius: 60rpx;
 		display: block;
-		width: 74rpx;
-		height: 74rpx;
+		width: 78rpx;
+		height: 78rpx;
 	}
 }
 </style>

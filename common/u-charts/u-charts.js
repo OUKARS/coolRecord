@@ -1760,26 +1760,24 @@ function drawPointShape(points, color, shape, context, opts) {
 }
 
 function drawRingTitle(opts, config, context, center) {
+  var customtype = opts.customtype || '';
   var titlefontSize = opts.title.fontSize || config.titleFontSize;
   var subtitlefontSize = opts.subtitle.fontSize || config.subtitleFontSize;
   var title = opts.title.name || '';
-  var customtype = opts.customtype || '';
   var subtitle = opts.subtitle.name || '';
   var titleFontColor = opts.title.color || config.titleColor;
   var subtitleFontColor = opts.subtitle.color || config.subtitleColor;
   var titleHeight = title ? titlefontSize : 0;
   var subtitleHeight = subtitle ? subtitlefontSize : 0;
   var margin = 5;
-
   
   if (subtitle) {
     var textWidth = measureText(subtitle, subtitlefontSize);
-    var startX = center.x  + (opts.subtitle.offsetX || 0);
+    var startX = center.x - textWidth / 2 + (opts.subtitle.offsetX || 0);
     var startY = center.y + subtitlefontSize / 2 + (opts.subtitle.offsetY || 0);
     if (title) {
       startY += (titleHeight + margin) / 2;
     }
-	context.font = "normal 40rpx 微软雅黑"
     context.beginPath();
     context.setFontSize(subtitlefontSize);
     context.setFillStyle(subtitleFontColor);
@@ -1787,24 +1785,23 @@ function drawRingTitle(opts, config, context, center) {
     context.closePath();
     context.stroke();
   }
-  console.log(customtype)
-  var _textWidth = measureText(title, titlefontSize);
-  var _startX = center.x  + (opts.title.offsetX || 0);
+  
+  if(title){
+  	  //假如是首页的arcbar
+  if(customtype == 'index-arcbar'){
+  	  title=opts.series[0].num ||'';
+  	}
+  }
+  var _textWidth = measureText(title, titlefontSize*1.2);
+  var _startX = center.x  -_textWidth/2+ (opts.title.offsetX || 0);
   var _startY = center.y + titlefontSize / 2 + (opts.title.offsetY || 0);
   if (subtitle) {
     _startY -= (subtitleHeight + margin) / 2;
   }
   context.font = "bold 40rpx 微软雅黑"
   context.beginPath();
-  context.setFontSize(titlefontSize*1.3);
+  context.setFontSize(titlefontSize*1.2);
   context.setFillStyle(titleFontColor);
-  context.setTextAlign('center');
-  if(title){
-	  //假如是首页的arcbar
-  if(customtype == 'index-arcbar'){
-	  title=opts.series[0].num ||'';
-	}
-  }
   context.fillText(title, _startX, _startY);
   context.closePath();
   context.stroke();

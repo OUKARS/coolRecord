@@ -1,5 +1,5 @@
 <template>
-	<view class="recordlist-container animated fadeInUp delay-013s">
+	<view class="recordlist-container animated fadeInUp delay-016s">
 		<view class="header">
 			<view class="title">
 				<image class="icon" src="../../static/icon/index-list.png" mode=""></image>

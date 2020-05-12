@@ -2,13 +2,13 @@
 	<view class="container">
 		<my-bar :nav="setNav"></my-bar>
 		<view class="swiper-header">
-			<view class="daily" :class="{headerctive:current==0}" @tap="swipeToIndex0()">
+			<view class="daily animated fadeInDown delay-01s" :class="{headerctive:current==0}" @tap="swipeToIndex0()">
 				今日
 			</view>
-			<view class="weekly" :class="{headerctive:current==1}"  @tap="swipeToIndex1()">
+			<view class="weekly animated fadeInDown delay-03s" :class="{headerctive:current==1}"  @tap="swipeToIndex1()">
 				本周
 			</view>
-			<view class="monthly" :class="{headerctive:current==2}"  @tap="swipeToIndex2()">
+			<view class="monthly animated fadeInDown delay-05s" :class="{headerctive:current==2}"  @tap="swipeToIndex2()">
 				本月
 			</view>
 		</view>	
@@ -21,8 +21,8 @@
 			</view>
 			
 			<view class="max-num">
-				<image class="rmb-img" src="../../static/icon/rmb.png" mode=""></image>
-				{{max_num}} 
+				<!-- <image class="rmb-img" src="../../static/icon/rmb.png" mode=""></image> -->
+				￥{{max_num}} 
 			</view>
 			
 			
@@ -62,34 +62,34 @@
 					'navTitle':'' //导航标题
 				},
 				cWidth3:'',//圆弧进度图
-								cHeight3:'',//圆弧进度图
-								arcbarWidth:'',//圆弧进度图，进度条宽度,此设置可使各端宽度一致
-								pixelRatio:1,
+				cHeight3:'',//圆弧进度图
+				arcbarWidth:'',//圆弧进度图，进度条宽度,此设置可使各端宽度一致
+				pixelRatio:1,
 				dailychartData: {
 					series: [{
-						name: '今日支出（元）',
+						name: '今日支出',
 						data: .5,
-						color: '#fff',
-						num:42123213
+						color: '#1FFED5',
+						num:4213.13
 					}]
 				},
 				weeklychartData: {
 					series: [{
-						name: '本周支出（元）',
+						name: '本周支出',
 						data: .7,
-						color: '#fff',
+						color: '#DCEA49',
 						num:4
 					}]
 				},
 				monthlychartData: {
 					series: [{
-						name: '本月支出（元）',
-						data: .6,
-						color: '#fff',
+						name: '本月支出',
+						data: .9,
+						color: 'red',
 						num:4
 					}]
 				},
-				max_num:123
+				max_num:123,
 			}
 		},
 		onLoad() {
@@ -115,6 +115,16 @@
 						
 			 	})
 		},
+		
+		onPageScroll:function(res){
+			if(res.scrollTop>=50){
+				this.setNav.isShowGoal=false;
+				this.setNav.isShowSetting=false
+			} else {
+				this.setNav.isShowGoal=true;
+				this.setNav.isShowSetting=true
+			}
+		  },
 		methods: {
 			swipeToIndex0(){
 				this.showArcbar("canvasArcbar1",this.dailychartData);
@@ -124,7 +134,6 @@
 			swipeToIndex1(){
 				this.showArcbar("canvasArcbar1",this.weeklychartData);
 				this.current = 1;
-
 			},
 			swipeToIndex2(){
 				this.showArcbar("canvasArcbar1",this.monthlychartData);
@@ -164,8 +173,7 @@
 										startAngle:0.5//整圆类型只需配置起始角度即可
 									}
 								}
-							});
-							
+							});		
 						}
 		}
 	}
@@ -190,7 +198,6 @@
 						background-color: transparent;
 					}
 		}
-		
 		.content {
 			box-sizing: border-box;
 			width: 100%;
