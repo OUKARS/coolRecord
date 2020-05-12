@@ -1,5 +1,5 @@
 <template>
-	<view class="recordlist-container animated fadeInUp">
+	<view class="recordlist-container animated fadeInUp delay-013s">
 		<view class="header">
 			<view class="title">
 				<image class="icon" src="../../static/icon/index-list.png" mode=""></image>
@@ -9,9 +9,9 @@
 				
 			</view>
 			<view class="more"  @tap="jumpToList()" >
-				<image class="icon" src="../../static/icon/index-search.png" mode=""></image>
+				<!-- <image class="icon" src="../../static/icon/eye.png" mode=""></image> -->
 				<view class="text">
-					账单查询
+					查看全部
 				</view>
 				
 			</view>
@@ -84,12 +84,12 @@
 	
 	height: auto;
 	// background-image:linear-gradient(75deg,#AF4DFF,#6327F6);
-	// box-shadow:15rpx 15rpx 20rpx rgba(50,50,93,.1),5rpx 15rpx 20rpx rgba(0,0,0,.1);
+	
 	.header{
 		margin-bottom: 20rpx;
 		display: flex;
 		justify-content: space-between;
-		
+		height: auto;
 		.title{
 			display: flex;
 			align-items:center;
@@ -99,36 +99,40 @@
 				margin-right: 6rpx;
 			}
 			.text{
-				color:#1D1C5C;
+				color:#A7A7F9;
 				font-weight: bold;
 				font-size: 36rpx;
 			}
 		}
 		.more{
 			box-sizing: border-box;
-			padding: 10rpx 18rpx;
-			background:#A343FF;
+			padding: 10rpx 24rpx;
+			background: #4331C1;
 			border-radius: 18rpx;
-			font-size: 28rpx;
-			color: #fff;
+			font-size: 32rpx;
+			color: #A7A7F9;
 			display: flex;
 			align-items: center;
 			.icon{
-				width: 32rpx;
-				height: 32rpx;
+				font-weight: bold;
+				width: 38rpx;
+				height: 38rpx;
 				margin-right: 6rpx;
 			}
 		}
 	}
 	.recordlist-content{
 		box-sizing: border-box;
-		padding: 30rpx 0;
-		border-radius:30rpx ;
-		background: #fff;
+		// padding: 30rpx 0;
+		border-radius:20rpx ;
+		// background: #fff;
 		width: 100%;
 		height: auto;
+		box-shadow:0rpx 0rpx 10rpx rgba(50,50,93,.1),5rpx 15rpx 10rpx rgba(41,41,41,.1);
 		.list-item{
-			// box-shadow: 0rpx 10rpx 25rpx -8rpx rgba(41,41,41,0.1);
+			margin-bottom: 24rpx;
+			background: #fff;
+			box-shadow: 0rpx 10rpx 25rpx -8rpx rgba(41,41,41,0.1);
 			border-radius: 15rpx;
 			box-sizing: border-box;
 			padding: 20rpx 40rpx;
@@ -165,11 +169,12 @@
 					align-items: center;
 					
 					.text{
+						
 						margin-left:20rpx ;
 						.category-text{
 							box-sizing: border-box;
 							padding-bottom:10rpx;
-							font-size: 32rpx;
+							font-size: 34rpx;
 							// font-weight: bold;
 							color:#1D1C5C;
 							font-weight: bold;
@@ -183,11 +188,13 @@
 					}
 				}
 				.num{
-
+					margin-top: 10rpx;
+					vertical-align: middle;
 					text-align: right;
 					.rmb{
-						font-size: 38rpx;
+						font-size: 42rpx;
 						font-weight: bold;
+						color: #13BB16;
 					}
 					.time{
 						font-size: 24rpx;

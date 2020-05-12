@@ -53,7 +53,7 @@
 } */
 page {
   box-sizing:border-box;
-  font-family: WeChat Sans;
+	font-family:Microsoft YaHei;
 }
 @font-face {
   font-family: 'iconfont';  /* project id 1321685 */

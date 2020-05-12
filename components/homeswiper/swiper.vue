@@ -12,6 +12,9 @@
 		<view class="swiperPanel" @touchstart="startMove" @touchend="endMove">
 			<view class="swiperItem" v-for="(item, index) in swiperList" :key="index" :style="{transform: itemStyle[index].transform, zIndex: itemStyle[index].zIndex, opacity: itemStyle[index].opacity,transition:itemStyle[index].transition,filter:itemStyle[index].filter}">
 				<view class="children" :style="{backgroundImage:'linear-gradient(75deg,'+colorList[index].from+' 0,'+colorList[index].to+')'}">
+					<view class="qiun-charts3">
+						<canvas canvas-id="canvasArcbar1" id="canvasArcbar1" class="charts3"></canvas>
+					</view>
 					<view class="num-content">
 						<view class="pay-content">
 							<view class="pay-title">
@@ -66,6 +69,9 @@
 </template>
 
 <script>
+	import uCharts from '../../common/u-charts/u-charts.js';
+	var _self;
+	var canvaArcbar1;
 	export default {
 		props: {
 			swiperList: {
@@ -93,9 +99,27 @@
 					},{
 						from:'#50C832',
 						to:'#0f9d58'
-					}]
+					}],
+					cWidth3:'',//圆弧进度图
+									cHeight3:'',//圆弧进度图
+									arcbarWidth:'',//圆弧进度图，进度条宽度,此设置可使各端宽度一致
+									pixelRatio:1,
+					chartData: {
+						series: [{
+							name: '正确率',
+							data: 0.29,
+							color: '#2fc25b'
+						}]
+					}
 
 			};
+		},
+		onLoad() {
+			_self = this;
+						this.cWidth3=uni.upx2px(250);//这里要与样式的宽高对应
+						this.cHeight3=uni.upx2px(250);//这里要与样式的宽高对应
+						this.arcbarWidth=uni.upx2px(24);
+						this.showArcbar("canvasArcbar1",this.chartData);
 		},
 		created() {
 			var macInfo = uni.getSystemInfoSync();
@@ -111,16 +135,16 @@
 				console.log(e)
 				if(e==0){
 					return {
-						transform: 'scale(.8) translate(0%,0%)',
+						transform: 'scale(.8) translate(-150%,0%)',
 						zIndex: 9998,
-						opacity:1,
+						opacity:0,
 						transition:'all .'+3+'s;',
 						filter: 'brightness(.8)'
 
 					}
 				} else if(e==1){
 					return {
-						transform: 'scale(1) translate(0%,14%)',
+						transform: 'scale(1) translate(0%,0%)',
 						zIndex: 9999,
 						opacity:1,
 						transition:'all .'+6+'s;',
@@ -129,9 +153,9 @@
 					}
 				}else {
 					return {
-						transform: 'scale(.8) translate(0%,35%)',
+						transform: 'scale(.8) translate(150%,0%)',
 						zIndex: 9998,
-						opacity:1,
+						opacity:0,
 						transition:'all .'+9+'s;',
 						filter: 'brightness(.8)'
 
@@ -145,7 +169,7 @@
 			endMove(e) {
 				
 				var newList = JSON.parse(JSON.stringify(this.itemStyle))
-				if ((e.changedTouches[0].pageY - this.slideNote.y) < 0) {
+				if ((e.changedTouches[0].pageX - this.slideNote.x) < 0) {
 					// 向上滑动
 					var last = [newList.pop()]
 					newList = last.concat(newList)
@@ -156,13 +180,60 @@
 				}
 				this.itemStyle = newList
 				console.log("endmove")
-			}
+			},
+			showArcbar(canvasId,chartData){
+							canvaArcbar1=new uCharts({
+								$this:_self,
+								canvasId: canvasId,
+								type: 'arcbar',
+								fontSize:11,
+								legend:{show:false},
+								background:'#FFFFFF',
+								pixelRatio:_self.pixelRatio,
+								series: chartData.series,
+								animation: true,
+								width: _self.cWidth3*_self.pixelRatio,
+								height: _self.cHeight3*_self.pixelRatio,
+								dataLabel: true,
+								title: {
+									name: Math.round(chartData.series[0].data*100)+'%',//这里我自动计算了，您可以直接给任意字符串
+									color: chartData.series[0].color,
+									fontSize: 25*_self.pixelRatio
+								},
+								subtitle: {
+									name: chartData.series[0].name,//这里您可以直接给任意字符串
+									color: '#666666',
+									fontSize: 15*_self.pixelRatio
+								},
+								extra: {
+									arcbar:{
+										type:'circle',//整圆类型进度条图
+										width: _self.arcbarWidth*_self.pixelRatio,//圆弧的宽度
+										startAngle:0.5//整圆类型只需配置起始角度即可
+									}
+								}
+							});
+							
+						}
 
 		}
 	}
 </script>
 
 <style lang="scss">
+	.qiun-charts3 {
+			width: 350upx;
+			height: 350upx;
+			background-color: #FFFFFF;
+			position: relative;
+		}
+	
+		.charts3 {
+			position: absolute;
+			width: 250upx;
+			height: 250upx;
+			background-color: #FFFFFF;
+		}
 	.swiper-header{
 		.title{
 			display: flex;
@@ -183,7 +254,7 @@
 		box-sizing: border-box;
 		margin: 20rpx 0;
 		padding-bottom: 20rpx;
-		height:480rpx;
+		height:800rpx;
 		width: 100%;
 		overflow-x:hidden;
 		// overflow: hidden;
@@ -199,7 +270,7 @@
 				position: relative;
 				padding:30rpx;
 				border-radius: 50rpx;
-				height: 360rpx;
+				height: 720rpx;
 				width: 640rpx;
 				margin: 2rpx auto;
 				background: #fff;

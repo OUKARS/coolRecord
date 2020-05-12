@@ -1,7 +1,7 @@
 <template>
   <view class="menulist-container ">
 	<view class="list-header">
-		<view class="hello-title animated fadeInLeft slow">
+		<view class="hello-title animated fadeInLeft delay-1s">
 			<image class="icon" src="../../static/icon/index-entrance.png" mode=""></image>
 			<view class="text">
 				便捷入口
@@ -10,10 +10,10 @@
 	</view>
   	<view class="list-content">
   		<view class="top-content">
-  			<view class="list-item addrecord-container animated fadeInLeft slower" @tap="jumpToAddRecord()" >
+  			<view class="list-item addrecord-container animated fadeInLeft delay-013s" @tap="jumpToAddRecord()" >
   				记一笔
   			</view>
-			<view class="list-item data-container animated fadeInRight veryslower" @tap="jumpToDataList()" >
+			<view class="list-item data-container animated fadeInRight delay-013s" @tap="jumpToDataList()" >
   				统计
   			</view>
   		</view>
