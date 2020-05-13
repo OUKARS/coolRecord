@@ -32,7 +32,7 @@
 		},
 		onLaunch: function() {
 			console.log('App Launch')
-			// this.wxlogin()
+			this.wxlogin()
 		},
 		onShow: function() {
 			console.log('App Show')

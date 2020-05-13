@@ -22,7 +22,7 @@
 			
 			<view class="max-num">
 				<!-- <image class="rmb-img" src="../../static/icon/rmb.png" mode=""></image> -->
-				￥{{max_num}} 
+				￥{{weeklychartData.max_num}} 
 			</view>
 			
 			
@@ -67,6 +67,7 @@
 				pixelRatio:1,
 				dailychartData: {
 					series: [{
+						max_num:123,
 						name: '今日支出',
 						data: .5,
 						color: '#1FFED5',
@@ -74,6 +75,7 @@
 					}]
 				},
 				weeklychartData: {
+					max_num:12,
 					series: [{
 						name: '本周支出',
 						data: .7,
@@ -82,6 +84,7 @@
 					}]
 				},
 				monthlychartData: {
+					max_num:123,
 					series: [{
 						name: '本月支出',
 						data: .9,
@@ -89,7 +92,7 @@
 						num:4
 					}]
 				},
-				max_num:123,
+				
 			}
 		},
 		onLoad() {
@@ -100,20 +103,6 @@
 			this.showArcbar("canvasArcbar1",this.dailychartData);
 		},
 		created(){
-
-			var  that = this;
-			 	uni.getSystemInfo({
-			 		success: function(res) {
-			 			if (res.model.indexOf('iPhone') !== -1) {
-							console.log(res)
-							that.titleBarHeight = 44 + 'px';
-			 			} else {
-			 				that.titleBarHeight = 48  + 'px';
-						}
-							that.statusBarHeight = res.statusBarHeight  + 'px'
-					},
-						
-			 	})
 		},
 		
 		onPageScroll:function(res){

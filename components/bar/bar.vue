@@ -84,18 +84,18 @@
 	
 	.header .header-title {
         font-weight: bold;
-        
+        color: #fff;
 		/* position: absolute;
 		left: 10%; */
-		font-size: 38rpx;
+		font-size: 42rpx;
 		/* transform: translateX(-50%); */
 	}
 	.header-back{
 		margin-right:6rpx ;
 		// position: absolute;
 		/* left:15upx; */
-		
-		font-size:30upx;
+		color: #fff;
+		font-size:32upx;
 		padding: 12upx;
 		border-radius: 50%;
 	}
