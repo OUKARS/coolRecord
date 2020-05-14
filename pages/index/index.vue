@@ -2,13 +2,14 @@
 	<view class="container">
 		<my-bar :nav="setNav"></my-bar>
 		<view class="swiper-header">
-			<view class="daily animated fadeInDown delay-01s" :class="{headerctive:current==0}" @tap="swipeToIndex0()">
+			<image class="header-img" src="../../static/bg/bg-index.png" mode=""></image>
+			<view class="daily animated fadeInLeft delay-08s" :class="{headerctive:current==0}" @tap="swipeToIndex0()">
 				今日
 			</view>
-			<view class="weekly animated fadeInDown delay-03s" :class="{headerctive:current==1}"  @tap="swipeToIndex1()">
+			<view class="weekly animated fadeInDown delay-1s" :class="{headerctive:current==1}"  @tap="swipeToIndex1()">
 				本周
 			</view>
-			<view class="monthly animated fadeInDown delay-05s" :class="{headerctive:current==2}"  @tap="swipeToIndex2()">
+			<view class="monthly animated fadeInRight delay-08s" :class="{headerctive:current==2}"  @tap="swipeToIndex2()">
 				本月
 			</view>
 		</view>	
@@ -30,7 +31,7 @@
 		<view class="content">
 			<recordlist />
 		</view>
-		<tabbar /> 
+		<tabbar currentPage="home"/> 
 	</view>
 </template>
 
@@ -101,10 +102,11 @@
 			this.cHeight3=uni.upx2px(480);//这里要与样式的宽高对应
 			this.arcbarWidth=uni.upx2px(56);
 			this.showArcbar("canvasArcbar1",this.dailychartData);
+			console.log(this.$store.state.app.device)
+
 		},
 		created(){
 		},
-		
 		onPageScroll:function(res){
 			if(res.scrollTop>=50){
 				this.setNav.isShowGoal=false;
@@ -113,7 +115,15 @@
 				this.setNav.isShowGoal=true;
 				this.setNav.isShowSetting=true
 			}
-		  },
+		 },
+		 computed: {
+		     device() {
+		       return this.$store.state.app.device
+		     },
+			 token() {
+			   return this.$store.state.user.token
+			 },
+		},
 		methods: {
 			swipeToIndex0(){
 				this.showArcbar("canvasArcbar1",this.dailychartData);
@@ -135,6 +145,7 @@
 								canvasId: canvasId,
 								type: 'arcbar',
 								customtype:'index-arcbar',
+								device:this.device,
 								fontSize:11,
 								legend:{show:false},
 								backgroundColor:'#383289',
@@ -226,6 +237,11 @@
 				box-sizing: border-box;
 				padding: 16rpx 32rpx;
 				border-radius: 40rpx;
+			}
+			.header-img{
+				top:-50rpx;
+				position: absolute;
+				opacity: 0.2;
 			}
 
 		}

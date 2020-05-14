@@ -1,24 +1,31 @@
 <template>
 	<view>
 		<my-bar :nav="setNav"></my-bar>
+		<com-calendar ref="calendar" :signeddates="signeddates" @onDayClick="onDayClick"></com-calendar>
 		list
 	</view>
 </template>
 
 <script>
+	import ComCalendar from '../../components/ren-calendar/ren-calendar.vue';
 	export default {
-		data() {
-			return {
-				setNav:{
-					'color':'red',  //字体颜色
-					'isdisPlayNavTitle':true, //是否显示返回按钮，由于导航栏是共用的，把所有的东西封装好，
-					'navTitle':'账单查询' //导航标题
-				},
-			}
-		},
-		methods: {
-			
-		}
+	    components: {
+	        ComCalendar
+	    },
+	    data() {
+	        return {
+	            signeddates:['2020-1-1']
+	        }
+	
+	    },
+	    methods: {
+	        onMonthChange(){//改变月份
+	            this.$refs.calendar.changYearMonth(yyyy,MM)
+	        },
+	        onDayClick(e) {//日点击
+	            console.log(e);
+	        }
+	    }
 	}
 </script>
 

@@ -3761,11 +3761,19 @@ function drawArcbarDataPoints(series, opts, config, context) {
 		context.stroke();
 		//进度条
     context.setLineWidth(arcbarOption.width);
+	let device = opts.device
+	
 	 const grd = context.createLinearGradient(0,120, 120, 0)
-	  // grd.addColorStop(0, '#1FFED5')
-	  // grd.addColorStop(1, '#DCEA49')
-   //  context.setStrokeStyle(grd);
-	context.setStrokeStyle(eachSeries.color);
+	 if(device === 'ios'){
+		 context.setStrokeStyle(eachSeries.color);
+	 } else {
+		  context.setStrokeStyle(eachSeries.color);
+		 // grd.addColorStop(0, '#1FFED5')
+		 // 	  grd.addColorStop(1, '#DCEA49')
+		 //  context.setStrokeStyle(grd);
+	 }
+	  
+	
     context.setLineCap('round');
     context.beginPath();
     context.arc(centerPosition.x, centerPosition.y, radius-(arcbarOption.width+arcbarOption.gap)*i, arcbarOption.startAngle * Math.PI, eachSeries._proportion_ * Math.PI, false);

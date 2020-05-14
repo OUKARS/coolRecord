@@ -1,14 +1,14 @@
 <template>
   <view class="tabbar-container">
-  	<view class="tabbar-content home-container">
+  	<view class="tabbar-content home-container" :style="{transform:touchActive === 'index' ? 'scale(.8, .8)':''}" @touchstart="changeImageSize('index')" @touchend="goTo('index')">
   		<image class="tabbar-icon" :class="{active:currentPage==='home'}" v-bind:src="getImgUrl('home')"></image>
 		
   	</view>
-	<view class="tabbar-content add-container">
-		<image class="tabbar-icon" :class="{active:currentPage==='add'}" v-bind:src="getImgUrl('add')"></image>
+	<view class="tabbar-content add-container" :style="{transform:touchActive === 'order' ? 'scale(.8, .8)':''}" @touchstart="changeImageSize('order')"  @touchend="goTo('order')">
+		<image class="tabbar-icon" :class="{active:currentPage==='order'}" v-bind:src="getImgUrl('order')"></image>
 
 	</view>
-	<view class="tabbar-content data-container">
+	<view class="tabbar-content data-container"  :style="{transform:touchActive === 'data' ? 'scale(.8, .8)':''}" @touchstart="changeImageSize('data')" @touchend="goTo('data')">
 		<image class="tabbar-icon" :class="{active:currentPage==='data'}" v-bind:src="getImgUrl('data')"></image>
 
 	</view>
@@ -24,14 +24,26 @@ export default {
 		},
 	data(){
 		return{
+			touchActive:''
 		}
 	},
 	methods:{
 		getImgUrl(icon){
-			
 			if(icon === this.currentPage)
 				return require("../../static/icon/"+icon+"-active.png");
 			else return require("../../static/icon/"+icon+".png");
+		},
+		changeImageSize(name){
+			this.touchActive = name
+			wx.vibrateShort()
+
+		},
+		goTo(name){
+			this.touchActive = ''
+			if(this.currentPage != name)
+				uni.redirectTo({
+				    url: '../../pages/'+name+'/'+name
+				});
 		}
 	},
 }

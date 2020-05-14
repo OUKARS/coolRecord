@@ -1,38 +1,70 @@
 <script>
 	export default {
 		methods:{
-				wxlogin(){
+			checkToken(){
+				var self = this
+				uni.getStorage({
+				    key: 'token',
+				    success: function (res) {
+						const token  = res.data
+						if(token === ''){
+							console.log('token为空');
+							self.$api.login()
+							
+						} else {
+							console.log('token存在');
+						}
+						
+				        
+				    },
+					fail:function(e){
+						console.log('token不存在')
+						self.$api.login()
+					}
+				});
+			},
+			wxGetDevice(){
+				var self = this
+				uni.getSystemInfo({
+					success(res) {
+						self.$store.dispatch('app/setDevice',res.platform)
+					}
+				})
+			},
+			wxlogin(){
+				var self = this
 				uni.login({
 					provider:'weixin',
 					success:function(loginRes){
 						let code = loginRes.code;
-						console.log("code：")
-						console.log(code)
 						uni.request({
-													url: 'http://www.codeskystar.cn:8080/weixin/login/auth',
-													data: {
-														code: code,
-													},
-													method: 'GET',
-													header: {
-														'content-type': 'application/json'
-													},
-													success: (res) => {
-														//openId、或SessionKdy存储//隐藏loading
-														console.log("code已经发给后端")
-														console.log(res)
-													},
-													fail: (err) => {
-															console.log(err)
-													}
-												});
+							url: 'http://www.codeskystar.cn:8080/weixin/login/auth',
+							data: {
+								code: code,
+							},
+							method: 'GET',
+							header: {
+							'content-type': 'application/json'
+							},
+							success: (res) => {
+								//openId、或SessionKdy存储//隐藏loading
+								console.log("code已经发给后端")
+								const token = res.data.data
+								self.$store.dispatch('user/addToken',token)
+							},
+							fail: (err) => {
+								console.log(err)
+							}
+						});
 					}
 				})
 			}
 		},
 		onLaunch: function() {
 			console.log('App Launch')
-			this.wxlogin()
+			this.wxGetDevice()
+			this.checkToken()
+			
 		},
 		onShow: function() {
 			console.log('App Show')

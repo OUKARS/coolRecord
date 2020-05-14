@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="header" :style="{'height':titleBarHeight,'padding-top':statusBarHeight}">
-			<text class="iconfont leftArrow header-back weight"   :style="{'border':nav.color}" v-if="nav.isdisPlayNavTitle" @click="back"></text>
+			<text class="iconfont leftArrow header-back weight"   :style="{'border':nav.color}" v-if="nav.isdisPlayNavTitle" @tap="back"></text>
 			<view class="goal-container animated fadeInDown delay-01s"  v-if="nav.isShowGoal" @tap="jumpToGoal()">
 				<image class="iconimg icon-goal" :style="{'width':iconimg,'height':iconimg}" src="../../static/icon/goal.png"></image>
 				<!-- 目标 -->
@@ -11,7 +11,7 @@
 				<!-- 设置 -->
 			</view>
 			
-			<view class="header-title weight">{{nav.navTitle}}</view>
+			<view class="header-title weight" @tap="back">{{nav.navTitle}}</view>
 		</view>
 		<view  :style="{'height':titleBarHeight,'padding-top':statusBarHeight}"></view>
 	</view>
@@ -53,13 +53,13 @@
 				 })
 			 },
 			 jumpToGoal(){
-			 
+				wx.vibrateShort()
 			 	uni.navigateTo({
 			 	    url: '../goal/goal'
 			 	});
 			 },
 			 jumpToSetting(){
-			 
+				wx.vibrateShort()
 			 	uni.navigateTo({
 			 	    url: '../setting/setting'
 			 	});
@@ -87,7 +87,7 @@
         color: #fff;
 		/* position: absolute;
 		left: 10%; */
-		font-size: 42rpx;
+		font-size: 38rpx;
 		/* transform: translateX(-50%); */
 	}
 	.header-back{
