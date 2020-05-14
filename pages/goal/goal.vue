@@ -22,7 +22,7 @@
 				</view>
 			</view>
 			<view class="btn-container">
-				<button class="goal-btn animated fadeInUp delay-016s" type="default">确认</button>
+				<button class="goal-btn" type="default">确认</button>
 			</view>
 		</view>
 	</view>
