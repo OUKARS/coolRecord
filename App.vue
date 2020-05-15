@@ -5,7 +5,7 @@
 				var self = this
 				uni.getStorage({
 				    key: 'token',
-				    success: function (res) {
+				    success: async function (res) {
 						const token  = res.data
 						if(token === ''){
 							console.log('token为空');
@@ -13,7 +13,7 @@
 							
 						} else {
 							console.log('token存在');
-							console.log(token)
+							const res =  await self.$api.checkToken()
 						}
 						
 				        
@@ -65,6 +65,7 @@
 			console.log('App Launch')
 			this.wxGetDevice()
 			this.checkToken()
+			console.log('用户设备：'+this.$store.state.app.device)
 			
 		},
 		onShow: function() {

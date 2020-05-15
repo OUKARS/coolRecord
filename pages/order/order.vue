@@ -207,7 +207,7 @@
 						width: 80rpx;
 						background:#fff;
 						color:rgb(75,60,221);
-						border-radius:6rpx ;
+						border-radius:12rpx ;
 						border: 1rpx solid rgb(75,60,221);	
 					}
 					.active{

@@ -9,8 +9,9 @@ fly.interceptors.response.use(
 	(response) => {
 			// 如果请求报错
 			if (response.data.code == 301) {
-				console.log("token过期，重新登录")
+				console.log("token无效，重新登录")
 				login() //token过期，重新登录
+				return response.data
 
 			}
 			else if(response.data.code != 200){
@@ -22,7 +23,7 @@ fly.interceptors.response.use(
 			}
 			else{
 				//只将请求结果的data字段返回
-				console.log("请求正常，返回结果")
+				console.log("请求正常："+response.engine.responseURL)
 				return response.data
 			}
 		},
@@ -38,7 +39,6 @@ fly.interceptors.response.use(
 )
 // 配置请求拦截器
 fly.interceptors.request.use((request) => {
-	console.log(request)
 	if(request.url != whiteUrl)
 		request.headers["Authorization"] = 'Bearer '+uni.getStorageSync('token');
 		
@@ -69,8 +69,20 @@ export const login = async () => {
 	console.log(res.data.token)
 }
 
+export const checkToken = async () => {
+
+		console.log('查询token有效接口...')
+		return fly.get('/chart/token')
+}
+
 export const fetchGoalDetail = async () => {
 
 		console.log('请求查询目标接口...')
 		return fly.get('/goal/detail')
+}
+
+export const fetchHomeChart = async () => {
+
+		console.log('请求首页饼图接口...')
+		return fly.get('/chart/home')
 }

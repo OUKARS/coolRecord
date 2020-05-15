@@ -23,7 +23,7 @@
 			
 			<view class="max-num">
 				<!-- <image class="rmb-img" src="../../static/icon/rmb.png" mode=""></image> -->
-				￥{{weeklychartData.max_num}} 
+				{{current===0?dailychartData.dailyBudget:current===1?weeklychartData.weeklyBudget:monthchartData.monthBudget}}
 			</view>
 			
 			
@@ -97,12 +97,12 @@
 			}
 		},
 		onLoad() {
+			this.fetchHomeChart()
 			_self = this;
 			this.cWidth3=uni.upx2px(480);//这里要与样式的宽高对应
 			this.cHeight3=uni.upx2px(480);//这里要与样式的宽高对应
 			this.arcbarWidth=uni.upx2px(56);
 			this.showArcbar("canvasArcbar1",this.dailychartData);
-			console.log(this.$store.state.app.device)
 
 		},
 		created(){
@@ -125,6 +125,15 @@
 			 },
 		},
 		methods: {
+			async fetchHomeChart(){
+				const res = await this.$api.fetchHomeChart()
+				this.dailychartData = res.data.dailychartData
+				this.weeklychartData = res.data.weeklychartData
+				this.monthlychartData = res.data.monthchartData
+				console.log(this.dailychartData)
+				console.log(this.weeklychartData)
+				console.log(this.monthlychartData)
+			},
 			swipeToIndex0(){
 				this.showArcbar("canvasArcbar1",this.dailychartData);
 				this.current = 0;
