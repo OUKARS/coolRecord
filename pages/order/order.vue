@@ -12,16 +12,21 @@
 			<view class="top-content">
 				<view class="date-container">
 					<view class="order-title" value="0">
-						日期
+						<view class="text">
+							日期
+						</view>
+						<view class="time">
+							{{selectdate}}
+						</view>
 					</view>
 					<view class="date-content">
-						<view class="date-card today">
+						<view class="date-card today" @tap="chooseToday()" :class="{active:selectdate===nowdate}">
 							今天
 						</view>
-						<view class="date-card yesterday">
+						<view class="date-card yesterday" @tap="chooseYesterday()" :class="{active:selectdate===yesterdaydate}">
 							昨天
 						</view>
-						<view class="date-card more">
+						<view class="date-card more" @tap="showDatePicker()" :class="{active:selectdate!=''&&selectdate!=nowdate&&selectdate!=yesterdaydate}">
 							...
 						</view>
 					</view>
@@ -58,12 +63,28 @@
 				<button class="order-btn" type="default">确认</button>
 			</view>
 		</view>
+		 <w-picker
+		                mode="date" 
+		                startYear="2019" 
+		                endYear="2029"
+		                :value=nowdate
+		                :current="true"
+		                fields="day"
+		                @confirm="onConfirm($event,'date')"
+		                @cancel="onCancel"
+		                :disabled-after="false"
+		                ref="date" 
+		            ></w-picker>
 		<tabbar currentPage="order"/> 
 	</view>
 </template>
 
 <script>
+	import wPicker from "../../components/w-picker/w-picker.vue";
 	export default {
+		components:{
+		        wPicker
+		 },
 		data() {
 			return {
 				setNav:{
@@ -76,17 +97,40 @@
 				orderData:{
 					'monthCost':0,
 					'monthSave':0
-				}
+				},
+				nowdate:'',
+				yesterdaydate:'',
+				selectdate:''
 			}
 		},
 		methods: {
-			// async fetchorderDetail(){
-			// 	const res = await this.$api.fetchorderDetail()
-			// 	this.orderData = res.data
-			// }
+			showDatePicker(){
+				this.$refs.date.show()
+			},
+			chooseToday(){
+				console.log("today")
+				this.selectdate = this.nowdate
+			},
+			chooseYesterday(){
+				console.log("Yesterday")
+				var myDate = new Date()
+				myDate.setTime(myDate.getTime()-1*24*60*60*1000);
+				this.yesterdaydate = myDate.toLocaleDateString().split('/').join('-');
+				this.selectdate = this.yesterdaydate
+			},
+			onConfirm(event,type){
+				wx.vibrateShort()
+				this.selectdate = event.value
+			},
+			onCancel(){}
 		},
 		onLoad() {
 			// this.fetchorderDetail()
+			var myDate = new Date();
+			this.nowdate = myDate.toLocaleDateString().split('/').join('-');
+			this.selectdate = this.nowdate
+		},
+		onReady() {
 		}
 	}
 </script>
@@ -133,6 +177,7 @@
 					display: flex;
 					justify-content: flex-start;
 					flex-wrap: nowrap;
+
 					.date-card{
 						text-align: center;
 						margin:0 10rpx;
@@ -144,8 +189,12 @@
 						background:#fff;
 						color:rgb(75,60,221);
 						border-radius:6rpx ;
-						border: 1rpx solid rgb(75,60,221);
-						
+						border: 1rpx solid rgb(75,60,221);	
+					}
+					.active{
+						transition: all .4s;
+						background:rgb(75,60,221) !important; 
+						color: #fff !important;
 					}
 				}
 			}
@@ -180,6 +229,19 @@
 			font-weight: bold;
 			color: rgb(75,60,221);
 			margin-bottom:20rpx ;
+			display: flex;
+			justify-content: flex-start;
+
+			.text{
+
+				margin-right: 18rpx;
+			}
+			.time{
+				
+				margin-top:12rpx ;
+				font-weight: normal;
+				font-size: 24rpx;
+			}
 		}
 		.order-input{
 			width: 90%;

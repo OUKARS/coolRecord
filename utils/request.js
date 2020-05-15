@@ -8,14 +8,21 @@ fly.config.baseURL = "http://www.codeskystar.cn/weixin"
 fly.interceptors.response.use(
 	(response) => {
 			// 如果请求报错
-			if (response.data.code != 200) {
+			if (response.data.code == 301) {
+				console.log("token过期，重新登录")
+				login() //token过期，重新登录
+
+			}
+			else if(response.data.code != 200){
 				uni.showModal({
 					title:'提示',
 					content:response.data,
 					showCancel:false
 				})
-			}else{
+			}
+			else{
 				//只将请求结果的data字段返回
+				console.log("请求正常，返回结果")
 				return response.data
 			}
 		},
@@ -58,7 +65,8 @@ export const login = async () => {
 	let code = await wxLogin();
 	let res = await fly.get('/login/auth',{code: code});
 	uni.setStorageSync('token',res.data.token)
-	
+	console.log("token:")
+	console.log(res.data.token)
 }
 
 export const fetchGoalDetail = async () => {

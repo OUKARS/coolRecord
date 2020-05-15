@@ -13,6 +13,7 @@
 							
 						} else {
 							console.log('token存在');
+							console.log(token)
 						}
 						
 				        
