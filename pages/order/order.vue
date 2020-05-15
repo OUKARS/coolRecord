@@ -16,17 +16,17 @@
 							日期
 						</view>
 						<view class="time">
-							{{selectdate}}
+							{{orderData.date}}
 						</view>
 					</view>
 					<view class="date-content">
-						<view class="date-card today" @tap="chooseToday()" :class="{active:selectdate===nowdate}">
+						<view class="date-card today" @tap="chooseToday()" :class="{active:orderData.date===nowdate}">
 							今天
 						</view>
-						<view class="date-card yesterday" @tap="chooseYesterday()" :class="{active:selectdate===yesterdaydate}">
+						<view class="date-card yesterday" @tap="chooseYesterday()" :class="{active:orderData.date===yesterdaydate}">
 							昨天
 						</view>
-						<view class="date-card more" @tap="showDatePicker()" :class="{active:selectdate!=''&&selectdate!=nowdate&&selectdate!=yesterdaydate}">
+						<view class="date-card more" @tap="showDatePicker()" :class="{active:orderData.date!=''&&orderData.date!=nowdate&&orderData.date!=yesterdaydate}">
 							...
 						</view>
 					</view>
@@ -49,14 +49,14 @@
 				金额
 			</view>
 			<view class="order-input">
-				<input type="digit" :value="orderData.monthCost"/>
+				<input type="digit" :value="orderData.money"/>
 			</view>
 			<view class="remark-container">
 				<view class="order-title">
 					备注
 				</view>
 				<view class="order-input">
-					<input type="digit" :value="orderData.monthCost"/>
+					<input type="text" :value="orderData.remark"/>
 				</view>
 			</view>
 			<view class="btn-container">
@@ -95,8 +95,10 @@
 					'navTitle':'' //导航标题
 				},
 				orderData:{
-					'monthCost':0,
-					'monthSave':0
+					'type':0,
+					'date':'',
+					'money':0,
+					'remark':''
 				},
 				nowdate:'',
 				yesterdaydate:'',
@@ -109,26 +111,43 @@
 			},
 			chooseToday(){
 				console.log("today")
-				this.selectdate = this.nowdate
+				this.orderData.date = this.nowdate
 			},
 			chooseYesterday(){
 				console.log("Yesterday")
 				var myDate = new Date()
 				myDate.setTime(myDate.getTime()-1*24*60*60*1000);
-				this.yesterdaydate = myDate.toLocaleDateString().split('/').join('-');
-				this.selectdate = this.yesterdaydate
+				var yesterday = this.getNowFormatDay(myDate)
+				this.yesterdaydate = yesterday
+				this.orderData.date = yesterday
+				
 			},
 			onConfirm(event,type){
 				wx.vibrateShort()
-				this.selectdate = event.value
+				this.orderData.date = event.value
 			},
-			onCancel(){}
+			onCancel(){},
+			completeDate(value) {
+			        return value < 10 ? "0"+value:value;
+			},
+			getNowFormatDay(nowDate){
+				var char = "-";
+				if(nowDate == null){
+					nowDate = new Date();
+				}
+				var day = nowDate.getDate();
+				var month = nowDate.getMonth() + 1;//注意月份需要+1
+				var year = nowDate.getFullYear();
+				var time =  year + char + this.completeDate(month) + char +this.completeDate(day);
+				return time
+			}
+				
 		},
 		onLoad() {
-			// this.fetchorderDetail()
-			var myDate = new Date();
-			this.nowdate = myDate.toLocaleDateString().split('/').join('-');
-			this.selectdate = this.nowdate
+			var nowDate = new Date();
+			var today = this.getNowFormatDay(nowDate)
+			this.nowdate = today
+			this.orderData.date = today
 		},
 		onReady() {
 		}
@@ -244,12 +263,12 @@
 			}
 		}
 		.order-input{
-			width: 90%;
+			width: 100%;
 			align-items: center;
 			border-radius: 24rpx;
 			box-sizing: border-box;
 			font-size: 36rpx;
-			padding: 16rpx 20rpx;
+			padding: 20rpx 24rpx;
 			background: #F5F5F5;
 			font-size: 36rpx;
 			color: #6327F6;
