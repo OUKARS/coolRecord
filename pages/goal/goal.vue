@@ -88,7 +88,7 @@
 		background: #fff;
 		height: auto;
 		.goal-title{
-			font-size: 40rpx;
+			font-size: 36rpx;
 			font-weight: bold;
 			color: rgb(75,60,221);
 			margin-bottom:20rpx ;

@@ -250,7 +250,7 @@
 			.header-img{
 				top:-50rpx;
 				position: absolute;
-				opacity: 0.2;
+				opacity: 0.3;
 			}
 
 		}

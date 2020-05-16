@@ -62,7 +62,7 @@ export default {
 		.active{
 			box-shadow: 0 10rpx 24rpx rgba(50,50,93,.24), 0 0.10rpx 20rpx rgba(0,0,0,.24);
 			box-sizing: border-box;
-			border:6rpx solid rgb(255,227,108);;
+			border:6rpx solid rgb(255,227,108);
 			background: rgb(255,227,108);
 			width: 98rpx;
 			height: 98rpx;

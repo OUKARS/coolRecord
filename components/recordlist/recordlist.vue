@@ -83,7 +83,6 @@
 	padding-top: 10rpx;
 	
 	height: auto;
-	// background-image:linear-gradient(75deg,#AF4DFF,#6327F6);
 	
 	.header{
 		margin-bottom: 20rpx;
@@ -128,7 +127,6 @@
 		// background: #fff;
 		width: 100%;
 		height: auto;
-		box-shadow:0rpx 0rpx 10rpx rgba(50,50,93,.1),5rpx 15rpx 10rpx rgba(41,41,41,.1);
 		.list-item{
 			margin-bottom: 24rpx;
 			background: #fff;

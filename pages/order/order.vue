@@ -6,8 +6,8 @@
 		</view>
 		<view class="order-content">
 			<view class="type-container">
-				<button class="out-btn" type="default">支出</button>
-				<button class="in-btn" type="default">收入</button>
+				<button class="out-btn" type="default" :class="{active:orderData.type===0}" @tap="selectOrderType(0)">支出</button>
+				<button class="in-btn" type="default" :class="{active:orderData.type===1}" @tap="selectOrderType(1)">收入</button>
 			</view>
 			<view class="top-content">
 				<view class="date-container">
@@ -60,7 +60,7 @@
 				</view>
 			</view>
 			<view class="btn-container">
-				<button class="order-btn" type="default">确认</button>
+				<button class="order-btn" type="default" @tap="postOrder()">确认</button>
 			</view>
 		</view>
 		 <w-picker
@@ -97,15 +97,24 @@
 				orderData:{
 					'type':0,
 					'date':'',
+					'categoryId':0,
 					'money':0,
-					'remark':''
+					'remark':'无'
 				},
 				nowdate:'',
 				yesterdaydate:'',
-				selectdate:''
+				selectdate:'',
+				selectType:0,
 			}
 		},
 		methods: {
+			postOrder(){
+				var data = this.orderData
+				this.$api.postOrder(data)
+			},
+			selectOrderType(type){
+				this.orderData.type=type;
+			},
 			showDatePicker(){
 				this.$refs.date.show()
 			},
@@ -278,7 +287,6 @@
 			width: 60%;
 			margin:0 auto;
 			justify-content: center;
-			
 			.out-btn{
 				box-shadow:0rpx 5rpx 8rpx rgba(41,41,41,.08);
 				border:none;
@@ -307,6 +315,9 @@
 				font-weight: bold;
 				background: #f6f6f6;
 				color:#6327F6 ;
+			}
+			.active{
+				transition: all .6s;
 				background: linear-gradient(90deg, #5153F6 0%, #4A34D5 100%);
 				color: #fff;
 			}

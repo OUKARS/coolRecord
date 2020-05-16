@@ -86,3 +86,15 @@ export const fetchHomeChart = async () => {
 		console.log('请求首页饼图接口...')
 		return fly.get('/chart/home')
 }
+
+export const fetchOrderListByDate = async (date) => {
+
+		console.log('请求账单列表接口...')
+		return fly.get('/order/list',{date:date})
+}
+
+export const postOrder = async (data) => {
+
+		console.log('请求账单列表接口...')
+		return fly.post('/order/set',{data:data})
+}
