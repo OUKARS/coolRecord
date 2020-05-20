@@ -47,7 +47,7 @@
 			},
 			themeColor:{//确认按钮主题颜色
 				type:String,
-				default:"#f5a200"
+				default:"#4B3CDD"
 			},
 			fields:{//日期颗粒度:year、month、day、hour、minute、second
 				type:String,

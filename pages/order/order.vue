@@ -2,7 +2,7 @@
 	<view class="order-container">
 		<my-bar :nav="setNav"></my-bar>
 		<view class="order-header">
-			<image class="order-bg-img" src="../../static/bg/bg-order.png"></image>
+			<image class="order-bg-img animated fadeInDown" src="../../static/bg/bg-order.png"></image>
 		</view>
 		<view class="order-content">
 			<view class="type-container">
@@ -49,14 +49,14 @@
 				金额
 			</view>
 			<view class="order-input">
-				<input type="digit" :value="orderData.money"/>
+				<input type="digit" placeholder="0.00" :focus='setFocus' @input="moneyInput"/>
 			</view>
 			<view class="remark-container">
 				<view class="order-title">
 					备注
 				</view>
 				<view class="order-input">
-					<input type="text" :value="orderData.remark"/>
+					<input type="text" placeholder="账单备注信息" @input="remarkInput"/>
 				</view>
 			</view>
 			<view class="btn-container">
@@ -98,13 +98,14 @@
 					'type':0,
 					'date':'',
 					'categoryId':0,
-					'money':0,
+					'money':0.00,
 					'remark':'无'
 				},
 				nowdate:'',
 				yesterdaydate:'',
 				selectdate:'',
 				selectType:0,
+				setFocus:false,
 			}
 		},
 		methods: {
@@ -149,6 +150,13 @@
 				var year = nowDate.getFullYear();
 				var time =  year + char + this.completeDate(month) + char +this.completeDate(day);
 				return time
+			},
+			moneyInput(e){
+				this.orderData.money = e.detail.value
+			},
+			remarkInput(e){
+				this.orderData.remark = e.detail.value
+				
 			}
 				
 		},
@@ -157,6 +165,7 @@
 			var today = this.getNowFormatDay(nowDate)
 			this.nowdate = today
 			this.orderData.date = today
+			this.setFocus = true
 		},
 		onReady() {
 		}
@@ -171,25 +180,25 @@
 	.order-header{
 		z-index: 1;
 		margin: 0 auto;
-		margin-top: 40rpx;
+		margin-top: 20rpx;
 		width: 100%;
 		height: auto;
 		text-align: center;
 		.order-bg-img{
-			width: 500rpx;
-			height: 329rpx;
+			width: 400rpx;
+			height: 264rpx;
 			margin:0 auto;
 			// width: 60%;
 		}
 	}
 	.order-content{
-		width: 90%;
+		width: 86%;
 		margin:0 auto;
 		box-sizing: border-box;
 		padding: 50rpx;
 		box-shadow:15rpx 15rpx 20rpx rgba(50,50,93,.1),5rpx 15rpx 20rpx rgba(0,0,0,.1);
-		margin-top: -74rpx;
-		padding-top: 90rpx;
+		margin-top: -62rpx;
+		padding-top: 80rpx;
 		z-index: 0;
 		border-radius: 80rpx;
 		background: #fff;
@@ -273,6 +282,8 @@
 		}
 		.order-input{
 			width: 100%;
+			height: 82rpx;
+			line-height: 82rpx;
 			align-items: center;
 			border-radius: 24rpx;
 			box-sizing: border-box;
@@ -281,6 +292,7 @@
 			background: #F5F5F5;
 			font-size: 36rpx;
 			color: #6327F6;
+			margin-bottom:20rpx ;
 		}
 		.type-container{
 			display: flex;
@@ -299,6 +311,8 @@
 				color: #fff;
 				font-weight: bold;
 				width: 100%;
+				line-height: 80rpx;
+				height: 80rpx;
 				background: #f6f6f6;
 				color:#6327F6 ;
 			}
@@ -311,6 +325,8 @@
 				border-bottom-right-radius: 50rpx;
 				marin:0;
 				width: 100%;
+				line-height: 80rpx;
+				height: 80rpx;
 				font-size: 36rpx;
 				font-weight: bold;
 				background: #f6f6f6;
@@ -324,12 +340,15 @@
 		}
 		
 		.btn-container{
-			margin:80rpx 0 0;
+			margin:60rpx 0 0;
 			.order-btn{
-				width: 60%;
-				margin:30rpx auto;
+				width: 50%;
+				border-radius: 80rpx;
+				line-height: 90rpx;
+				height: 90rpx;
+				margin:30rpx auto 0;
 				color: #fff;
-				background: linear-gradient(90deg, #5373FC 0%, #39A0FF 100%);
+				background: linear-gradient(90deg, #5153F6 0%, #4A34D5 100%);
 			}
 		}
 	}

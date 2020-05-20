@@ -7,22 +7,22 @@
 		<view class="goal-content">
 			<view class="monthcost-container">
 				<view class="goal-title">
-					最大支出
+					最大支出目标
 				</view>
 				<view class="goal-input">
-					<input type="digit" :value="goalData.monthCost"/>
+					<input type="digit"  v-model="goalData.monthCost"/>
 				</view>
 			</view>
 			<view class="monthsave-container">
 				<view class="goal-title">
-					本月存款
+					本月存款目标
 				</view>
 				<view class="goal-input">
-					<input type="digit" :value="goalData.monthCost"/>
+					<input type="digit"  v-model="goalData.monthSave"/>
 				</view>
 			</view>
 			<view class="btn-container">
-				<button class="goal-btn" type="default">确认</button>
+				<button class="goal-btn" type="default" @tap="PostGoal()">确认</button>
 			</view>
 		</view>
 	</view>
@@ -47,6 +47,33 @@
 			async fetchGoalDetail(){
 				const res = await this.$api.fetchGoalDetail()
 				this.goalData = res.data
+			},
+			async PostGoal(){
+				var monthCost = parseFloat(this.goalData.monthCost)
+				var monthSave = parseFloat(this.goalData.monthSave)
+				if(monthCost >=0 && monthSave >=0){
+					const res = await this.$api.PostGoal({monthCost,monthSave})
+					if(res.data.message==='设置成功'){
+						uni.showModal({
+							title:'成功',
+							content:"设置成功！",
+							showCancel:false,
+							success: function (res) {
+							        if (res.confirm) {
+							            uni.navigateBack({
+							            	delta:1
+							            })
+							        } 
+							    }
+						})
+					}
+				} else {
+					uni.showModal({
+						title:'错误',
+						content:"请正确填写内容！",
+						showCancel:false
+					})
+				}
 			}
 		},
 		onLoad() {
@@ -76,7 +103,7 @@
 		}
 	}
 	.goal-content{
-		width: 90%;
+		width: 86%;
 		margin:0 auto;
 		box-sizing: border-box;
 		padding: 50rpx;
@@ -98,7 +125,8 @@
 			box-sizing: border-box;
 			padding: 20rpx;
 			background: #F5F5F5;
-			font-size: 36rpx;
+			margin-bottom:20rpx ;
+			// font-size: 36rpx;
 			color: #6327F6;
 		}
 		
@@ -112,10 +140,13 @@
 		.btn-container{
 			margin:80rpx 0 0;
 			.goal-btn{
-				width: 60%;
-				margin:30rpx auto;
+				width: 50%;
+				border-radius: 80rpx;
+				line-height: 90rpx;
+				height: 90rpx;
+				margin:10rpx auto;
 				color: #fff;
-				background: linear-gradient(90deg, #5373FC 0%, #39A0FF 100%);
+				background: linear-gradient(90deg, #5153F6 0%, #4A34D5 100%);
 			}
 		}
 	}

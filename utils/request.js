@@ -1,6 +1,5 @@
 var Fly=require('../common/wx.umd.min.js') //wx.js为您下载的源码文件
 var fly=new Fly;
-
 const whiteUrl='/login/auth'
 
 fly.config.baseURL = "http://www.codeskystar.cn/weixin"
@@ -46,6 +45,7 @@ fly.interceptors.request.use((request) => {
 	return request;
 })
 
+
 async function wxLogin() {
 	return await new Promise((resolve, reject) => {
 		uni.login({
@@ -80,6 +80,11 @@ export const fetchGoalDetail = async () => {
 		console.log('请求查询目标接口...')
 		return fly.get('/goal/detail')
 }
+export const PostGoal = async (data) => {
+
+		console.log('请求设置目标接口...')
+		return fly.post('/goal/set',data)
+}
 
 export const fetchHomeChart = async () => {
 
@@ -96,5 +101,5 @@ export const fetchOrderListByDate = async (date) => {
 export const postOrder = async (data) => {
 
 		console.log('请求账单列表接口...')
-		return fly.post('/order/set',{data:data})
+		return fly.post('/order/set',data)
 }

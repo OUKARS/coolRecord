@@ -2,11 +2,11 @@
 	<view>
 		<view class="header" :style="{'height':titleBarHeight,'padding-top':statusBarHeight}">
 			<text class="iconfont leftArrow header-back weight"   :style="{'border':nav.color}" v-if="nav.isdisPlayNavTitle" @tap="back"></text>
-			<view class="goal-container animated fadeInDown delay-01s"  v-if="nav.isShowGoal" @tap="jumpToGoal()">
+			<view class="goal-container animated"  v-if="nav.isShowGoal" @tap="jumpToGoal()">
 				<image class="iconimg icon-goal" :style="{'width':iconimg,'height':iconimg}" src="../../static/icon/goal.png"></image>
 				<!-- 目标 -->
 			</view>
-			<view class="setting-container animated fadeInDown delay-01s"  v-if="nav.isShowSetting"  @tap="jumpToSetting()">
+			<view class="setting-container animated"  v-if="nav.isShowSetting"  @tap="jumpToSetting()">
 				<image class="iconimg icon-setting" :style="{'width':iconimg,'height':iconimg}" src="../../static/icon/setting.png"></image>
 				<!-- 设置 -->
 			</view>
