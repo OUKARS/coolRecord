@@ -23,7 +23,7 @@
 			
 			<view class="max-num">
 				<!-- <image class="rmb-img" src="../../static/icon/rmb.png" mode=""></image> -->
-				{{current===0?dailychartData.dailyBudget:current===1?weeklychartData.weeklyBudget:monthchartData.monthBudget}}
+				{{current===0?dailychartData.dailyBudget:(current===1?weeklychartData.weeklyBudget:monthlychartData.monthBudget)}}
 			</view>
 			
 			
@@ -128,8 +128,13 @@
 			async fetchHomeChart(){
 				const res = await this.$api.fetchHomeChart()
 				this.dailychartData = res.data.dailychartData
+				// this.dailychartData.series[0].data=0.81
+				if(this.dailychartData.series[0].data<0.5 && this.dailychartData.series[0].data<0.5){this.dailychartData.series[0].color='#1FFED5'}
+				else if(this.dailychartData.series[0].data<0.8){this.dailychartData.series[0].color='#DCEA49'}
+				else this.dailychartData.series[0].color='red'
 				this.weeklychartData = res.data.weeklychartData
 				this.monthlychartData = res.data.monthchartData
+				
 				console.log(this.dailychartData)
 				console.log(this.weeklychartData)
 				console.log(this.monthlychartData)
