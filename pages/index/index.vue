@@ -29,7 +29,7 @@
 			
 		</view>
 		<view class="content">
-			<recordlist />
+			<recordlist  :orderList="todayOrderList"/>
 		</view>
 		<tabbar currentPage="home"/> 
 	</view>
@@ -40,6 +40,7 @@
 	import tabbar from '../../components/tabbar/tabbar'
 	import recordlist from '../../components/recordlist/recordlist'
 	import uCharts from '../../common/u-charts/u-charts.js';
+	import {formatDate } from '../../utils/date.js'
 	var _self;
 
 	export default {
@@ -66,44 +67,54 @@
 				cHeight3:'',//圆弧进度图
 				arcbarWidth:'',//圆弧进度图，进度条宽度,此设置可使各端宽度一致
 				pixelRatio:1,
+				firstLoad:true,
+				todayOrderList:[],
 				dailychartData: {
 					series: [{
-						max_num:123,
+						max_num:0,
 						name: '今日支出',
-						data: .5,
+						data: 0,
 						color: '#1FFED5',
-						num:4213.13
+						num:0
 					}]
 				},
 				weeklychartData: {
-					max_num:12,
+					max_num:0,
 					series: [{
 						name: '本周支出',
-						data: .7,
+						data: 0,
 						color: '#DCEA49',
-						num:4
+						num:0
 					}]
 				},
 				monthlychartData: {
-					max_num:123,
+					max_num:0,
 					series: [{
 						name: '本月支出',
-						data: .9,
+						data: 0,
 						color: 'red',
-						num:4
+						num:0
 					}]
 				},
 				
 			}
 		},
+		onShow() {
+			if(this.firstLoad == true){
+				this.fetchHomeChart()
+				this.fetchTodayOrderList()
+			}			
+			this.firstLoad = false
+		},
 		onLoad() {
 			this.fetchHomeChart()
+			this.fetchTodayOrderList()
 			_self = this;
 			this.cWidth3=uni.upx2px(480);//这里要与样式的宽高对应
 			this.cHeight3=uni.upx2px(480);//这里要与样式的宽高对应
 			this.arcbarWidth=uni.upx2px(56);
 			this.showArcbar("canvasArcbar1",this.dailychartData);
-
+			
 		},
 		created(){
 		},
@@ -125,9 +136,20 @@
 			 },
 		},
 		methods: {
+			async fetchTodayOrderList(){
+				let date = new Date()
+				let formatdate = formatDate(date)
+				const res = await this.$api.fetchOrderListByDate(formatdate)
+				this.todayOrderList = res.data
+				this.todayOrderList.forEach(e=>{
+					e.date = formatDate(new Date(e.date))
+				})
+				this.todayOrderList = this.todayOrderList.reverse()
+			},
 			async fetchHomeChart(){
 				const res = await this.$api.fetchHomeChart()
 				this.dailychartData = res.data.dailychartData
+				this.dailychartData.series[0].num="无"
 				// this.dailychartData.series[0].data=0.81
 				if(this.dailychartData.series[0].data<0.5 && this.dailychartData.series[0].data<0.5){this.dailychartData.series[0].color='#1FFED5'}
 				else if(this.dailychartData.series[0].data<0.8){this.dailychartData.series[0].color='#DCEA49'}

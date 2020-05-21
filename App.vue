@@ -66,6 +66,12 @@
 			this.wxGetDevice()
 			this.checkToken()
 			console.log('用户设备：'+this.$store.state.app.device)
+			var isOnboarding = uni.getStorageSync('isOnboarding')
+			    if (!isOnboarding) {
+			      uni.redirectTo({
+			        url: 'pages/onboarding/onboarding',
+			      })
+			    }
 			
 		},
 		onShow: function() {

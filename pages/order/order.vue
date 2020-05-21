@@ -36,11 +36,15 @@
 						分类 
 					</view>
 					<view class="category-content">
-						<view class="category-card today">
-							晚餐
+						<view v-if="selectCategoryItem.categoryId!=-1" class="select-category"  @tap="openPop()">
+							<image class="category-img" :src="selectCategoryItem.categoryImgUrl"></image>
+							<view class="text">
+								{{selectCategoryItem.categoryName}}
+							</view>
+							
 						</view>
-						<view class="category-card more">
-							...
+						<view v-else class="category-card active" @tap="openPop()">
+							点我选择
 						</view>
 					</view>
 				</view>
@@ -56,7 +60,7 @@
 					备注
 				</view>
 				<view class="order-input">
-					<input type="text" placeholder="账单备注信息" @input="remarkInput"/>
+					<input type="text" placeholder="账单备注(选填)" @input="remarkInput"/>
 				</view>
 			</view>
 			<view class="btn-container">
@@ -76,14 +80,33 @@
 		                ref="date" 
 		            ></w-picker>
 		<tabbar currentPage="order"/> 
+		<lee-popup ref="popup" type="bottom">
+			<view class="category-choose-container">
+				<view class="header">
+					选择分类
+				</view>
+				<view class="content">
+
+					<view class="category-item" :key="item.categoryId" v-for="item in categoryList" @tap="selectCategory(item)">
+							<image class="category-img" :src="item.categoryImgUrl"></image>
+							<view class="category-name">
+								{{item.categoryName}}
+							</view>
+					</view>
+				</view>
+			</view>
+			
+		</lee-popup>
 	</view>
 </template>
 
 <script>
 	import wPicker from "../../components/w-picker/w-picker.vue";
+	import LeePopup from '@/components/lee-popup/lee-popup.vue'
 	export default {
 		components:{
-		        wPicker
+		        wPicker,
+				LeePopup 
 		 },
 		data() {
 			return {
@@ -97,21 +120,51 @@
 				orderData:{
 					'type':0,
 					'date':'',
-					'categoryId':0,
 					'money':0.00,
 					'remark':'无'
 				},
+				categoryList:[],
 				nowdate:'',
 				yesterdaydate:'',
 				selectdate:'',
 				selectType:0,
+				selectCategoryItem:{
+					categoryId:-1,
+					categoryName:'',
+					categoryImgUrl:''
+				},
 				setFocus:false,
 			}
 		},
 		methods: {
-			postOrder(){
+			async fetchCategoryData(){
+				const res = await this.$api.fetchCategoryData()
+				this.categoryList = res.data
+			},
+			selectCategory(item){
+				this.selectCategoryItem = item
+			},
+			async postOrder(){
+				
 				var data = this.orderData
-				this.$api.postOrder(data)
+				if(this.selectCategoryItem.categoryId!=-1)
+					data.categoryId = this.selectCategoryItem.categoryId
+				else {
+					uni.showModal({
+						title:'哦吼',
+						content:"请选择分类！o(╥﹏╥)o",
+						showCancel:false,
+					})
+					return
+				}
+				const res = await this.$api.postOrder(data)
+				if(res.data.message="创建成功"){
+					uni.showModal({
+						title:'欧耶',
+						content:"记录成功！(＾－＾)V",
+						showCancel:false,
+					})
+					}
 			},
 			selectOrderType(type){
 				this.orderData.type=type;
@@ -156,7 +209,9 @@
 			},
 			remarkInput(e){
 				this.orderData.remark = e.detail.value
-				
+			},
+			openPop(){
+			         this.$refs.popup.open()
 			}
 				
 		},
@@ -166,6 +221,7 @@
 			this.nowdate = today
 			this.orderData.date = today
 			this.setFocus = true
+			this.fetchCategoryData()
 		},
 		onReady() {
 		}
@@ -237,10 +293,28 @@
 			}
 			.category-container{
 				.category-content{
+					vertical-align: middle;
 					// background: pink;
 					display: flex;
 					justify-content: flex-start;
 					flex-wrap: nowrap;
+					.select-category{
+						vertical-align: middle;
+						line-height: 60rpx;
+						width: 200rpx;
+						display: flex;
+						justify-content: flex-start;
+						.category-img{
+							vertical-align: middle;
+							width: 60rpx;
+							height: 60rpx;
+						}
+						.text{
+							vertical-align: middle;
+							margin-left: 10rpx;
+							color: rgb(75,60,221);
+						}
+					}
 					.category-card{
 						text-align: center;
 						margin:0 10rpx;
@@ -248,12 +322,20 @@
 						box-sizing: border-box;
 						padding: 8rpx 10rpx;
 						background: #fff;
-						width: 80rpx;
+						width: 150rpx;
 						background:#fff;
 						color:rgb(75,60,221);
 						border-radius:6rpx ;
-						border: 1rpx solid rgb(75,60,221);
+						// border: 1rpx solid rgb(75,60,221);
 						
+					}
+					.active{
+						box-shadow:0rpx 8rpx 12rpx rgba(41,41,41,.1);
+						padding: 12rpx 16rpx;
+						border-radius: 30rpx;
+						font-weight: bold;
+						background: #f6f6f6;
+						color:#6327F6 ;
 					}
 				}
 			}
@@ -349,6 +431,43 @@
 				margin:30rpx auto 0;
 				color: #fff;
 				background: linear-gradient(90deg, #5153F6 0%, #4A34D5 100%);
+			}
+		}
+	}
+	.category-choose-container{
+		height: auto;
+		.header{
+			font-size:42rpx;
+			font-weight: bold;
+			color: rgb(75,60,221);
+			margin-bottom:20rpx ;
+		}
+		.content{
+			box-sizing: border-box;
+			padding: 10rpx 0rpx;
+			border-top: 1rpx sold red;
+			display: flex;
+			width: 700rpx;
+			margin:0 auto;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+			height: auto;
+			.category-item{
+				text-align: center;
+				box-sizing: border-box;
+				padding: 20rpx;
+				width: 140rpx;
+				height: 180rpx;
+					.category-img{
+						width: 80rpx !important;
+						height: 80rpx !important;
+						box-shadow: 0rpx 10rpx 25rpx -8rpx rgba(41,41,41,0.1);
+					}
+					.category-name{
+						margin-top: 10rpx;
+						color: #696969;
+					}
+	
 			}
 		}
 	}

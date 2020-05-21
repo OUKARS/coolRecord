@@ -103,3 +103,9 @@ export const postOrder = async (data) => {
 		console.log('请求账单列表接口...')
 		return fly.post('/order/set',data)
 }
+
+export const fetchCategoryData = async () => {
+
+		console.log('请求账单列表接口...')
+		return fly.get('/category/detail')
+}
