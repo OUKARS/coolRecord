@@ -1,6 +1,13 @@
 {
 	"pages": [ 
-		
+		{
+		    "path" : "pages/data/data",
+		    "style": {
+		    	"navigationStyle": "custom"
+		    	
+		    }
+		}
+		,
 	    {
             "path" : "pages/order/order",
             "style": {
@@ -15,13 +22,6 @@
 				
 			}
 		}
-        ,{
-            "path" : "pages/data/data",
-            "style": {
-            	"navigationStyle": "custom"
-            	
-            }
-        }
         ,{
             "path" : "pages/setting/setting",
             "style": {

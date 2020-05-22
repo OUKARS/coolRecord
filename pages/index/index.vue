@@ -16,17 +16,41 @@
 		<view class="arcbar-container">
 			<canvas  canvas-id="canvasArcbar1" id="canvasArcbar1" class="charts-arcbar"></canvas>
 		</view>
+		<view class="info-container">
+			<view class="income">
+				{{current===0?'今日':current===1?'本周':'本月'}}收入
+				<view v-if="current==0" class="num">
+					￥{{dailychartData.income}}
+				</view>
+				<view v-else-if="current==1" class="num">
+					￥{{weeklychartData.income}}
+				</view>
+				<view v-else class="num">
+					￥{{monthlychartData.income}}
+				</view>
+				
+			</view>
+			<view class="deposit">
+				{{current===0?'今日':current===1?'本周':'本月'}}存款
+				<view v-if="current==0" class="num">
+					￥{{dailychartData.income-dailychartData.series[0].num}}
+				</view>
+				<view v-else-if="current==1" class="num">
+					￥{{weeklychartData.income-weeklychartData.series[0].num}}
+				</view>
+				<view v-else class="num">
+					￥{{monthlychartData.income-monthlychartData.series[0].num}}
+				</view>
+			</view>
+		</view>
 		<view class="budget-container">
 			<view class="budget-text">
 				{{current===0?'今日':current===1?'本周':'本月'}}支出预算
-			</view>
-			
+			</view>	
 			<view class="max-num">
 				<!-- <image class="rmb-img" src="../../static/icon/rmb.png" mode=""></image> -->
-				{{current===0?dailychartData.dailyBudget:(current===1?weeklychartData.weeklyBudget:monthlychartData.monthBudget)}}
+				￥{{current===0?dailychartData.dailyBudget:(current===1?weeklychartData.weeklyBudget:monthlychartData.monthBudget)}}
 			</view>
-			
-			
 		</view>
 		<view class="content">
 			<recordlist  :orderList="todayOrderList"/>
@@ -232,6 +256,26 @@
 		background: linear-gradient(0deg, #5153F6 0%, #4A34D5 100%);
 	
 		min-height: 100vh;
+		.info-container{
+			width: 80%;
+			margin: 0 auto 24rpx;
+			display: flex;
+			font-weight: bold;
+			font-size: 36rpx;
+			justify-content: space-around;
+			color: #fff;
+			.num{
+				color:#FFE36C;
+			}
+			.income{
+				display: flex;
+				justify-content: flex-start;
+			}
+			.deposit{
+				display: flex;
+				justify-content: flex-start;
+			}
+		}
 		.arcbar-container{
 			height: auto;
 			margin:0 auto;
@@ -299,11 +343,12 @@
 			transition: all 1s;
 			display: flex;
 			justify-content: center;
-			font-size: 36rpx;
+			font-size: 32rpx;
 			font-weight: bold;
 			letter-spacing: 4rpx;
 			vertical-align:middle;
 			.budget-text{
+				vertical-align:middle;
 				line-height: 48rpx;
 				height: 48rpx;
 				font-size: 32rpx;
@@ -312,7 +357,7 @@
 			.max-num{
 				color: #FFE36C;
 				vertical-align:middle;
-				font-size: 36rpx;
+				font-size: 32rpx;
 				.rmb-img{
 					vertical-align:top;
 					width: 42rpx;

@@ -16,28 +16,31 @@
 		             @confirm="confirm"
 		              />     
 		    </view>
-	<view class="recordlist-content">
-			<view :key="index" class="list-item" v-for="(item,index) in recordlist">
+	<view class="orderlist-content">
+			<view :key="index" class="list-item" v-for="(item,index) in orderlist">
 				<view class="left-content">
-					<image class="category-img" src="../../static/category/breakfirst.png" mode=""></image>
+					<image class="category-img" :src="item.categoryImgUrl" mode=""></image>
 				</view>
 				<view class="right-content">
 					<view class="info">
 						<view class="text">
 							<view class="category-text">
-								早餐
+								{{item.categoryName}}
 							</view>
 							<view class="other-text">
-								无备注
+								{{item.remark}}
 							</view>
 						</view>
 					</view>
 					<view class="num">
-						<view class="rmb">
-							-123
+						<view v-if="item.type==0" class="rmb" style="color:red">
+							-{{item.money}}
+						</view>
+						<view v-else class="rmb">
+							+{{item.money}}
 						</view>
 						<view class="time">
-							2020-5-6
+							{{item.date}}
 						</view>
 					</view>
 				</view>
@@ -49,7 +52,7 @@
 
 <script>
 	import uniCalendar from '../../components/uni-calendar/uni-calendar.vue'
-	
+	import {formatDate } from '../../utils/date.js'
 	export default {
 	    components: {
 	        uniCalendar
@@ -64,23 +67,18 @@
 					'navTitle':'账单列表' //导航标题
 				},
 	            nowdate:'',
-				recordlist:[{
-					temp:1
-				},{
-					temp:2
-				},{
-					temp:2
-				},{
-					temp:2
-				},{
-					temp:2
-				},]
+				orderlist:[]
 	        }
 	
 	    },
 	    methods: {
-			fetchOrderListByDate(date){
-				this.$api.fetchOrderListByDate(date)
+			async fetchOrderListByDate(date){
+				const res = await this.$api.fetchOrderListByDate(date)
+				var list = res.data
+				list.forEach(e=>{
+					e.date = formatDate(new Date(e.date))
+				})
+				this.orderlist = list
 			},
 			open(){
 			    this.$refs.calendar.open();
@@ -88,6 +86,7 @@
 			confirm(e) {
 				console.log(e);
 				this.nowdate = e.fulldate;
+				this.fetchOrderListByDate(this.nowdate)
 			},
 			completeDate(value) {
 			        return value < 10 ? "0"+value:value;
@@ -141,7 +140,7 @@
 			font-weight: bold;
 		}
 	}
-	.recordlist-content{
+	.orderlist-content{
 		box-sizing: border-box;
 		padding: 10rpx 40rpx;
 		border-radius:20rpx ;

@@ -99,7 +99,7 @@
 <style lang="scss">
 .recordlist-container{
 	box-sizing: border-box;
-	margin-top: 60rpx;
+	margin-top: 50rpx;
 	padding-top: 10rpx;
 	
 	height: auto;
