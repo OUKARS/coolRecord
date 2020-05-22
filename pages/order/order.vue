@@ -83,6 +83,7 @@
 		<lee-popup ref="popup" type="bottom">
 			<view class="category-choose-container">
 				<view class="header">
+					<image style="width: 36rpx;height: 35rpx;margin-right: 8rpx;" src="../../static/icon/choosecategory.png" mode=""></image>
 					选择分类
 				</view>
 				<view class="content">

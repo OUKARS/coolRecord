@@ -18,7 +18,7 @@
 		</view>
 		<view class="budget-container">
 			<view class="budget-text">
-				{{current===0?'今日':current===1?'本周':'本月'}}预算
+				{{current===0?'今日':current===1?'本周':'本月'}}支出预算
 			</view>
 			
 			<view class="max-num">
@@ -113,7 +113,7 @@
 			this.cWidth3=uni.upx2px(480);//这里要与样式的宽高对应
 			this.cHeight3=uni.upx2px(480);//这里要与样式的宽高对应
 			this.arcbarWidth=uni.upx2px(56);
-			this.showArcbar("canvasArcbar1",this.dailychartData);
+			
 			
 		},
 		created(){
@@ -149,17 +149,29 @@
 			async fetchHomeChart(){
 				const res = await this.$api.fetchHomeChart()
 				this.dailychartData = res.data.dailychartData
-				this.dailychartData.series[0].num="无"
-				// this.dailychartData.series[0].data=0.81
-				if(this.dailychartData.series[0].data<0.5 && this.dailychartData.series[0].data<0.5){this.dailychartData.series[0].color='#1FFED5'}
-				else if(this.dailychartData.series[0].data<0.8){this.dailychartData.series[0].color='#DCEA49'}
-				else this.dailychartData.series[0].color='red'
 				this.weeklychartData = res.data.weeklychartData
 				this.monthlychartData = res.data.monthchartData
+				// this.dailychartData.series[0].num="无"
+				// this.dailychartData.series[0].data=0.81
+				this.dailychartData.series[0].name='今日支出'
+				if(this.dailychartData.series[0].data<=0.1){this.dailychartData.series[0].color='#fff'}
+				else if(this.dailychartData.series[0].data<=0.5){this.dailychartData.series[0].color='#1FFED5'}
+				else if(this.dailychartData.series[0].data<=0.8){this.dailychartData.series[0].color='#DCEA49'}
+				else this.dailychartData.series[0].color='red'
 				
-				console.log(this.dailychartData)
-				console.log(this.weeklychartData)
-				console.log(this.monthlychartData)
+				if(this.weeklychartData.series[0].data<=0.1){this.weeklychartData.series[0].color='#fff'}
+				else if(this.weeklychartData.series[0].data<=0.5){this.weeklychartData.series[0].color='#1FFED5'}
+				else if(this.weeklychartData.series[0].data<=0.8){this.weeklychartData.series[0].color='#DCEA49'}
+				else this.weeklychartData.series[0].color='red'
+				
+				if(this.monthlychartData.series[0].data<=0.1){this.monthlychartData.series[0].color='#fff'}
+				else if(this.monthlychartData.series[0].data<=0.5){this.monthlychartData.series[0].color='#1FFED5'}
+				else if(this.monthlychartData.series[0].data<=0.8){this.monthlychartData.series[0].color='#DCEA49'}
+				else this.monthlychartData.series[0].color='red'
+				
+				
+				this.showArcbar("canvasArcbar1",this.dailychartData);
+				
 			},
 			swipeToIndex0(){
 				this.showArcbar("canvasArcbar1",this.dailychartData);
@@ -275,9 +287,9 @@
 				border-radius: 40rpx;
 			}
 			.header-img{
-				top:-50rpx;
+				top:-40rpx;
 				position: absolute;
-				opacity: 0.3;
+				opacity: 0.32;
 			}
 
 		}

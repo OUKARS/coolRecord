@@ -17,7 +17,17 @@
 			</view>
 			
 		</view>
-		<view class="recordlist-content">
+		<view v-if="orderList.length==0" class="nodata-container">
+			<view class="img-container">
+				<image class="nodata-img" src="../../static/bg/nodata.png" mode=""></image>
+			</view>
+			
+			<view class="text">
+				今天还没有账单哦~
+			</view>
+		</view>
+		<view v-else class="recordlist-content">
+			
 				<view :key="item.orderId" class="list-item" v-for="item in orderList">
 					<view class="left-content">
 						<image class="category-img" :src="item.categoryImgUrl" mode=""></image>
@@ -46,6 +56,7 @@
 						</view>
 					</view>
 				</view>
+				
 	
 		</view>
 	</view>
@@ -92,7 +103,26 @@
 	padding-top: 10rpx;
 	
 	height: auto;
-	
+	.nodata-container{
+		margin: 60rpx 0;
+		width: 100%;
+		text-align: center;
+		.img-container{
+			width: 120rpx;
+			height: 95rpx;
+			margin:10rpx auto;
+			.nodata-img{
+				opacity: 0.8;
+				width: 120rpx;
+				height: 95rpx;
+			}
+		}
+		
+		.text{
+			opacity: 0.8;
+			color: #A7A7F9;
+		}
+	}
 	.header{
 		margin-bottom: 20rpx;
 		display: flex;
@@ -101,12 +131,14 @@
 		.title{
 			display: flex;
 			align-items:center;
+			
 			.icon{
 				width: 44rpx;
 				height: 44rpx;
 				margin-right: 6rpx;
 			}
 			.text{
+				
 				color:#A7A7F9;
 				font-weight: bold;
 				font-size: 36rpx;

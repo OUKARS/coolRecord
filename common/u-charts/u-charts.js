@@ -1788,8 +1788,10 @@ function drawRingTitle(opts, config, context, center) {
   
   if(title){
   	  //假如是首页的arcbar
+  let num = opts.series[0].num
   if(customtype == 'index-arcbar'){
-  	  title=opts.series[0].num ||'';
+	  console.log(num)
+	   title=num ||'无';
   	}
   }
   var _textWidth = measureText(title, titlefontSize*1.2);
@@ -1800,7 +1802,7 @@ function drawRingTitle(opts, config, context, center) {
   }
   context.font = "bold 40rpx 微软雅黑"
   context.beginPath();
-  context.setFontSize(titlefontSize*1.2);
+  context.setFontSize(titlefontSize*1.3);
   context.setFillStyle(titleFontColor);
   context.fillText(title, _startX, _startY);
   context.closePath();

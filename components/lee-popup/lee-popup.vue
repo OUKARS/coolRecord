@@ -174,7 +174,8 @@
 		box-sizing: border-box;
 		background-color: $uni-bg-color;
 		position: absolute;
-		
+		border-top-right-radius: 40rpx;
+		border-top-left-radius: 40rpx;
 		&-round > & {
 			border-radius: $uni-border-radius-lg;
 		}
