@@ -149,8 +149,8 @@
 		margin-right: 10rpx;
 		background: rgba(67,49,193,0.8);
 		.iconimg{
-			width: 48rpx !important;
-			height: 48rpx !important;
+			width: 45rpx !important;
+			height: 45rpx !important;
 		}
 	}
 </style>
