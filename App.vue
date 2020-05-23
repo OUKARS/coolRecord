@@ -59,6 +59,40 @@
 						});
 					}
 				})
+			},
+			async downloadExcel(){
+				const res = await this.$api.exportDataExcel('2020-05-11','2020-05-20')
+				let url = res.data
+				uni.downloadFile({
+				    url: 'http://'+url, //仅为示例，并非真实的资源
+				    success: (res) => {
+						console.log(res)
+						uni.saveFile({
+						      tempFilePath: res.tempFilePath,
+						      success: function (res) {
+						        var savedFilePath = res.savedFilePath;
+								console.log(savedFilePath)
+						      }
+						    });
+						uni.showModal({
+						    title: '保存文件',
+						    content: '保存成功！是否现在打开文档？',
+						    success: function (res) {
+						        if (res.confirm) {
+									uni.openDocument({
+									      filePath: res.tempFilePath,
+									      success: function (res) {
+									        console.log('打开文档成功');
+									}
+									});
+						        }
+						    }
+						});
+						
+						
+				        
+				    }
+				});
 			}
 		},
 		onLaunch: function() {
@@ -72,6 +106,8 @@
 			        url: 'pages/onboarding/onboarding',
 			      })
 			    }
+			// this.downloadExcel()
+			
 			
 		},
 		onShow: function() {

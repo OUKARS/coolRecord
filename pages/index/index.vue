@@ -3,14 +3,24 @@
 		<my-bar :nav="setNav"></my-bar>
 		<view class="swiper-header">
 			<image class="header-img" src="../../static/bg/bg-index.png" mode=""></image>
-			<view class="daily animated fadeInLeft delay-08s" :class="{headerctive:current==0}" @tap="swipeToIndex0()">
+			<view class="daily header animated fadeInLeft delay-08s" :class="{headerctive:current==0}" @tap="swipeToIndex0()">
 				今日
+				<view v-if="current==0" class="percentage" :style="{color:dailychartData.series[0].color}">
+					{{Math.round(dailychartData.series[0].data*100)+'%'}}
+				</view>
+				
 			</view>
-			<view class="weekly animated fadeInDown delay-1s" :class="{headerctive:current==1}"  @tap="swipeToIndex1()">
+			<view class="weekly header animated fadeInDown delay-1s" :class="{headerctive:current==1}"  @tap="swipeToIndex1()">
 				本周
+				<view v-if="current==1" class="percentage" :style="{color:weeklychartData.series[0].color}">
+					{{Math.round(weeklychartData.series[0].data*100)+'%'}}
+				</view>
 			</view>
-			<view class="monthly animated fadeInRight delay-08s" :class="{headerctive:current==2}"  @tap="swipeToIndex2()">
+			<view class="monthly header animated fadeInRight delay-08s" :class="{headerctive:current==2}"  @tap="swipeToIndex2()">
 				本月
+				<view v-if="current==2" class="percentage" :style="{color:monthlychartData.series[0].color}">
+					{{Math.round(monthlychartData.series[0].data*100)+'%'}}
+				</view>
 			</view>
 		</view>	
 		<view class="arcbar-container">
@@ -33,13 +43,13 @@
 			<view class="deposit">
 				{{current===0?'今日':current===1?'本周':'本月'}}存款
 				<view v-if="current==0" class="num">
-					￥{{dailychartData.income-dailychartData.series[0].num}}
+					￥{{dailychartData.deposit}}
 				</view>
 				<view v-else-if="current==1" class="num">
-					￥{{weeklychartData.income-weeklychartData.series[0].num}}
+					￥{{weeklychartData.deposit}}
 				</view>
 				<view v-else class="num">
-					￥{{monthlychartData.income-monthlychartData.series[0].num}}
+					￥{{monthlychartData.deposit}}
 				</view>
 			</view>
 		</view>
@@ -53,7 +63,7 @@
 			</view>
 		</view>
 		<view class="content">
-			<recordlist  :orderList="todayOrderList"/>
+			<recordlist @updateInfo="updateInfo" ref="indexlist"/>
 		</view>
 		<tabbar currentPage="home"/> 
 	</view>
@@ -92,10 +102,11 @@
 				arcbarWidth:'',//圆弧进度图，进度条宽度,此设置可使各端宽度一致
 				pixelRatio:1,
 				firstLoad:true,
-				todayOrderList:[],
 				dailychartData: {
+					income:0,
+					dailyBudget:0,
+					deposit:0,
 					series: [{
-						max_num:0,
 						name: '今日支出',
 						data: 0,
 						color: '#1FFED5',
@@ -103,7 +114,9 @@
 					}]
 				},
 				weeklychartData: {
-					max_num:0,
+					income:0,
+					weeklyBudget:0,
+					deposit:0,
 					series: [{
 						name: '本周支出',
 						data: 0,
@@ -112,7 +125,9 @@
 					}]
 				},
 				monthlychartData: {
-					max_num:0,
+					income:0,
+					monthBudget:0,
+					deposit:0,
 					series: [{
 						name: '本月支出',
 						data: 0,
@@ -124,15 +139,12 @@
 			}
 		},
 		onShow() {
-			if(this.firstLoad == true){
-				this.fetchHomeChart()
-				this.fetchTodayOrderList()
-			}			
-			this.firstLoad = false
+			this.fetchHomeChart()
+			this.$refs.indexlist.refresh()
 		},
 		onLoad() {
 			this.fetchHomeChart()
-			this.fetchTodayOrderList()
+			
 			_self = this;
 			this.cWidth3=uni.upx2px(480);//这里要与样式的宽高对应
 			this.cHeight3=uni.upx2px(480);//这里要与样式的宽高对应
@@ -160,15 +172,8 @@
 			 },
 		},
 		methods: {
-			async fetchTodayOrderList(){
-				let date = new Date()
-				let formatdate = formatDate(date)
-				const res = await this.$api.fetchOrderListByDate(formatdate)
-				this.todayOrderList = res.data
-				this.todayOrderList.forEach(e=>{
-					e.date = formatDate(new Date(e.date))
-				})
-				this.todayOrderList = this.todayOrderList.reverse()
+			updateInfo(){
+				this.fetchHomeChart()
 			},
 			async fetchHomeChart(){
 				const res = await this.$api.fetchHomeChart()
@@ -178,17 +183,17 @@
 				// this.dailychartData.series[0].num="无"
 				// this.dailychartData.series[0].data=0.81
 				this.dailychartData.series[0].name='今日支出'
-				if(this.dailychartData.series[0].data<=0.1){this.dailychartData.series[0].color='#fff'}
+				if(this.dailychartData.series[0].data<=0.1){this.dailychartData.series[0].color='#87CEFA'}
 				else if(this.dailychartData.series[0].data<=0.5){this.dailychartData.series[0].color='#1FFED5'}
 				else if(this.dailychartData.series[0].data<=0.8){this.dailychartData.series[0].color='#DCEA49'}
 				else this.dailychartData.series[0].color='red'
 				
-				if(this.weeklychartData.series[0].data<=0.1){this.weeklychartData.series[0].color='#fff'}
+				if(this.weeklychartData.series[0].data<=0.1){this.weeklychartData.series[0].color='#87CEFA'}
 				else if(this.weeklychartData.series[0].data<=0.5){this.weeklychartData.series[0].color='#1FFED5'}
 				else if(this.weeklychartData.series[0].data<=0.8){this.weeklychartData.series[0].color='#DCEA49'}
 				else this.weeklychartData.series[0].color='red'
 				
-				if(this.monthlychartData.series[0].data<=0.1){this.monthlychartData.series[0].color='#fff'}
+				if(this.monthlychartData.series[0].data<=0.1){this.monthlychartData.series[0].color='#87CEFA'}
 				else if(this.monthlychartData.series[0].data<=0.5){this.monthlychartData.series[0].color='#1FFED5'}
 				else if(this.monthlychartData.series[0].data<=0.8){this.monthlychartData.series[0].color='#DCEA49'}
 				else this.monthlychartData.series[0].color='red'
@@ -198,15 +203,18 @@
 				
 			},
 			swipeToIndex0(){
+				wx.vibrateShort()
 				this.showArcbar("canvasArcbar1",this.dailychartData);
 				this.current = 0;
 
 			},
 			swipeToIndex1(){
+				wx.vibrateShort()
 				this.showArcbar("canvasArcbar1",this.weeklychartData);
 				this.current = 1;
 			},
 			swipeToIndex2(){
+				wx.vibrateShort()
 				this.showArcbar("canvasArcbar1",this.monthlychartData);
 				this.current = 2;
 			
@@ -263,6 +271,7 @@
 			font-weight: bold;
 			font-size: 36rpx;
 			justify-content: space-around;
+			flex-wrap: wrap;
 			color: #fff;
 			.num{
 				color:#FFE36C;
@@ -275,6 +284,10 @@
 				display: flex;
 				justify-content: flex-start;
 			}
+		}
+		.notice-container{
+
+			text-align: center;
 		}
 		.arcbar-container{
 			height: auto;
@@ -298,23 +311,26 @@
 			margin: 0 auto;	
 			
 		}
-		.headerctive{
-			transition: all 1s;
-			-webkit-transition: all 1s;
-			box-shadow:15rpx 15rpx 20rpx rgba(50,50,93,.1),5rpx 15rpx 20rpx rgba(0,0,0,.1);
-			background: #fff;
-			color: #454356;
-		}
+		
 		.swiper-header{
 			transition: all 1s;
 			-webkit-transition: all 1s;
 			width: 80%;
 			margin:60rpx auto 50rpx;
+			height: 120rpx;
 			color: #fff;
 			font-weight: bold;
 			position: relative;
 			display: flex;
 			justify-content: space-around;
+			text-align: center;
+			.header{
+				height: 80rpx;
+			}
+			.percentage{
+				margin-top: 8rpx;
+				font-size: 25rpx;
+			}
 			.daily{
 				box-sizing: border-box;
 				padding: 16rpx 32rpx;
@@ -337,6 +353,14 @@
 			}
 
 		}
+		.headerctive{
+			height: 120rpx !important;
+			transition: all 1s;
+			-webkit-transition: all 1s;
+			box-shadow:15rpx 15rpx 20rpx rgba(50,50,93,.1),5rpx 15rpx 20rpx rgba(0,0,0,.1);
+			background: #fff;
+			color: #454356;
+		}
 		.budget-container{
 			color: #fff;
 			text-align: center;
@@ -358,11 +382,7 @@
 				color: #FFE36C;
 				vertical-align:middle;
 				font-size: 32rpx;
-				.rmb-img{
-					vertical-align:top;
-					width: 42rpx;
-					height:42rpx;
-				}
+
 				
 				// height:48rpx;
 				// line-height: 48rpx;

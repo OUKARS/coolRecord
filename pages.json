@@ -1,20 +1,20 @@
 {
 	"pages": [ 
 		{
-		    "path" : "pages/data/data",
+		    "path" : "pages/order/order",
+		    "style": {
+		    	"navigationStyle": "custom"
+		    	
+		    }
+		},
+		{
+		    "path" : "pages/list/list",
 		    "style": {
 		    	"navigationStyle": "custom"
 		    	
 		    }
 		}
 		,
-	    {
-            "path" : "pages/order/order",
-            "style": {
-            	"navigationStyle": "custom"
-            	
-            }
-        },
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -22,15 +22,18 @@
 				
 			}
 		}
-        ,{
+		,
+		{
+		    "path" : "pages/data/data",
+		    "style": {
+		    	"navigationStyle": "custom"
+		    	
+		    }
+		}
+		,
+	    
+		{
             "path" : "pages/setting/setting",
-            "style": {
-            	"navigationStyle": "custom"
-            	
-            }
-        }
-        ,{
-            "path" : "pages/list/list",
             "style": {
             	"navigationStyle": "custom"
             	

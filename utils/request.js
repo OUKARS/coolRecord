@@ -98,14 +98,56 @@ export const fetchOrderListByDate = async (date) => {
 		return fly.get('/order/list',{date:date})
 }
 
+export const fetchOrderDetail = async (id) => {
+
+		console.log('请求账单详情接口...')
+		return fly.get('/order/detail',{orderId:id})
+}
+
 export const postOrder = async (data) => {
 
-		console.log('请求账单列表接口...')
+		console.log('请求提交账单接口...')
 		return fly.post('/order/set',data)
 }
 
 export const fetchCategoryData = async () => {
 
-		console.log('请求账单列表接口...')
+		console.log('请求分类列表接口...')
 		return fly.get('/category/detail')
 }
+
+export const exportDataExcel = async (start,end) => {
+
+		console.log('请求导出账单接口...')
+		return fly.get('/export/order',{
+			startDate:start,
+			endDate:end
+		})
+}
+
+export const fetchRoseData = async (type,kind,date) => {
+
+		console.log('请求玫瑰图接口...')
+		return fly.get('/chart/rosecategory',{
+			type:type,
+			kind:kind,
+			date:date
+		})
+}
+
+export const fetchLineData = async (kind,date) => {
+
+		console.log('请求线图接口...')
+		return fly.get('/chart/line',{
+			kind:kind,
+			date:date
+		})
+}
+export const deleteOrder = async (id) => {
+
+		console.log('请求删除订单接口...')
+		return fly.delete('/order/delete',{
+			orderId:id
+		})
+}
+

@@ -1,6 +1,7 @@
 <template>
 	<view class="order-container">
-		<my-bar :nav="setNav"></my-bar>
+		<my-bar v-if="!orderid" :nav="setNav"></my-bar>
+		<my-bar v-else :nav="setprimaryNav"></my-bar>
 		<view class="order-header">
 			<image class="order-bg-img animated fadeInDown" src="../../static/bg/bg-order.png"></image>
 		</view>
@@ -49,18 +50,18 @@
 					</view>
 				</view>
 			</view>
-			<view class="order-title" value="0">
+			<view class="order-title" >
 				金额
 			</view>
 			<view class="order-input">
-				<input type="digit" placeholder="0.00" :focus='setFocus' @input="moneyInput"/>
+				<input :value="orderData.money" type="digit" placeholder="0.00" :focus='setFocus' @input="moneyInput"/>
 			</view>
 			<view class="remark-container">
 				<view class="order-title">
 					备注
 				</view>
-				<view class="order-input">
-					<input type="text" placeholder="账单备注(选填)" @input="remarkInput"/>
+				<view v-if="remarkshow" class="order-textarea">
+					<textarea :value="orderData.remark" auto-height adjust-position placeholder="账单备注(选填)" @input="remarkInput"/>
 				</view>
 			</view>
 			<view class="btn-container">
@@ -79,7 +80,7 @@
 		                :disabled-after="false"
 		                ref="date" 
 		            ></w-picker>
-		<tabbar currentPage="order"/> 
+		<tabbar v-if="!orderid" currentPage="order"/> 
 		<lee-popup ref="popup" type="bottom">
 			<view class="category-choose-container">
 				<view class="header">
@@ -87,8 +88,13 @@
 					选择分类
 				</view>
 				<view class="content">
-
-					<view class="category-item" :key="item.categoryId" v-for="item in categoryList" @tap="selectCategory(item)">
+					<view v-if="orderData.type==0" class="category-item" :key="item.categoryId" v-for="item in categoryList.outdata" @tap="selectCategory(item)">
+						<image class="category-img" :src="item.categoryImgUrl"></image>
+						<view class="category-name">
+							{{item.categoryName}}
+						</view>
+					</view>
+					<view v-if="orderData.type==1" class="category-item" :key="item.categoryId" v-for="item in categoryList.indata" @tap="selectCategory(item)">
 							<image class="category-img" :src="item.categoryImgUrl"></image>
 							<view class="category-name">
 								{{item.categoryName}}
@@ -104,13 +110,26 @@
 <script>
 	import wPicker from "../../components/w-picker/w-picker.vue";
 	import LeePopup from '@/components/lee-popup/lee-popup.vue'
+	import {formatDate } from '../../utils/date.js'
 	export default {
+		props:{
+			orderid:{
+				type:String,
+				default:''
+			}
+		},
 		components:{
 		        wPicker,
 				LeePopup 
 		 },
 		data() {
 			return {
+				setprimaryNav:{
+					'isdisPlayNavTitle':true,
+					'isShowGoal':false,
+					'isShowSetting':false,
+					'navTitle':'首页' //导航标题
+				},
 				setNav:{
 					'color':'red',  //字体颜色
 					'isdisPlayNavTitle':false, //是否显示返回按钮，由于导航栏是共用的，把所有的东西封装好，
@@ -131,22 +150,38 @@
 				selectType:0,
 				selectCategoryItem:{
 					categoryId:-1,
-					categoryName:'',
-					categoryImgUrl:''
+					categoryName:'无',
+					categoryImgUrl:'无'
 				},
 				setFocus:false,
+				remarkshow:true
 			}
 		},
 		methods: {
+			async fetchOrderDetail(){
+				const res = await this.$api.fetchOrderDetail(this.orderid)
+				this.selectCategoryItem.categoryId = res.data.categoryId
+				this.selectCategoryItem.categoryName = res.data.categoryName
+				this.selectCategoryItem.categoryImgUrl = res.data.categoryImgUrl
+				this.orderData.type = res.data.type
+				this.orderData.date = formatDate(new Date(res.data.date))
+				this.orderData.money = res.data.money
+				this.orderData.remark = res.data.remark
+				console.log(this.selectCategoryItem)
+				console.log(this.yesterdaydate)
+			},
 			async fetchCategoryData(){
 				const res = await this.$api.fetchCategoryData()
 				this.categoryList = res.data
 			},
 			selectCategory(item){
+				wx.vibrateShort()
+				this.remarkshow = true
 				this.selectCategoryItem = item
 			},
 			async postOrder(){
-				
+				if(this.orderid)
+					this.orderData.orderId = this.orderid
 				var data = this.orderData
 				if(this.selectCategoryItem.categoryId!=-1)
 					data.categoryId = this.selectCategoryItem.categoryId
@@ -169,8 +204,15 @@
 			},
 			selectOrderType(type){
 				this.orderData.type=type;
+				this.selectCategoryItem={
+					categoryId:-1,
+					categoryName:'',
+					categoryImgUrl:''
+				}
 			},
 			showDatePicker(){
+				wx.vibrateShort()
+				this.remarkshow = false
 				this.$refs.date.show()
 			},
 			chooseToday(){
@@ -181,16 +223,19 @@
 				console.log("Yesterday")
 				var myDate = new Date()
 				myDate.setTime(myDate.getTime()-1*24*60*60*1000);
-				var yesterday = this.getNowFormatDay(myDate)
+				var yesterday = formatDate(myDate)
 				this.yesterdaydate = yesterday
 				this.orderData.date = yesterday
 				
 			},
 			onConfirm(event,type){
 				wx.vibrateShort()
+				this.remarkshow = true
 				this.orderData.date = event.value
 			},
-			onCancel(){},
+			onCancel(){
+				this.remarkshow = true
+			},
 			completeDate(value) {
 			        return value < 10 ? "0"+value:value;
 			},
@@ -212,20 +257,35 @@
 				this.orderData.remark = e.detail.value
 			},
 			openPop(){
-			         this.$refs.popup.open()
+				this.remarkshow = false
+			    this.$refs.popup.open()
 			}
 				
 		},
+		onShow() {
+			// if(this.orderid){
+			// 	this.fetchOrderDetail()
+			// }
+		},
 		onLoad() {
+			
 			var nowDate = new Date();
-			var today = this.getNowFormatDay(nowDate)
-			this.nowdate = today
-			this.orderData.date = today
+			var today = formatDate(nowDate)
+			this.nowdate = today	
 			this.setFocus = true
 			this.fetchCategoryData()
+			if(this.orderid){
+				this.fetchOrderDetail()
+			} else {
+				this.orderData.date = today
+			}
+			
+			console.log("Yesterday")
+			var myDate = new Date()
+			myDate.setTime(myDate.getTime()-1*24*60*60*1000);
+			this.yesterdaydate = formatDate(myDate)
+			
 		},
-		onReady() {
-		}
 	}
 </script>
 
@@ -249,7 +309,7 @@
 		}
 	}
 	.order-content{
-		width: 86%;
+		width: 90%;
 		margin:0 auto;
 		box-sizing: border-box;
 		padding: 50rpx;
@@ -306,6 +366,7 @@
 						display: flex;
 						justify-content: flex-start;
 						.category-img{
+							background: transparent;
 							vertical-align: middle;
 							width: 60rpx;
 							height: 60rpx;
@@ -331,7 +392,7 @@
 						
 					}
 					.active{
-						box-shadow:0rpx 8rpx 12rpx rgba(41,41,41,.1);
+						box-shadow:0rpx 6rpx 10rpx rgba(41,41,41,.1);
 						padding: 12rpx 16rpx;
 						border-radius: 30rpx;
 						font-weight: bold;
@@ -373,7 +434,7 @@
 			font-size: 36rpx;
 			padding: 20rpx 24rpx;
 			background: #F5F5F5;
-			font-size: 36rpx;
+			font-size: 32rpx;
 			color: #6327F6;
 			margin-bottom:20rpx ;
 		}
@@ -421,7 +482,21 @@
 				color: #fff;
 			}
 		}
-		
+		.remark-container{
+			.order-textarea{
+				line-height: auto;
+				align-items: center;
+				border-radius: 24rpx;
+				box-sizing: border-box;
+				font-size: 36rpx;
+				padding: 20rpx 24rpx;
+				background: #F5F5F5;
+				font-size: 32rpx;
+				color: #6327F6;
+				margin-bottom:20rpx ;
+			}
+			
+		}
 		.btn-container{
 			margin:60rpx 0 0;
 			.order-btn{
@@ -462,10 +537,10 @@
 					.category-img{
 						width: 80rpx !important;
 						height: 80rpx !important;
-						box-shadow: 0rpx 10rpx 25rpx -8rpx rgba(41,41,41,0.1);
+						// box-shadow: 0rpx 10rpx 25rpx -8rpx rgba(41,41,41,0.1);
 					}
 					.category-name{
-						margin-top: 10rpx;
+						margin-top: 5rpx;
 						color: #696969;
 					}
 	

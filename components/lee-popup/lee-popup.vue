@@ -99,9 +99,15 @@
 					padding: this.padding
 				}, this.customStyle)
 				if (this.animation) {
-					style.transition = 'all .5s'
+					style.transition = 'all .3s'
 				}
-				return Object.entries(style).map(item => `${item[0]}: ${item[1]}`).join(';')
+				let styleString=''
+				let keys = Object.keys(style)
+				keys.forEach((e,i)=>{
+					styleString= styleString+`${e}:${style[e]};`
+				})
+
+				return styleString
 			},
 			
 			// 遮罩层类计算
@@ -172,6 +178,9 @@
 	
 	.lee-popup {
 		box-sizing: border-box;
+		
+		//默认初始时就在底部收起
+		transform: translate(0, 100%);
 		background-color: $uni-bg-color;
 		position: absolute;
 		border-top-right-radius: 40rpx;
@@ -203,14 +212,14 @@
 		}
 		&-type_bottom > & {
 			left: 0;
-			bottom: 0;
+			bottom:0 ;
 			transform: translate(0, 100%);
 			border-bottom-left-radius: 0;
 			border-bottom-right-radius: 0;
 		}
 		
 		&-status_open > &,
-		&-status_opened > & {
+		&-status_opened > & {	
 			transform: translate(0, 0);
 		}
 	}

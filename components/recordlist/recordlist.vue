@@ -1,5 +1,5 @@
 <template>
-	<view class="recordlist-container animated fadeInUp delay-016s">
+	<view class="recordlist-container animated fadeInUp delay-016s" >
 		<view class="header">
 			<view class="title">
 				<image class="icon" src="../../static/icon/index-list.png" mode=""></image>
@@ -23,12 +23,20 @@
 			</view>
 			
 			<view class="text">
-				今天还没有账单哦~
+				今天没有账单记录哦~
 			</view>
 		</view>
 		<view v-else class="recordlist-content">
-			
-				<view :key="item.orderId" class="list-item" v-for="item in orderList">
+				
+				<view :key="item.orderId" class="list-item" v-for="item in orderList" @touchstart="touchItemStart" @touchmove="touchItemMove" @touchend="touchItemEnd(item.orderId)">
+					<view :class="{menuactive:selectOrderId===item.orderId}" class="menu-container" >
+						<view class="edit" @tap="jumpToOrder(item.orderId)">
+							编辑
+						</view>
+						<view class="delete" @tap="deleteOrder(item.orderId)">
+							删除
+						</view>
+					</view>
 					<view class="left-content">
 						<image class="category-img" :src="item.categoryImgUrl" mode=""></image>
 					</view>
@@ -63,34 +71,104 @@
 </template>
 
 <script>
+	import {formatDate } from '../../utils/date.js'
+	var startX = 0; 
+	var endX =0;
 	export default {
-		props:{
-			orderList: {
-				required: true,
-				type: Array,
-			},
-		},
+
 		data() {
 			return {
-				recordlist:[{
-					temp:1
-				},{
-					temp:2
-				},{
-					temp:2
-				},{
-					temp:2
-				},{
-					temp:2
-				},]
+				selectOrderId:'',
+				orderList:''
 			};
+		},
+		created() {
+			this.fetchTodayOrderList()
 		},
 		methods:{
 			jumpToList(){
-			
+				wx.vibrateShort()
 				uni.navigateTo({
 				    url: '../list/list'
 				});
+			},
+			showMenu(id){
+				
+			},
+			touchItemStart(e){
+				console.log(e)
+				startX=e.touches[0].pageX;
+			},
+			touchItemMove(e){
+				console.log(e)
+				endX=e.touches[0].pageX;
+			},
+			touchItemEnd(id){
+				let distance = endX-startX
+				
+				if(id && distance<=-50)
+					this.selectOrderId = id
+				else this.selectOrderId = ''
+				console.log(id+' '+distance)
+				
+			},
+			refresh(){
+				this.fetchTodayOrderList()
+			},
+			async fetchTodayOrderList(){
+				
+				let date = new Date()
+				let formatdate = formatDate(date)
+				const res = await this.$api.fetchOrderListByDate(formatdate)
+				this.orderList = res.data
+				this.orderList.forEach(e=>{
+					e.date = formatDate(new Date(e.date))
+				})
+				this.orderList = this.orderList.reverse()
+				console.log("重新获取成功")
+			},
+			async deleteOrderRequest(id){
+				const result = await this.$api.deleteOrder(id)
+				if(result.data.message=='删除成功'){
+					uni.showModal({
+						title:'欧耶',
+						content:"删除成功！",
+						showCancel:false,
+					})
+					this.$emit('updateInfo')
+					this.fetchTodayOrderList()
+				} else {
+					uni.showModal({
+						title:'咦',
+						content:"好像失败了o(╥﹏╥)o",
+						showCancel:false,
+					})
+				}
+			},
+			deleteOrder(id){
+				wx.vibrateShort()
+				let _self =this
+				if(!id)
+					return
+				uni.showModal({
+				    title: '删除账单',
+				    content: '确定要删除该账单吗？',
+				    success: function (res) {
+				        if (res.confirm) {
+				            console.log('用户确定删除');
+							_self.deleteOrderRequest(id)
+				        } else if (res.cancel) {
+				            console.log('用户取消删除');
+				        }
+				    }
+				});
+			},
+			jumpToOrder(id){
+				wx.vibrateShort()
+				uni.navigateTo({
+				    url: '../order/order?orderid='+id
+				});
+				this.selectOrderId =''
 			}
 		}
 	}
@@ -168,6 +246,48 @@
 		// background: #fff;
 		width: 100%;
 		height: auto;
+		position: relative;
+		overflow: hidden;
+		.menu-container{
+			top:0;
+			right: 0;
+			width: 320rpx;
+			height: 140rpx;
+			// background: pink;
+			border-top-right-radius: 15rpx;
+			border-bottom-right-radius: 15rpx;
+			right: -100%;
+			opacity: 0;
+			transition: all .4s;
+			position: absolute;
+			vertical-align: middle;
+			display: flex;
+			justify-content: flex-start;
+			.edit{
+				width: 160rpx;
+				vertical-align: middle;
+				text-align: center;
+				background: rgb(255,227,108);;
+				color: rgb(67,73,106);
+				line-height: 140rpx;
+				font-weight: bold;
+				font-size: 36rpx;
+			}
+			.delete{
+				width: 160rpx;
+				vertical-align: middle;
+				text-align: center;
+				line-height: 140rpx;
+				font-size: 36rpx;
+				font-weight: bold;
+				color: #fff;
+			}
+		}
+		.menuactive{
+			opacity: 1;
+			right: 0;
+			background: red !important;
+		}
 		.list-item{
 			margin-bottom: 24rpx;
 			background: #fff;
@@ -183,6 +303,7 @@
 			display: flex;
 			justify-content: space-between;
 			flex-wrap: nowrap;
+			position: relative;
 			.left-content{
 				box-sizing: border-box;
 				padding: 20rpx 0;

@@ -6,6 +6,10 @@
 				<image class="iconimg icon-goal" :style="{'width':iconimg,'height':iconimg}" src="../../static/icon/goal.png"></image>
 				<!-- 目标 -->
 			</view>
+			<view class="list-container animated"  v-if="nav.isShowSetting"  @tap="jumpToList()">
+				<image class="iconimg icon-list" :style="{'width':iconimg,'height':iconimg}" src="../../static/icon/list.png"></image>
+				<!-- 列表 -->
+			</view>
 			<view class="setting-container animated"  v-if="nav.isShowSetting"  @tap="jumpToSetting()">
 				<image class="iconimg icon-setting" :style="{'width':iconimg,'height':iconimg}" src="../../static/icon/setting.png"></image>
 				<!-- 设置 -->
@@ -63,6 +67,12 @@
 			 	uni.navigateTo({
 			 	    url: '../setting/setting'
 			 	});
+			 },
+			 jumpToList(){
+			 	wx.vibrateShort()
+			 	uni.navigateTo({
+			 	    url: '../list/list'
+			 	});
 			 }
 		}
 	}
@@ -102,15 +112,14 @@
 	.goal-container{
 		color: #fff;
 		box-sizing: border-box;
-		padding: 12rpx 28rpx;
-		border-radius: 16px;
+		padding: 12rpx 22rpx;
+		border-radius: 18px;
 		display: flex;
 		justify-content: space-around;
 		margin-right: 10rpx;
 		
 		background: rgba(67,49,193,0.8);
 		.iconimg{
-			margin-right: 4rpx;
 			width: 48rpx !important;
 			height: 48rpx !important;
 		}
@@ -119,14 +128,27 @@
 	.setting-container{
 		color: #fff;
 		box-sizing: border-box;
-		padding: 12rpx 28rpx;
-		border-radius: 16px;
+		padding: 12rpx 22rpx;
+		border-radius: 18px;
 		display: flex;
 		justify-content: space-around;
 		margin-right: 10rpx;
 		background: rgba(67,49,193,0.8);
 		.iconimg{
-			margin-right: 4rpx;
+			width: 48rpx !important;
+			height: 48rpx !important;
+		}
+	}
+	.list-container{
+		color: #fff;
+		box-sizing: border-box;
+		padding: 12rpx 22rpx;
+		border-radius: 18px;
+		display: flex;
+		justify-content: space-around;
+		margin-right: 10rpx;
+		background: rgba(67,49,193,0.8);
+		.iconimg{
 			width: 48rpx !important;
 			height: 48rpx !important;
 		}
