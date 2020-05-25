@@ -21,16 +21,30 @@
 				@touchstart="touchStart" 
 				@touchend="touchEnd">
 			</date-picker>
+			<range-picker
+							v-if="mode=='range'" 
+							class="w-picker-wrapper"
+							:startYear="startYear"
+							:endYear="endYear"
+							:value="value"
+							:item-height="itemHeight"
+							:current="current"
+							@change="handlerChange"
+							@touchstart="touchStart" 
+							@touchend="touchEnd">
+						</range-picker>
 		</view>
 	</view>
 </template>
 
 <script>
 	import datePicker from "./date-picker.vue"
+	import rangePicker from "./range-picker.vue"
 	export default {
 		name:"w-picker",
 		components:{
 			datePicker,
+			rangePicker
 		},
 		props:{
 			mode:{

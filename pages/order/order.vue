@@ -3,7 +3,7 @@
 		<my-bar v-if="!orderid" :nav="setNav"></my-bar>
 		<my-bar v-else :nav="setprimaryNav"></my-bar>
 		<view class="order-header">
-			<image class="order-bg-img animated fadeInDown" src="../../static/bg/bg-order.png"></image>
+			<image class="order-bg-img animated fadeInDown" src="https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/bg/bg-order.png"></image>
 		</view>
 		<view class="order-content">
 			<view class="type-container">
@@ -180,6 +180,7 @@
 				this.selectCategoryItem = item
 			},
 			async postOrder(){
+				let _self = this
 				if(this.orderid)
 					this.orderData.orderId = this.orderid
 				var data = this.orderData
@@ -193,14 +194,50 @@
 					})
 					return
 				}
+				if(this.orderData.money<=0){
+					uni.showModal({
+						title:'哦吼',
+						content:"金额必须大于0o(╥﹏╥)o",
+						showCancel:false,
+					})
+					return
+				}
 				const res = await this.$api.postOrder(data)
 				if(res.data.message="创建成功"){
 					uni.showModal({
 						title:'欧耶',
 						content:"记录成功！(＾－＾)V",
 						showCancel:false,
+						success:function(res){
+							
+							if(_self.orderid){
+								uni.navigateBack({
+									delta:1
+								})
+							} else {
+								//清除数据
+								var nowDate = new Date();
+								var today = formatDate(nowDate)
+								
+								_self.orderData={
+									'type':0,
+									'date':'',
+									'money':0.00,
+									'remark':'无'
+								}
+								
+								_self.orderData.date = today
+								_self.selectCategoryItem={
+									categoryId:-1,
+									categoryName:'无',
+									categoryImgUrl:'无'
+								}
+								console.log("清除数据")
+							}
+						}
 					})
 					}
+					
 			},
 			selectOrderType(type){
 				this.orderData.type=type;
@@ -211,7 +248,6 @@
 				}
 			},
 			showDatePicker(){
-				wx.vibrateShort()
 				this.remarkshow = false
 				this.$refs.date.show()
 			},
@@ -268,7 +304,6 @@
 			// }
 		},
 		onLoad() {
-			
 			var nowDate = new Date();
 			var today = formatDate(nowDate)
 			this.nowdate = today	

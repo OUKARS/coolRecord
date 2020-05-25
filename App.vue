@@ -7,20 +7,34 @@
 				    key: 'token',
 				    success: async function (res) {
 						const token  = res.data
-						if(token === ''){
+						if(token == ''){
 							console.log('token为空');
-							self.$api.login()
-							
+							const result = await self.$api.login()
+							if(result.data.token.length>0) {
+								self.$store.dispatch('user/addToken',result.data.token)
+								self.checkGoal()
+							}
 						} else {
 							console.log('token存在');
-							const res =  await self.$api.checkToken()
+							// self.$store.dispatch('user/addToken',token)
+							const result =  await self.$api.checkToken()
+							if(result.data.message == 'token有效'){
+								console.log("addtoken")
+								self.$store.dispatch('user/addToken',token)
+								self.checkGoal()
+							} 
+							
 						}
 						
 				        
 				    },
-					fail:function(e){
+					fail:async function(e){
 						console.log('token不存在')
-						self.$api.login()
+						const result = await self.$api.login()
+						if(result.data.token.length>0) {
+							self.$store.dispatch('user/addToken',result.data.token)
+							self.checkGoal()
+						}
 					}
 				});
 			},
@@ -32,82 +46,41 @@
 					}
 				})
 			},
-			wxlogin(){
-				var self = this
-				uni.login({
-					provider:'weixin',
-					success:function(loginRes){
-						let code = loginRes.code;
-						uni.request({
-							url: 'http://www.codeskystar.cn:8080/weixin/login/auth',
-							data: {
-								code: code,
-							},
-							method: 'GET',
-							header: {
-							'content-type': 'application/json'
-							},
-							success: (res) => {
-								//openId、或SessionKdy存储//隐藏loading
-								console.log("code已经发给后端")
-								const token = res.data.data
-								self.$store.dispatch('user/addToken',token)
-							},
-							fail: (err) => {
-								console.log(err)
-							}
-						});
+			checkGoal(){
+				uni.getStorage({
+				    key: 'isgoal',
+				    success: function (res) {
+						if(res.data === 'yes')
+						{
+							console.log('目标已经设置')
+							
+						} else {
+							uni.redirectTo({
+							  url: '../onboarding/onboarding',
+							})
+							console.log(res)
+						}
+				    },
+					fail:function(e){
+						console.log('goal未设置')
+						uni.redirectTo({
+						  url: '../onboarding/onboarding',
+						})
 					}
-				})
-			},
-			async downloadExcel(){
-				const res = await this.$api.exportDataExcel('2020-05-11','2020-05-20')
-				let url = res.data
-				uni.downloadFile({
-				    url: 'http://'+url, //仅为示例，并非真实的资源
-				    success: (res) => {
-						console.log(res)
-						uni.saveFile({
-						      tempFilePath: res.tempFilePath,
-						      success: function (res) {
-						        var savedFilePath = res.savedFilePath;
-								console.log(savedFilePath)
-						      }
-						    });
-						uni.showModal({
-						    title: '保存文件',
-						    content: '保存成功！是否现在打开文档？',
-						    success: function (res) {
-						        if (res.confirm) {
-									uni.openDocument({
-									      filePath: res.tempFilePath,
-									      success: function (res) {
-									        console.log('打开文档成功');
-									}
-									});
-						        }
-						    }
-						});
-						
-						
-				        
-				    }
 				});
 			}
+			
+			
 		},
 		onLaunch: function() {
 			console.log('App Launch')
-			this.wxGetDevice()
-			this.checkToken()
-			console.log('用户设备：'+this.$store.state.app.device)
-			var isOnboarding = uni.getStorageSync('isOnboarding')
-			    if (!isOnboarding) {
-			      uni.redirectTo({
-			        url: 'pages/onboarding/onboarding',
-			      })
-			    }
-			// this.downloadExcel()
+			setTimeout(()=>{
+				this.checkToken()
+			},2000)
 			
+			this.wxGetDevice()
+			
+			console.log('用户设备：'+this.$store.state.app.device)
 			
 		},
 		onShow: function() {

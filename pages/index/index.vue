@@ -2,7 +2,7 @@
 	<view class="container">
 		<my-bar :nav="setNav"></my-bar>
 		<view class="swiper-header">
-			<image class="header-img" src="../../static/bg/bg-index.png" mode=""></image>
+			<image class="header-img" src="https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/bg/bg-index.png" mode=""></image>
 			<view class="daily header animated fadeInLeft delay-08s" :class="{headerctive:current==0}" @tap="swipeToIndex0()">
 				今日
 				<view v-if="current==0" class="percentage" :style="{color:dailychartData.series[0].color}">
@@ -139,13 +139,21 @@
 			}
 		},
 		onShow() {
-			this.fetchHomeChart()
+			let token = this.$store.state.user.token
+			console.log("onshow",token)
+			if(!this.firstLoad)
+				this.fetchHomeChart()
 			this.$refs.indexlist.refresh()
+			
+		},
+
+		onBackPress(e){
+			
 		},
 		onLoad() {
-			this.fetchHomeChart()
 			
 			_self = this;
+			this.fetchHomeChart()
 			this.cWidth3=uni.upx2px(480);//这里要与样式的宽高对应
 			this.cHeight3=uni.upx2px(480);//这里要与样式的宽高对应
 			this.arcbarWidth=uni.upx2px(56);
@@ -177,44 +185,43 @@
 			},
 			async fetchHomeChart(){
 				const res = await this.$api.fetchHomeChart()
-				this.dailychartData = res.data.dailychartData
-				this.weeklychartData = res.data.weeklychartData
-				this.monthlychartData = res.data.monthchartData
-				// this.dailychartData.series[0].num="无"
-				// this.dailychartData.series[0].data=0.81
-				this.dailychartData.series[0].name='今日支出'
-				if(this.dailychartData.series[0].data<=0.1){this.dailychartData.series[0].color='#87CEFA'}
-				else if(this.dailychartData.series[0].data<=0.5){this.dailychartData.series[0].color='#1FFED5'}
-				else if(this.dailychartData.series[0].data<=0.8){this.dailychartData.series[0].color='#DCEA49'}
-				else this.dailychartData.series[0].color='red'
-				
-				if(this.weeklychartData.series[0].data<=0.1){this.weeklychartData.series[0].color='#87CEFA'}
-				else if(this.weeklychartData.series[0].data<=0.5){this.weeklychartData.series[0].color='#1FFED5'}
-				else if(this.weeklychartData.series[0].data<=0.8){this.weeklychartData.series[0].color='#DCEA49'}
-				else this.weeklychartData.series[0].color='red'
-				
-				if(this.monthlychartData.series[0].data<=0.1){this.monthlychartData.series[0].color='#87CEFA'}
-				else if(this.monthlychartData.series[0].data<=0.5){this.monthlychartData.series[0].color='#1FFED5'}
-				else if(this.monthlychartData.series[0].data<=0.8){this.monthlychartData.series[0].color='#DCEA49'}
-				else this.monthlychartData.series[0].color='red'
-				
-				
-				this.showArcbar("canvasArcbar1",this.dailychartData);
-				
+				if(res.data){
+					this.firstLoad=false
+					this.dailychartData = res.data.dailychartData
+					this.weeklychartData = res.data.weeklychartData
+					this.monthlychartData = res.data.monthchartData
+					// this.dailychartData.series[0].num="无"
+					// this.dailychartData.series[0].data=0.81
+					this.dailychartData.series[0].name='今日支出'
+					if(this.dailychartData.series[0].data<=0.1){this.dailychartData.series[0].color='#87CEFA'}
+					else if(this.dailychartData.series[0].data<=0.5){this.dailychartData.series[0].color='#1FFED5'}
+					else if(this.dailychartData.series[0].data<=0.8){this.dailychartData.series[0].color='#DCEA49'}
+					else this.dailychartData.series[0].color='red'
+					
+					if(this.weeklychartData.series[0].data<=0.1){this.weeklychartData.series[0].color='#87CEFA'}
+					else if(this.weeklychartData.series[0].data<=0.5){this.weeklychartData.series[0].color='#1FFED5'}
+					else if(this.weeklychartData.series[0].data<=0.8){this.weeklychartData.series[0].color='#DCEA49'}
+					else this.weeklychartData.series[0].color='red'
+					
+					if(this.monthlychartData.series[0].data<=0.1){this.monthlychartData.series[0].color='#87CEFA'}
+					else if(this.monthlychartData.series[0].data<=0.5){this.monthlychartData.series[0].color='#1FFED5'}
+					else if(this.monthlychartData.series[0].data<=0.8){this.monthlychartData.series[0].color='#DCEA49'}
+					else this.monthlychartData.series[0].color='red'
+					console.log("1")
+					this.showArcbar("canvasArcbar1",this.dailychartData);
+				}
 			},
 			swipeToIndex0(){
-				wx.vibrateShort()
+
 				this.showArcbar("canvasArcbar1",this.dailychartData);
 				this.current = 0;
 
 			},
 			swipeToIndex1(){
-				wx.vibrateShort()
 				this.showArcbar("canvasArcbar1",this.weeklychartData);
 				this.current = 1;
 			},
 			swipeToIndex2(){
-				wx.vibrateShort()
 				this.showArcbar("canvasArcbar1",this.monthlychartData);
 				this.current = 2;
 			

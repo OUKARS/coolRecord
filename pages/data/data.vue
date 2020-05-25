@@ -105,7 +105,6 @@
 				_self.showLineA("canvasLineA",this.lineChartData);
 			},
 			showDatePicker(){
-				wx.vibrateShort()
 				this.openpicker = true
 				this.$refs.date.show()
 			},
@@ -256,7 +255,7 @@
 .container{
 	background: linear-gradient(0deg, #5153F6 0%, #4A34D5 100%);
 	box-sizing: border-box;
-	padding-bottom: 30rpx;
+	padding-bottom: 80rpx;
 	min-height: 100vh;
 	.data-header{
 		width: 90%;
@@ -300,6 +299,9 @@
 		}
 	}
 	.rose-container{
+		box-sizing: border-box;
+		padding: 10rpx 0 30rpx;
+		
 		height: auto;
 		width: 90%;
 		margin: 0 auto;
@@ -324,7 +326,6 @@
 						height: 95rpx;
 					}
 				}
-				
 				.text{
 					color: #BABABA;
 				}
@@ -384,6 +385,8 @@
 	.line-container{
 		height: auto;
 		width: 90%;
+		box-sizing: border-box;
+		padding: 0 0 10rpx;
 		margin: 48rpx auto;
 		.line-card{
 			background: #fff;

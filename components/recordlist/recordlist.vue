@@ -17,6 +17,7 @@
 			</view>
 			
 		</view>
+		
 		<view v-if="orderList.length==0" class="nodata-container">
 			<view class="img-container">
 				<image class="nodata-img" src="../../static/bg/nodata.png" mode=""></image>
@@ -27,7 +28,9 @@
 			</view>
 		</view>
 		<view v-else class="recordlist-content">
-				
+				<view class="tip">
+					左滑可以编辑和删除哦~
+				</view>
 				<view :key="item.orderId" class="list-item" v-for="item in orderList" @touchstart="touchItemStart" @touchmove="touchItemMove" @touchend="touchItemEnd(item.orderId)">
 					<view :class="{menuactive:selectOrderId===item.orderId}" class="menu-container" >
 						<view class="edit" @tap="jumpToOrder(item.orderId)">
@@ -83,11 +86,13 @@
 			};
 		},
 		created() {
-			this.fetchTodayOrderList()
+			let token = this.$store.state.user.token
+			if(token.length>0)
+				this.fetchTodayOrderList()
+			
 		},
 		methods:{
 			jumpToList(){
-				wx.vibrateShort()
 				uni.navigateTo({
 				    url: '../list/list'
 				});
@@ -109,7 +114,6 @@
 				if(id && distance<=-50)
 					this.selectOrderId = id
 				else this.selectOrderId = ''
-				console.log(id+' '+distance)
 				
 			},
 			refresh(){
@@ -120,12 +124,15 @@
 				let date = new Date()
 				let formatdate = formatDate(date)
 				const res = await this.$api.fetchOrderListByDate(formatdate)
-				this.orderList = res.data
-				this.orderList.forEach(e=>{
-					e.date = formatDate(new Date(e.date))
-				})
-				this.orderList = this.orderList.reverse()
-				console.log("重新获取成功")
+				if(res.data.message!='无账单'){
+					this.orderList = res.data
+					this.orderList.forEach(e=>{
+						e.date = e.date.replace(/-/g, '/')
+						e.date = formatDate(new Date(e.date))
+					})
+					this.orderList = this.orderList.reverse()
+				}
+				
 			},
 			async deleteOrderRequest(id){
 				const result = await this.$api.deleteOrder(id)
@@ -164,7 +171,6 @@
 				});
 			},
 			jumpToOrder(id){
-				wx.vibrateShort()
 				uni.navigateTo({
 				    url: '../order/order?orderid='+id
 				});
@@ -181,6 +187,7 @@
 	padding-top: 10rpx;
 	
 	height: auto;
+	
 	.nodata-container{
 		margin: 60rpx 0;
 		width: 100%;
@@ -241,13 +248,20 @@
 	}
 	.recordlist-content{
 		box-sizing: border-box;
-		// padding: 30rpx 0;
+		padding: 0rpx 0rpx 100rpx;
 		border-radius:20rpx ;
 		// background: #fff;
 		width: 100%;
 		height: auto;
 		position: relative;
 		overflow: hidden;
+		.tip{
+			margin: 0rpx auto 20rpx;
+			text-align: center;
+			color:#A0A0F0;
+		
+			font-size: 32rpx;
+		}
 		.menu-container{
 			top:0;
 			right: 0;
@@ -258,7 +272,7 @@
 			border-bottom-right-radius: 15rpx;
 			right: -100%;
 			opacity: 0;
-			transition: all .4s;
+			transition: all .2s;
 			position: absolute;
 			vertical-align: middle;
 			display: flex;
@@ -291,7 +305,7 @@
 		.list-item{
 			margin-bottom: 24rpx;
 			background: #fff;
-			box-shadow: 0rpx 10rpx 25rpx -8rpx rgba(41,41,41,0.1);
+			box-shadow: 0rpx 10rpx 25rpx -8rpx rgba(41,41,41,0.5);
 			border-radius: 15rpx;
 			box-sizing: border-box;
 			padding: 20rpx 40rpx;

@@ -1790,7 +1790,6 @@ function drawRingTitle(opts, config, context, center) {
   	  //假如是首页的arcbar
   let num = opts.series[0].num
   if(customtype == 'index-arcbar'){
-	  console.log(num)
 	   title=num ||'无';
   	}
   }

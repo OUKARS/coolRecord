@@ -94,13 +94,18 @@
 	    },
 	    methods: {
 			async fetchOrderListByDate(date){
+				this.firstLoad=false
 				const res = await this.$api.fetchOrderListByDate(date)
-				var list = res.data
-				list.forEach(e=>{
-					e.date = formatDate(new Date(e.date))
-				})
-				this.orderList = list.reverse()
-				console.log(this.orderList)
+				if(res.data.message!='无账单'){
+					var list = res.data
+					list.forEach(e=>{
+						e.date = e.date.replace(/-/g, '/')
+						e.date = formatDate(new Date(e.date))
+					})
+					this.orderList = list.reverse()
+					console.log(this.orderList)
+				}
+				
 			},
 			open(){
 			    this.$refs.calendar.open();
@@ -185,7 +190,7 @@
 		onShow() {
 			if(this.firstLoad==false)
 				this.fetchOrderListByDate(this.nowdate)
-			this.firstLoad=false
+			
 		},
 		onLoad() {
 			var nowDate = new Date();

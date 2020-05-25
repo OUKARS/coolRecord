@@ -2,7 +2,7 @@
 	<view class="goal-container">
 		<my-bar :nav="setNav"></my-bar>
 		<view class="goal-header animated fadeInDown">
-			<image class="goal-bg-img" src="../../static/bg/bg-goal.png"></image>
+			<image class="goal-bg-img" src="https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/bg/bg-goal.png"></image>
 		</view>
 		<view class="goal-content">
 			<view class="monthcost-container">
@@ -49,16 +49,19 @@
 				this.goalData = res.data
 			},
 			async PostGoal(){
+				var _self = this
 				var monthCost = parseFloat(this.goalData.monthCost)
 				var monthSave = parseFloat(this.goalData.monthSave)
 				if(monthCost >=0 && monthSave >=0){
 					const res = await this.$api.PostGoal({monthCost,monthSave})
 					if(res.data.message==='设置成功'){
+						_self.$store.dispatch('user/addGoal','yes')
 						uni.showModal({
 							title:'成功',
 							content:"设置成功！",
 							showCancel:false,
 							success: function (res) {
+								
 							        if (res.confirm) {
 							            uni.navigateBack({
 							            	delta:1

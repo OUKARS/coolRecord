@@ -7,6 +7,7 @@ Vue.prototype.$api = API
 App.mpType = 'app'
 import myBar from './components/bar/bar.vue';
 Vue.component('my-bar',myBar)
+
 const app = new Vue({
     ...App,
 	store

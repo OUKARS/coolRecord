@@ -1,24 +1,38 @@
-import { getToken, setToken, removeToken } from '../../utils/auth.js'
+import { getToken, setToken, removeToken,setGoal,removeGoal } from '../../utils/auth.js'
 
 
 const state = {
-	token:'null'
+	token:'',
+	isgoal:'yes'
 }
 
 const mutations = {
   RESET_STATE: (state) => {
-    state.token=''
+    state.token='',
+	state.isgoal='yes'
   },
   SET_TOKEN: (state, token) => {
     state.token = token
+  },
+
+  SET_GOAL: (state, bool) => {
+    state.isgoal = bool
   }
 }
 
 const actions = {
 	addToken({ commit },token) {
 	  return new Promise(resolve => {
-	    setToken(token) // must remove  token  first
+	    setToken(token) 
 	    commit('SET_TOKEN', token)
+	    resolve()
+	  })
+	},
+	addGoal({ commit },bool) {
+	  return new Promise(resolve => {
+	    setGoal(bool) 
+		console.log("addgoal",bool)
+	    commit('SET_GOAL', bool)
 	    resolve()
 	  })
 	},

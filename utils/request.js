@@ -1,15 +1,19 @@
 var Fly=require('../common/wx.umd.min.js') //wx.js为您下载的源码文件
 var fly=new Fly;
 const whiteUrl='/login/auth'
-
-fly.config.baseURL = "http://www.codeskystar.cn/weixin"
+var jumpflag=0
+fly.config.baseURL = "https://www.codeskystar.cn/weixin"
 // 配置响应拦截器
 fly.interceptors.response.use(
 	(response) => {
 			// 如果请求报错
 			if (response.data.code == 301) {
 				console.log("token无效，重新登录")
+				uni.redirectTo({
+					url:'../onboarding/onboarding'
+				})
 				login() //token过期，重新登录
+				
 				return response.data
 
 			}
@@ -22,17 +26,32 @@ fly.interceptors.response.use(
 			}
 			else{
 				//只将请求结果的data字段返回
+				
 				console.log("请求正常："+response.engine.responseURL)
 				return response.data
 			}
 		},
 		(err) => {
 			//发生网络错误后会走到这里
+
+			
+			if(err.response.data.message=='用户未登录，请先登录'){
+				if(jumpflag==0){
+					console.log("跳转onborading")
+					uni.redirectTo({
+						url:'../onboarding/onboarding'
+					})
+					login() //token过期，重新登录
+					jumpflag=1;
+				}
+				
+			} else {
 			uni.showModal({
 				title:'咦',
 				content:"网络好像出现了点问题o(╥﹏╥)o",
 				showCancel:false
 			})
+			}
 			return Promise.resolve("网络好像出现了点问题o(╥﹏╥)o")
 		}
 )
@@ -65,8 +84,8 @@ export const login = async () => {
 	let code = await wxLogin();
 	let res = await fly.get('/login/auth',{code: code});
 	uni.setStorageSync('token',res.data.token)
-	console.log("token:")
-	console.log(res.data.token)
+	console.log("登录成功")
+	return res
 }
 
 export const checkToken = async () => {
