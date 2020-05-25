@@ -269,7 +269,8 @@
 <style lang="scss">
 	.container{
 		background: linear-gradient(0deg, #5153F6 0%, #4A34D5 100%);
-	
+		width: 100%;
+		overflow:hidden;
 		min-height: 100vh;
 		.info-container{
 			width: 80%;

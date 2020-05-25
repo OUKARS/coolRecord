@@ -82,8 +82,13 @@
 		data() {
 			return {
 				selectOrderId:'',
-				orderList:''
+				orderList:'',
+				device:'',
+				
 			};
+		},
+		mounted() {
+
 		},
 		created() {
 			let token = this.$store.state.user.token
@@ -110,7 +115,7 @@
 			},
 			touchItemEnd(id){
 				let distance = endX-startX
-				
+				// if(this.device == ''){}
 				if(id && distance<=-50)
 					this.selectOrderId = id
 				else this.selectOrderId = ''
