@@ -3,7 +3,8 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": true
 				
 			}
 		}
@@ -27,7 +28,8 @@
 		{
 		    "path" : "pages/list/list",
 		    "style": {
-		    	"navigationStyle": "custom"
+		    	"navigationStyle": "custom",
+				"enablePullDownRefresh": true
 		    	
 		    }
 		}
@@ -43,7 +45,8 @@
 		{
 		    "path" : "pages/data/data",
 		    "style": {
-		    	"navigationStyle": "custom"
+		    	"navigationStyle": "custom",
+				"enablePullDownRefresh": true
 		    	
 		    }
 		}
@@ -59,9 +62,9 @@
         
     ],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "学生记账",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "酷记账",
+		"navigationBarBackgroundColor": "#4A34D5",
+		"backgroundColor": "#4A34D5"
 	}
 }

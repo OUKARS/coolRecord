@@ -82,7 +82,7 @@
 		data() {
 			return {
 				selectOrderId:'',
-				orderList:'',
+				orderList:[],
 				device:'',
 				
 			};
@@ -129,7 +129,7 @@
 				let date = new Date()
 				let formatdate = formatDate(date)
 				const res = await this.$api.fetchOrderListByDate(formatdate)
-				if(res.data.message!='无账单'){
+				if(res.data.length>0){
 					this.orderList = res.data
 					this.orderList.forEach(e=>{
 						e.date = e.date.replace(/-/g, '/')

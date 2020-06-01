@@ -9,11 +9,6 @@ fly.interceptors.response.use(
 			// 如果请求报错
 			if (response.data.code == 301) {
 				console.log("token无效，重新登录")
-				uni.redirectTo({
-					url:'../onboarding/onboarding'
-				})
-				login() //token过期，重新登录
-				
 				return response.data
 
 			}
@@ -33,18 +28,12 @@ fly.interceptors.response.use(
 		},
 		(err) => {
 			//发生网络错误后会走到这里
-
-			
 			if(err.response.data.message=='用户未登录，请先登录'){
-				if(jumpflag==0){
-					console.log("跳转onborading")
-					uni.redirectTo({
-						url:'../onboarding/onboarding'
-					})
-					login() //token过期，重新登录
-					jumpflag=1;
-				}
-				
+				uni.showModal({
+					title:'咦',
+					content:"用户登录失败，请重新启动小程序o(╥﹏╥)o",
+					showCancel:false
+				})
 			} else {
 			uni.showModal({
 				title:'咦',

@@ -22,7 +22,13 @@
 								console.log("addtoken")
 								self.$store.dispatch('user/addToken',token)
 								self.checkGoal()
-							} 
+							} else {
+								const result = await self.$api.login()
+								if(result.data.token.length>0) {
+									self.$store.dispatch('user/addToken',result.data.token)
+									self.checkGoal()
+								}
+							}
 							
 						}
 						
@@ -50,11 +56,13 @@
 				uni.getStorage({
 				    key: 'isgoal',
 				    success: function (res) {
+						console.log('goal',res)
 						if(res.data === 'yes')
 						{
 							console.log('目标已经设置')
 							
-						} else {
+						} else {   
+							console.log("success jump to onboarding")
 							uni.redirectTo({
 							  url: '../onboarding/onboarding',
 							})
@@ -62,10 +70,13 @@
 						}
 				    },
 					fail:function(e){
-						console.log('goal未设置')
-						uni.redirectTo({
-						  url: '../onboarding/onboarding',
-						})
+						if(e.errMsg == 'getStorage:fail data not found'){
+							console.log('goal未设置')
+							uni.redirectTo({
+							  url: '../onboarding/onboarding',
+							})
+						}
+						
 					}
 				});
 			}
@@ -74,10 +85,7 @@
 		},
 		onLaunch: function() {
 			console.log('App Launch')
-			setTimeout(()=>{
-				this.checkToken()
-			},2000)
-			
+			this.checkToken()	
 			this.wxGetDevice()
 			
 			console.log('用户设备：'+this.$store.state.app.device)

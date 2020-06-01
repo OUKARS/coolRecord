@@ -76,7 +76,10 @@
 	import uCharts from '../../common/u-charts/u-charts.js';
 	import {formatDate } from '../../utils/date.js'
 	var _self;
-
+	import {
+	        mapActions,
+	        mapState,
+	    } from 'vuex'
 	export default {
 		components:{
 			newRecord,
@@ -84,6 +87,7 @@
 			tabbar,
 			// roundChart
 		},
+		computed: mapState(['token']),  
 		data() {
 			return {
 				title: '123',
@@ -139,7 +143,7 @@
 			}
 		},
 		onShow() {
-			let token = this.$store.state.user.token
+			let token = this.token
 			console.log("onshow",token)
 			if(!this.firstLoad)
 				this.fetchHomeChart()

@@ -10,7 +10,7 @@
 		:duration="duration"
 		:circular="circular"
 		:vertical="vertical"
-		easing-function="easeInOutCubic"
+		easing-function="default"
 		:previous-margin="previousMargin"
 		:next-margin="nextMargin"
 		:display-multiple-items="displayMultipleItems"
