@@ -66,6 +66,7 @@
 			<recordlist @updateInfo="updateInfo" ref="indexlist"/>
 		</view>
 		<tabbar currentPage="home"/> 
+		<!-- <onloading v-if="isloading"/> -->
 	</view>
 </template>
 
@@ -74,6 +75,7 @@
 	import tabbar from '../../components/tabbar/tabbar'
 	import recordlist from '../../components/recordlist/recordlist'
 	import uCharts from '../../common/u-charts/u-charts.js';
+	import onloading from '../../components/loading/loading.vue'
 	import {formatDate } from '../../utils/date.js'
 	var _self;
 	import {
@@ -85,6 +87,7 @@
 			newRecord,
 			recordlist,
 			tabbar,
+			onloading
 			// roundChart
 		},
 		computed: mapState(['token']),  
@@ -106,6 +109,7 @@
 				arcbarWidth:'',//圆弧进度图，进度条宽度,此设置可使各端宽度一致
 				pixelRatio:1,
 				firstLoad:true,
+				isloading:false,
 				dailychartData: {
 					income:0,
 					dailyBudget:0,
@@ -188,6 +192,7 @@
 				this.fetchHomeChart()
 			},
 			async fetchHomeChart(){
+				this.isloading = true
 				const res = await this.$api.fetchHomeChart()
 				if(res.data){
 					this.firstLoad=false
@@ -213,6 +218,9 @@
 					else this.monthlychartData.series[0].color='red'
 					console.log("1")
 					this.showArcbar("canvasArcbar1",this.dailychartData);
+					this.isloading = false
+				} else {
+					this.isloading = false
 				}
 			},
 			swipeToIndex0(){
@@ -272,6 +280,7 @@
 
 <style lang="scss">
 	.container{
+		position: relative;
 		background: linear-gradient(0deg, #5153F6 0%, #4A34D5 100%);
 		width: 100%;
 		overflow:hidden;

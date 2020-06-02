@@ -159,3 +159,10 @@ export const deleteOrder = async (id) => {
 		})
 }
 
+export const importData = async () => {
+
+		console.log('请求预设数据接口...')
+		return fly.get('/pingwei/api')
+}
+
+

@@ -202,14 +202,16 @@
 		},
 		methods: {
 			jumpToWeChatAdmin(){
+				var that = this
 				uni.showModal({
 					title:'注意',
 					content:"以评委身份进入，酷记账会自动预设目标，并录入一批预设数据，以全面展现小程序功能，是否确定？",
 					success: function (res) {
 					        if (res.confirm) {
-					           uni.redirectTo({
+								that.$api.importData()
+					            uni.redirectTo({
 					               url: '../index/index'
-					           });
+					            });
 					        } 
 					    }
 				})
