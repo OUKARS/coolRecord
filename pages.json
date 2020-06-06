@@ -3,12 +3,17 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationStyle": "custom",
-				"enablePullDownRefresh": true
-				
+				"navigationStyle": "custom"
 			}
 		}
 		,
+		{
+		    "path" : "pages/gesture/gesture",
+		    "style": {
+		    	"navigationStyle": "custom"
+		    }
+		},
+		
 		{
 		    "path" : "pages/onboarding/onboarding",
 		    "style": {
@@ -57,6 +62,7 @@
             	
             }
         }
+        
         
     ],
 	"globalStyle": {

@@ -29,11 +29,11 @@ fly.interceptors.response.use(
 		(err) => {
 			//发生网络错误后会走到这里
 			if(err.response.data.message=='用户未登录，请先登录'){
-				uni.showModal({
-					title:'咦',
-					content:"用户登录失败，请重新启动小程序o(╥﹏╥)o",
-					showCancel:false
-				})
+				// uni.showModal({
+				// 	title:'咦',
+				// 	content:"用户登录失败，请重新启动小程序o(╥﹏╥)o",
+				// 	showCancel:false
+				// })
 			} else {
 			uni.showModal({
 				title:'咦',
@@ -53,116 +53,117 @@ fly.interceptors.request.use((request) => {
 	return request;
 })
 
+export default fly
 
-async function wxLogin() {
-	return await new Promise((resolve, reject) => {
-		uni.login({
-			provider:'weixin',
-			success:function(loginRes){
-				let code = loginRes.code;
-				if(code){
-					resolve(code)
-				}
-			}
-		})
-	})
-}
+// async function wxLogin() {
+// 	return await new Promise((resolve, reject) => {
+// 		uni.login({
+// 			provider:'weixin',
+// 			success:function(loginRes){
+// 				let code = loginRes.code;
+// 				if(code){
+// 					resolve(code)
+// 				}
+// 			}
+// 		})
+// 	})
+// }
 
-export const login = async () => {
-	console.log('开始登录...')
-	let code = await wxLogin();
-	let res = await fly.get('/login/auth',{code: code});
-	uni.setStorageSync('token',res.data.token)
-	console.log("登录成功")
-	return res
-}
+// export const login = async () => {
+// 	console.log('开始登录...')
+// 	let code = await wxLogin();
+// 	let res = await fly.get('/login/auth',{code: code});
+// 	uni.setStorageSync('token',res.data.token)
+// 	console.log("登录成功")
+// 	return res
+// }
 
-export const checkToken = async () => {
+// export const checkToken = async () => {
 
-		console.log('查询token有效接口...')
-		return fly.get('/chart/token')
-}
+// 		console.log('查询token有效接口...')
+// 		return fly.get('/chart/token')
+// }
 
-export const fetchGoalDetail = async () => {
+// export const fetchGoalDetail = async () => {
 
-		console.log('请求查询目标接口...')
-		return fly.get('/goal/detail')
-}
-export const PostGoal = async (data) => {
+// 		console.log('请求查询目标接口...')
+// 		return fly.get('/goal/detail')
+// }
+// export const PostGoal = async (data) => {
 
-		console.log('请求设置目标接口...')
-		return fly.post('/goal/set',data)
-}
+// 		console.log('请求设置目标接口...')
+// 		return fly.post('/goal/set',data)
+// }
 
-export const fetchHomeChart = async () => {
+// export const fetchHomeChart = async () => {
 
-		console.log('请求首页饼图接口...')
-		return fly.get('/chart/home')
-}
+// 		console.log('请求首页饼图接口...')
+// 		return fly.get('/chart/home')
+// }
 
-export const fetchOrderListByDate = async (date) => {
+// export const fetchOrderListByDate = async (date) => {
 
-		console.log('请求账单列表接口...')
-		return fly.get('/order/list',{date:date})
-}
+// 		console.log('请求账单列表接口...')
+// 		return fly.get('/order/list',{date:date})
+// }
 
-export const fetchOrderDetail = async (id) => {
+// export const fetchOrderDetail = async (id) => {
 
-		console.log('请求账单详情接口...')
-		return fly.get('/order/detail',{orderId:id})
-}
+// 		console.log('请求账单详情接口...')
+// 		return fly.get('/order/detail',{orderId:id})
+// }
 
-export const postOrder = async (data) => {
+// export const postOrder = async (data) => {
 
-		console.log('请求提交账单接口...')
-		return fly.post('/order/set',data)
-}
+// 		console.log('请求提交账单接口...')
+// 		return fly.post('/order/set',data)
+// }
 
-export const fetchCategoryData = async () => {
+// export const fetchCategoryData = async () => {
 
-		console.log('请求分类列表接口...')
-		return fly.get('/category/detail')
-}
+// 		console.log('请求分类列表接口...')
+// 		return fly.get('/category/detail')
+// }
 
-export const exportDataExcel = async (start,end) => {
+// export const exportDataExcel = async (start,end) => {
 
-		console.log('请求导出账单接口...')
-		return fly.get('/export/order',{
-			startDate:start,
-			endDate:end
-		})
-}
+// 		console.log('请求导出账单接口...')
+// 		return fly.get('/export/order',{
+// 			startDate:start,
+// 			endDate:end
+// 		})
+// }
 
-export const fetchRoseData = async (type,kind,date) => {
+// export const fetchRoseData = async (type,kind,date) => {
 
-		console.log('请求玫瑰图接口...')
-		return fly.get('/chart/rosecategory',{
-			type:type,
-			kind:kind,
-			date:date
-		})
-}
+// 		console.log('请求玫瑰图接口...')
+// 		return fly.get('/chart/rosecategory',{
+// 			type:type,
+// 			kind:kind,
+// 			date:date
+// 		})
+// }
 
-export const fetchLineData = async (kind,date) => {
+// export const fetchLineData = async (kind,date) => {
 
-		console.log('请求线图接口...')
-		return fly.get('/chart/line',{
-			kind:kind,
-			date:date
-		})
-}
-export const deleteOrder = async (id) => {
+// 		console.log('请求线图接口...')
+// 		return fly.get('/chart/line',{
+// 			kind:kind,
+// 			date:date
+// 		})
+// }
+// export const deleteOrder = async (id) => {
 
-		console.log('请求删除订单接口...')
-		return fly.delete('/order/delete',{
-			orderId:id
-		})
-}
+// 		console.log('请求删除订单接口...')
+// 		return fly.delete('/order/delete',{
+// 			orderId:id
+// 		})
+// }
 
-export const importData = async () => {
+// export const importData = async () => {
 
-		console.log('请求预设数据接口...')
-		return fly.get('/pingwei/api')
-}
+// 		console.log('请求预设数据接口...')
+// 		return fly.get('/pingwei/api')
+// }
 
 

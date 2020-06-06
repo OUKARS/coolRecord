@@ -126,9 +126,10 @@
 		.goal-input{
 			border-radius: 24rpx;
 			box-sizing: border-box;
-			padding: 20rpx;
+			padding: 20rpx 24rpx;
 			background: #F5F5F5;
 			margin-bottom:20rpx ;
+
 			// font-size: 36rpx;
 			color: #6327F6;
 		}

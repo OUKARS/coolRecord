@@ -196,32 +196,33 @@
 				const res = await this.$api.fetchHomeChart()
 				if(res.data){
 					this.firstLoad=false
-					this.dailychartData = res.data.dailychartData
-					this.weeklychartData = res.data.weeklychartData
-					this.monthlychartData = res.data.monthchartData
-					// this.dailychartData.series[0].num="无"
-					// this.dailychartData.series[0].data=0.81
-					this.dailychartData.series[0].name='今日支出'
-					if(this.dailychartData.series[0].data<=0.1){this.dailychartData.series[0].color='#87CEFA'}
-					else if(this.dailychartData.series[0].data<=0.5){this.dailychartData.series[0].color='#1FFED5'}
-					else if(this.dailychartData.series[0].data<=0.8){this.dailychartData.series[0].color='#DCEA49'}
-					else this.dailychartData.series[0].color='red'
+					if(res.data.dailychartData){
+						this.dailychartData = res.data.dailychartData;
+						this.dailychartData.series[0].name='今日支出'
+						if(this.dailychartData.series[0].data<=0.1){this.dailychartData.series[0].color='#87CEFA'}
+						else if(this.dailychartData.series[0].data<=0.5){this.dailychartData.series[0].color='#1FFED5'}
+						else if(this.dailychartData.series[0].data<=0.8){this.dailychartData.series[0].color='#DCEA49'}
+						else this.dailychartData.series[0].color='red'
+					}
+						
+					if(res.data.weeklychartData){
+						this.weeklychartData = res.data.weeklychartData;
+						if(this.weeklychartData.series[0].data<=0.1){this.weeklychartData.series[0].color='#87CEFA'}
+						else if(this.weeklychartData.series[0].data<=0.5){this.weeklychartData.series[0].color='#1FFED5'}
+						else if(this.weeklychartData.series[0].data<=0.8){this.weeklychartData.series[0].color='#DCEA49'}
+						else this.weeklychartData.series[0].color='red'
+					}
 					
-					if(this.weeklychartData.series[0].data<=0.1){this.weeklychartData.series[0].color='#87CEFA'}
-					else if(this.weeklychartData.series[0].data<=0.5){this.weeklychartData.series[0].color='#1FFED5'}
-					else if(this.weeklychartData.series[0].data<=0.8){this.weeklychartData.series[0].color='#DCEA49'}
-					else this.weeklychartData.series[0].color='red'
-					
-					if(this.monthlychartData.series[0].data<=0.1){this.monthlychartData.series[0].color='#87CEFA'}
-					else if(this.monthlychartData.series[0].data<=0.5){this.monthlychartData.series[0].color='#1FFED5'}
-					else if(this.monthlychartData.series[0].data<=0.8){this.monthlychartData.series[0].color='#DCEA49'}
-					else this.monthlychartData.series[0].color='red'
-					console.log("1")
+					if(res.data.monthchartData){
+						this.monthlychartData = res.data.monthchartData
+						if(this.monthlychartData.series[0].data<=0.1){this.monthlychartData.series[0].color='#87CEFA'}
+						else if(this.monthlychartData.series[0].data<=0.5){this.monthlychartData.series[0].color='#1FFED5'}
+						else if(this.monthlychartData.series[0].data<=0.8){this.monthlychartData.series[0].color='#DCEA49'}
+						else this.monthlychartData.series[0].color='red'
+					}
 					this.showArcbar("canvasArcbar1",this.dailychartData);
-					this.isloading = false
-				} else {
-					this.isloading = false
 				}
+				this.isloading = false
 			},
 			swipeToIndex0(){
 
