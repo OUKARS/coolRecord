@@ -3,7 +3,8 @@ import { getToken, setToken, removeToken,setGoal,removeGoal } from '../../utils/
 
 const state = {
 	token:'',
-	isgoal:'yes'
+	isgoal:'yes',
+	gestureStatus:-1,
 }
 
 const mutations = {
@@ -17,6 +18,9 @@ const mutations = {
 
   SET_GOAL: (state, bool) => {
     state.isgoal = bool
+  },
+  SET_GESTURESTATUS: (state, bool) => {
+    state.gestureStatus = bool
   }
 }
 
@@ -30,9 +34,15 @@ const actions = {
 	},
 	addGoal({ commit },bool) {
 	  return new Promise(resolve => {
-	    setGoal(bool) 
-		console.log("addgoal",bool)
+		 setGoal(bool) 
 	    commit('SET_GOAL', bool)
+	    resolve()
+	  })
+	},
+	addGestureStatus({ commit },bool) {
+	  return new Promise(resolve => {
+	    
+	    commit('SET_GESTURESTATUS', bool)
 	    resolve()
 	  })
 	},

@@ -53,6 +53,8 @@
 				})
 			},
 			checkGoal(){
+				let that = this
+				console.log("开始检查goal")
 				uni.getStorage({
 				    key: 'isgoal',
 				    success: function (res) {
@@ -60,7 +62,7 @@
 						if(res.data === 'yes')
 						{
 							console.log('目标已经设置')
-							
+							that.checkGesture()
 						} else {   
 							console.log("success jump to onboarding")
 							uni.redirectTo({
@@ -70,7 +72,7 @@
 						}
 				    },
 					fail:function(e){
-						if(e.errMsg == 'getStorage:fail data not found'){
+						if(e.errMsg){
 							console.log('goal未设置')
 							uni.redirectTo({
 							  url: '../onboarding/onboarding',
@@ -79,6 +81,17 @@
 						
 					}
 				});
+			},
+			async checkGesture(){
+				// const res = await this.$api.gestureSet('856')
+				await this.$api.gestureCheck('-1').then((res)=>{
+					if(res.data != '-1') { //手势密码已经开启
+						uni.navigateTo({
+						  url:'../gesture/gesture?method=0'
+						})
+					}
+					this.$store.dispatch('user/addGestureStatus',res.data.data)
+				})
 			}
 			
 			
@@ -87,7 +100,7 @@
 			console.log('App Launch')
 			this.checkToken()	
 			this.wxGetDevice()
-			
+			// this.checkGesture()
 			console.log('用户设备：'+this.$store.state.app.device)
 			
 		},

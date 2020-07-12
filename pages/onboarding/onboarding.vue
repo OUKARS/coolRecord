@@ -26,34 +26,35 @@
 					</view>
 					<view class="detail">
 						<view class="header">
-							欢迎使用
+							记录流水 查看收支
 						</view>
 						<view class="name">
-							酷记账
+							小巧轻量
 						</view>
-						<view class="text">
-							<view class="top">
-								请左滑页面
-							</view>
-							<view class="bottom">
-								我会带你设置一些目标信息
-							</view>
 
-						</view>
 					</view>
-					<view class="goal-btn">
-					<!-- 	<view class="btn" >
-							左滑下一步
-						</view> -->
-						<view class="btn wechat-btn" @tap="jumpToWeChatAdmin()">
-							小程序大赛评委入口
-						</view>
-					</view>
+					
 				</view>
 				<view v-if="index==1"class="card">
 					<view class="img2-content">
 						<image class="onboard-img" src="https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/bg/boarding02.png" mode=""></image>
 					</view>
+					<view class="detail">
+						<view class="header">
+							数据安全 目标定制
+						</view>
+						<view class="name">
+							为你制定每月计划
+						</view>
+						<view class="text">
+							<view class="top">
+								请继续左滑
+							</view>
+						</view>
+					</view>
+				</view>
+				<view v-if="index==2" class="card">
+
 					<view class="goal-container">
 						<view class="goal-header">
 							目标设置
@@ -80,6 +81,14 @@
 						</view>
 						<view class="btn-container">
 							<button class="goal-btn" type="default" @tap="PostGoal()">进入酷记账</button>
+						</view>
+					</view>
+					<view class="goal-btn">
+					<!-- 	<view class="btn" >
+							左滑下一步
+						</view> -->
+						<view class="btn wechat-btn" @tap="jumpToWeChatAdmin()">
+							小程序大赛评委入口
 						</view>
 					</view>
 				</view>
@@ -183,7 +192,7 @@
 				rangeVal:[],
 				startDate:'',
 				endDate:'',
-				swiperList:[{name:1},{name:2}],
+				swiperList:[{name:1},{name:2},{name:3}],
 				goalData:{
 					'monthCost':0,
 					'monthSave':0
@@ -208,6 +217,7 @@
 					content:"以评委身份进入，酷记账会自动预设目标，并录入一批预设数据，以全面展现小程序功能，是否确定？",
 					success: function (res) {
 					        if (res.confirm) {
+								that.$store.dispatch('user/addGoal','yes')
 								that.$api.importData()
 					            uni.redirectTo({
 					               url: '../index/index'
@@ -337,14 +347,16 @@
 				font-size: 44rpx;
 			}
 			.name{
-				font-size: 76rpx;
+				margin-top: 20rpx;
+				font-size: 60rpx;
 				font-weight: bold;
 				color: rgb(255,227,108);
 			}
 			.text{
-				margin: 40rpx 0;
+				margin: 100rpx 0;
 				font-size: 38rpx;
 				.top{
+					margin: 40rpx;
 					color: rgb(255,227,108);
 					font-size: 42rpx;
 				}
@@ -360,7 +372,7 @@
 			font-weight: bold;
 			.btn{
 				box-sizing: border-box;
-				padding: 10rpx 20rpx;
+				padding: 8rpx 16rpx;
 				width: 38%;
 				margin: 10rpx auto;
 				// background: #fff;
@@ -371,9 +383,13 @@
 				line-height: 80rpx;
 			}
 			.wechat-btn{
-				width: 60%;
-				font-size: 36rpx;
+				position: absolute;
+				left:50%;
+				bottom: 200rpx;
+				width: 50%;
+				font-size: 32rpx;
 				margin: 10rpx auto;
+				margin-left: -25%;
 				background: #09bb07;
 				color: #fff;
 			
@@ -414,7 +430,7 @@
 			width: 94%;
 			margin:0 auto 20rpx;
 			box-sizing: border-box;
-			padding: 28rpx 50rpx 20rpx;
+			padding: 40rpx 60rpx;
 			text-align: left;
 			box-shadow:15rpx 15rpx 20rpx rgba(50,50,93,.1),5rpx 15rpx 20rpx rgba(0,0,0,.1);
 			z-index: 0;
@@ -424,19 +440,19 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: space-around;
-			min-height: 420rpx;
+			min-height: 500rpx;
 			.goal-title{
 				font-size: 40rpx;
 				font-weight: bold;
 				color: rgb(75,60,221);
-				margin-bottom:20rpx ;
+				margin-bottom:24rpx ;
 			}
 			.goal-input{
 				border-radius: 24rpx;
 				box-sizing: border-box;
 				padding: 20rpx 18rpx;
 				background: #F5F5F5;
-				margin-bottom:20rpx ;
+				margin-bottom:40rpx ;
 				// font-size: 36rpx;
 				color: #6327F6;
 			}

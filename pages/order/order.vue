@@ -81,7 +81,7 @@
 		                ref="date" 
 		            ></w-picker>
 		<tabbar v-if="!orderid" currentPage="order"/> 
-		<lee-popup ref="popup" type="bottom">
+		<lee-popup ref="popup" type="bottom" @closeHandler="closeHandler">
 			<view class="category-choose-container">
 				<view class="header">
 					<image style="width: 36rpx;height: 35rpx;margin-right: 8rpx;" src="../../static/icon/choosecategory.png" mode=""></image>
@@ -179,6 +179,9 @@
 				this.remarkshow = true
 				this.selectCategoryItem = item
 			},
+			closeHandler(){
+				this.remarkshow = true
+			},
 			async postOrder(){
 				let _self = this
 				if(this.orderid)
@@ -197,7 +200,7 @@
 				if(this.orderData.money<=0){
 					uni.showModal({
 						title:'哦吼',
-						content:"金额必须大于0o(╥﹏╥)o",
+						content:"金额必须大于零哦o(╥﹏╥)o",
 						showCancel:false,
 					})
 					return
@@ -206,7 +209,7 @@
 				if(res.data.message="创建成功"){
 					uni.showModal({
 						title:'欧耶',
-						content:"记录成功！(＾－＾)V",
+						content:"记录成功！",
 						showCancel:false,
 						success:function(res){
 							

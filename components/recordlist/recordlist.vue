@@ -1,5 +1,5 @@
 <template>
-	<view class="recordlist-container animated fadeInUp delay-016s" >
+	<view class="recordlist-container animated fadeInUp delay-016s" @tap="hidetip()">
 		<view class="header">
 			<view class="title">
 				<image class="icon" src="../../static/icon/index-list.png" mode=""></image>
@@ -28,7 +28,7 @@
 			</view>
 		</view>
 		<view v-else class="recordlist-content">
-				<view class="tip">
+				<view v-if="showtip" class="tip">
 					左滑可以编辑和删除哦~
 				</view>
 				<view :key="item.orderId" class="list-item" v-for="item in orderList" @touchstart="touchItemStart" @touchmove="touchItemMove" @touchend="touchItemEnd(item.orderId)">
@@ -84,6 +84,7 @@
 				selectOrderId:'',
 				orderList:[],
 				device:'',
+				showtip:true,
 				
 			};
 		},
@@ -97,6 +98,9 @@
 			
 		},
 		methods:{
+			hidetip(){
+				this.showtip = false
+			},
 			jumpToList(){
 				uni.navigateTo({
 				    url: '../list/list'
@@ -129,7 +133,7 @@
 				let date = new Date()
 				let formatdate = formatDate(date)
 				const res = await this.$api.fetchOrderListByDate(formatdate)
-				if(res.data.length>0){
+				if(res.data && res.data.length>=0){
 					this.orderList = res.data
 					this.orderList.forEach(e=>{
 						e.date = e.date.replace(/-/g, '/')
@@ -137,7 +141,7 @@
 					})
 					this.orderList = this.orderList.reverse()
 				}
-				
+				 
 			},
 			async deleteOrderRequest(id){
 				const result = await this.$api.deleteOrder(id)

@@ -9,6 +9,9 @@ async function wxLogin() {
 				if(code){
 					resolve(code)
 				}
+			},
+			fail:function(err){
+				console.log(err)
 			}
 		})
 	})
@@ -18,6 +21,7 @@ export const login = async () => {
 	console.log('开始登录...')
 	let code = await wxLogin();
 	let res = await fly.get('/login/auth',{code: code});
+	console.log(code)
 	uni.setStorageSync('token',res.data.token)
 	console.log("登录成功")
 	return res
@@ -112,3 +116,18 @@ export const importData = async () => {
 }
 
 
+export const gestureCheck = async (passowrd) => {
+
+		console.log('请求预设数据接口...')
+		return fly.post('/guesture/check',{
+			guesture:passowrd
+		})
+}
+
+export const gestureSet = async (passowrd) => {
+
+		console.log('请求预设数据接口...')
+		return fly.post('/guesture/set',{
+			guesture:passowrd
+		})
+}

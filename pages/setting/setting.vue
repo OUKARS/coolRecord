@@ -2,7 +2,7 @@
 	<view class="setting-container">
 		<my-bar class="setting-nav" :nav="setNav"></my-bar>
 		<view class="swiper">
-			<set-swiper :swiperList="swiperList" style="width:100%" fullScreen="true"></set-swiper>
+			<set-swiper ref="setswiper" :swiperList="swiperList" style="width:100%" fullScreen="true"></set-swiper>
 		</view>
 	</view>
 </template>
@@ -20,9 +20,13 @@
 					'isdisPlayNavTitle':true, //是否显示返回按钮，由于导航栏是共用的，把所有的东西封装好，
 					'navTitle':'更多' //导航标题
 				},
-				swiperList: [{name:'export'},{name:'bug'},{name:'about'}]
+				swiperList: [{name:'export'},{name:'gesture'},{name:'bug'},{name:'about'}]
 			}
 		},
+		onShow() {
+			this.$refs.setswiper.fetchGesture()
+		},
+		
 		methods: {
 			
 		}

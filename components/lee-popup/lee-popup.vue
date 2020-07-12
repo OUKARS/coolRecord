@@ -144,6 +144,7 @@
 			maskClickHandler(e) {
 				if (e.target.dataset.role === 'mask') {
 					this.close()
+					this.$emit('closeHandler')
 				}
 			},
 			

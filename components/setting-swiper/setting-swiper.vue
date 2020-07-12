@@ -55,6 +55,32 @@
 						</view>
 					</view>
 				</view>
+				<view v-if="item.name === 'gesture'" class="card-container">
+					<view class="header">
+						手势密码
+					</view>
+					<view class="card">
+						<view class="img-content">
+							<image class="export-img" src="https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/bg/kefu.png"></image>
+						</view>
+						<view class="text">
+							<view class="top">
+								保护数据与隐私安全
+							</view>
+							<view class="top-text">
+								访问小程序前需验证手势密码
+							</view>
+						</view>
+						<view class="switch-bottom">
+							<view class="switch-text" :class="{close:gestureStatus == '-1',open:gestureStatus !='-1'}">
+								{{gestureStatus == '-1' ? '未开启':'已开启'}}
+							</view>
+							<view class="switch-btn" @tap="jumpToGuesture()">
+								{{gestureStatus == '-1' ? '前往开启':'关闭/修改'}}
+							</view>
+						</view>
+					</view>
+				</view>
 				<view v-if="item.name === 'bug'" class="card-container">
 					<view class="header">
 						使用反馈
@@ -210,6 +236,9 @@
 				rangeVal:[],
 				startDate:'',
 				endDate:'',
+				gestureStatus:-1,
+				guesture:'',
+				
 			}
 		},
 		computed:{
@@ -221,6 +250,7 @@
 			this.endDate = nowDate;
 			this.startDate = nowDate
 			this.rangeVal = [this.startDate,this.endDate]
+			// this.fetchGesture()
 		},
 		methods: {
 			clickItem:function(index){
@@ -230,6 +260,25 @@
 			},
 			change:function(e){
 				this.$emit('change',e)
+			},
+			async fetchGesture(){
+				await this.$api.gestureCheck('-1').then(res=>{
+					this.gestureStatus = res.data
+				})
+
+				
+			},
+			jumpToGuesture(){
+				if(this.gestureStatus == '-1'){
+					uni.navigateTo({
+						url:'../gesture/gesture?method=1&open=0'
+					})
+				} else {
+					uni.navigateTo({
+						url:'../gesture/gesture?method=1&open=1'
+					})
+				}
+				
 			},
 			animationfinish:function(e){
 				this.cardCur = e.detail.current;
@@ -377,9 +426,37 @@
 					font-weight: bold;
 					font-size: 56rpx;
 					margin-bottom: 8rpx;
+					.top-text{
+						margin-top: 40rpx;
+						}
 				}
 				.bottom{
 					font-size: 40rpx;
+				}
+			}
+			.switch-bottom{
+				text-align: center;
+				.switch-text{
+					font-weight: 600;
+					font-size: 48rpx;
+				}
+				.open{
+					color: green;
+				}
+				.close{
+					color: red;
+				}
+				.switch-btn{
+					
+					height: 100rpx;
+					line-height: 100rpx;
+					width: 36%;
+					margin: auto;
+					font-size: 34rpx;
+					margin-top: 40rpx;
+					border-radius: 36rpx;
+					background: #6327F6;
+					color: #fff;
 				}
 			}
 			.date-btn{

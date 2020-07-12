@@ -1,5 +1,5 @@
 {
-    "name" : "recordlife",
+    "name" : "酷记账",
     "appid" : "",
     "description" : "",
     "versionName" : "1.0.0",
@@ -76,5 +76,8 @@
     },
     "uniStatistics" : {
         "enable" : false
+    },
+    "mp-qq" : {
+        "appid" : "1109998495"
     }
 }

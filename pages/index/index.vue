@@ -220,6 +220,7 @@
 						else if(this.monthlychartData.series[0].data<=0.8){this.monthlychartData.series[0].color='#DCEA49'}
 						else this.monthlychartData.series[0].color='red'
 					}
+					this.current =0;
 					this.showArcbar("canvasArcbar1",this.dailychartData);
 				}
 				this.isloading = false

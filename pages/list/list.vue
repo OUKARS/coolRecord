@@ -5,10 +5,17 @@
 			<view class="text">
 				{{nowdate}}
 			</view>
-			<view class="calendar-btn">
-				<image class="search-img" src="../../static/icon/search.png"></image>
-				 <view class="text" @tap="open">选择日期</view>
+			<view class="btn-container">
+				<view class="category-btn">
+					<image class="search-img" src="../../static/icon/search.png"></image>
+					 <view class="text" @tap="open">选择分类</view>
+				</view>
+				<view class="calendar-btn">
+					<image class="search-img" src="../../static/icon/search.png"></image>
+					 <view class="text" @tap="openCalendar">选择日期</view>
+				</view>
 			</view>
+			
 		</view>
 		<view class="calendar-content">
 		         <uni-calendar 
@@ -107,7 +114,7 @@
 				}
 				
 			},
-			open(){
+			openCalendar(){
 			    this.$refs.calendar.open();
 			},
 			confirm(e) {
@@ -207,7 +214,7 @@
 	min-height: 100vh;
 	.list-header{
 		box-sizing: border-box;
-		padding: 20rpx 40rpx;
+		padding: 20rpx 20rpx;
 		display: flex;
 		justify-content: space-between;
 		vertical-align: middle;
@@ -219,30 +226,59 @@
 			font-weight: bold;
 			vertical-align: middle;
 		}
-		.calendar-btn{
-			font-size: 32rpx;
-			border-radius: 24rpx;
-			box-sizing: border-box;
-			
-			color: #DCDCDC;
-			background: #4331C1;
-			font-weight: bold;
+		.btn-container{
 			display: flex;
-			justify-content: center;
-			vertical-align: middle;
-			.search-img{
-				margin-top: 4rpx;
-				padding: 10rpx 5rpx 10rpx 20rpx;
+			justify-content: flex-end;
+			.category-btn{
+				font-size: 32rpx;
+				border-radius: 24rpx;
+				box-sizing: border-box;
+				
+				color: #DCDCDC;
+				background: #4331C1;
+				font-weight: bold;
+				display: flex;
+				justify-content: center;
 				vertical-align: middle;
-				width: 36rpx;
-				height: 36rpx;
+				.search-img{
+					margin-top: 4rpx;
+					padding: 10rpx 5rpx 10rpx 20rpx;
+					vertical-align: middle;
+					width: 36rpx;
+					height: 36rpx;
+				}
+				.text{
+					padding: 10rpx 20rpx 10rpx 5rpx;
+					vertical-align: middle;
+					margin-left: 2rpx;
+				}
 			}
-			.text{
-				padding: 10rpx 20rpx 10rpx 5rpx;
+			.calendar-btn{
+				font-size: 32rpx;
+				border-radius: 24rpx;
+				box-sizing: border-box;
+				
+				color: #DCDCDC;
+				background: #4331C1;
+				font-weight: bold;
+				display: flex;
+				justify-content: center;
 				vertical-align: middle;
-				margin-left: 2rpx;
+				.search-img{
+					margin-top: 4rpx;
+					padding: 10rpx 5rpx 10rpx 20rpx;
+					vertical-align: middle;
+					width: 36rpx;
+					height: 36rpx;
+				}
+				.text{
+					padding: 10rpx 20rpx 10rpx 5rpx;
+					vertical-align: middle;
+					margin-left: 2rpx;
+				}
 			}
 		}
+		
 	}
 	
 	.nodata-container{
