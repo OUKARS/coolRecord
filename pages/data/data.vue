@@ -69,7 +69,7 @@
 				</view>
 			</view>
 			<view class="info-container" v-if="activeName == 'info'">
-				<view class="info-card">
+				<view class="info-card animated fadeInUp">
 					<view class="info-header">
 						<text class="title">本月实时日报</text>
 						<text class="tip">截止至7月10日</text>
@@ -90,7 +90,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="over-card">
+				<view class="over-card animated fadeInUp .delay-08s">
 					<view class="over-header">
 						<text class="title">本月达标情况</text>
 						<text class="tip">截止至7月10日</text>
@@ -111,7 +111,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="max-card">
+				<view class="max-card animated fadeInUp delay-012s">
 					<view class="max-header">
 						<text class="title">本月最大支出</text>
 						<text class="tip">截止至7月10日</text>
