@@ -7,7 +7,7 @@
 		<view class="goal-content">
 			<view class="monthcost-container">
 				<view class="goal-title">
-					最大支出目标
+					最大支出金额目标
 				</view>
 				<view class="goal-input">
 					<input type="digit"  v-model="goalData.monthCost"/>

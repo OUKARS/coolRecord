@@ -63,7 +63,7 @@
 							<view class="input-content">
 								<view class="monthcost-container">
 									<view class="goal-title">
-										每月最大支出
+										每月最大支出金额
 									</view>
 									<view class="goal-input">
 										<input type="digit" placeholder="需大于0哦~" @input="outInput"/>

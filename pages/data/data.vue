@@ -3,14 +3,14 @@
 		<my-bar :nav="setNav"></my-bar>
 		<view class="wrapper">
 			<view class="page-header">
-				<view class="header-item graph" :class="{active:activeName == 'graph'}" @tap="toIndex('graph')">
-					图表
+				<view class="header-item peopleinfo" :class="{active:activeName == 'info'}"  @tap="toIndex('info')">
+					统计
 				</view>
 				<view class="header-item line" >
 					|
 				</view>
-				<view class="header-item peopleinfo" :class="{active:activeName == 'info'}"  @tap="toIndex('info')">
-					总结
+				<view class="header-item graph" :class="{active:activeName == 'graph'}" @tap="toIndex('graph')">
+					图表
 				</view>
 			</view>
 			<view class="graph-container" v-if="activeName == 'graph'">
@@ -70,9 +70,116 @@
 			</view>
 			<view class="info-container" v-if="activeName == 'info'">
 				<view class="info-card">
-					1212
+					<view class="info-header">
+						<text class="title">本月实时日报</text>
+						<text class="tip">截止至7月10日</text>
+					</view>
+					<view class="overview-container">
+						<view class="left">
+							
+							<view class="daynum-content">
+								您记录了<br /><text class="overview-text">5</text>天，
+							</view>
+							<view class="recordnum-content">
+								记录了<br /><text class="overview-text">5</text>笔账单
+							</view>
+							
+						</view>
+						<view class="right">
+							<image class="summary-img" src="https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/bg/summary-bg.png?x-oss-process=style/blog_img" mode=""></image>
+						</view>
+					</view>
 				</view>
-				
+				<view class="over-card">
+					<view class="over-header">
+						<text class="title">本月达标情况</text>
+						<text class="tip">截止至7月10日</text>
+					</view>
+					<view class="over-container">
+						<view class="right">
+							<image class="summary-img" src="https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/bg/over-bg.png?x-oss-process=style/blog_img" mode=""></image>
+						</view>
+						<view class="left">
+							
+							<view class="daynum-content">
+								您在实际支出上<br />超出预算天数<br /><text class="over-text">5</text>天
+							</view>
+							<view class="recordnum-content">
+								超出预算周数<br /><text class="over-text">5</text>周
+							</view>
+							
+						</view>
+					</view>
+				</view>
+				<view class="max-card">
+					<view class="max-header">
+						<text class="title">本月最大支出</text>
+						<text class="tip">截止至7月10日</text>
+					</view>
+					<view class="max-container">
+						<view class="max-item">
+							<view class="left-content">
+								<image class="category-img" :src="maxpayItem.categoryImgUrl" mode=""></image>
+							</view>
+							<view class="right-content">
+								<view class="info">
+									<view class="text">
+										<view class="category-text">
+											{{maxpayItem.categoryName}}
+										</view>
+										<view class="other-text">
+											{{maxpayItem.remark}}
+										</view>
+									</view>
+								</view>
+								<view class="num">
+									<view v-if="maxpayItem.type==0" class="rmb" style="color:red">
+										-{{maxpayItem.money}}
+									</view>
+									<view v-else class="rmb">
+										+{{maxpayItem.money}}
+									</view>
+									<view class="time">
+										{{maxpayItem.date}}
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
+					<view class="max-header">
+						<text class="title">本月最大收入</text>
+					</view>
+					<view class="max-container">
+						<view class="max-item">
+							<view class="left-content">
+								<image class="category-img" :src="maxpayItem.categoryImgUrl" mode=""></image>
+							</view>
+							<view class="right-content">
+								<view class="info">
+									<view class="text">
+										<view class="category-text">
+											{{maxpayItem.categoryName}}
+										</view>
+										<view class="other-text">
+											{{maxpayItem.remark}}
+										</view>
+									</view>
+								</view>
+								<view class="num">
+									<view v-if="maxpayItem.type==0" class="rmb" style="color:red">
+										-{{maxpayItem.money}}
+									</view>
+									<view v-else class="rmb">
+										+{{maxpayItem.money}}
+									</view>
+									<view class="time">
+										{{maxpayItem.date}}
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
 			</view>
 		</view>
 		<tabbar currentPage="data" /> 
@@ -110,7 +217,18 @@
 				roseChartData:{},
 				lineChartData:{},
 				openpicker:false,
-				activeName:'graph'
+				activeName:'info',
+				firstLoad:true,
+				maxpayItem:{
+				  "orderId": 1,
+				  "categoryId": 1,
+				  "categoryName":"早餐",
+				  "categoryImgUrl":'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/01eat.png?x-oss-process=style/blog_img',
+				  "type": 0,
+				  "date": "2020-05-10",
+				  "remark": "暂无备注",
+				  "money":2
+				},
 
 			}
 		},
@@ -156,14 +274,14 @@
 				const res = await this.$api.fetchRoseData(type,1,date)
 				if(res.data){
 					this.roseChartData = res.data
-					_self.showPie("canvasPie",this.roseChartData);
+					// _self.showPie("canvasPie",this.roseChartData);
 				}
 			},
 			async fetchLineData(date){
 				const res = await this.$api.fetchLineData(0,date)
 				if(res.data){
 					this.lineChartData = res.data
-					_self.showLineA("canvasLineA",this.lineChartData);
+					// _self.showLineA("canvasLineA",this.lineChartData);
 				}
 				
 			},
@@ -280,6 +398,7 @@
 			today = today+'-01'
 			this.fetchRoseData(0,today)
 			this.fetchLineData(today)
+			
 		}
 	}
 </script>
@@ -467,20 +586,221 @@
 		}
 		.info-container{
 			box-sizing: border-box;
-			padding: 10rpx 0 30rpx;
+			padding: 30rpx 0;
 			
 			height: auto;
 			width: 90%;
-			margin: 0 auto;
-			margin-top: 32rpx;
+			margin: 32rpx auto;
 			.info-card{
 				background: #fff;
 				box-shadow:15rpx 15rpx 20rpx rgba(50,50,93,.1),5rpx 15rpx 20rpx rgba(0,0,0,.1);
 				box-sizing: border-box;
 				border-radius: 28rpx;
-				padding: 24rpx;
+				padding: 32rpx;
+				height: auto;
+				// min-height: 500rpx;
+				.info-header{
+					margin: 10rpx 0 20rpx;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					.title{
+						font-size: 38rpx;
+						font-weight: bold;
+					}
+					.tip{
+						font-size: 26rpx;
+						color: #808080;
+					}
+					
+				}
+
+				.overview-container{
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					.left{
+						width: 40%;
+						color: #757575;
+						.daynum-container{
+							margin: 10rpx 0;
+						}
+						.recordnum-content{
+							margin: 10rpx 0;
+						}
+						.overview-text{
+							font-size: 56rpx;
+							color: #6327F6;
+							font-weight: bold;
+							margin-right: 5rpx;
+						}
+					}
+					.right{
+						width: 60%;
+						height: auto;
+						.summary-img{
+							width: 100%;
+							height: 200rpx;
+						}
+					}
+				}
+			}
+			.over-card{
+				margin-top: 48rpx;
+				background: #fff;
+				box-shadow:15rpx 15rpx 20rpx rgba(50,50,93,.1),5rpx 15rpx 20rpx rgba(0,0,0,.1);
+				box-sizing: border-box;
+				border-radius: 28rpx;
+				padding: 32rpx;
+				height: auto;
+				// min-height: 500rpx;
+				.over-header{
+					margin: 10rpx 0 20rpx;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					.title{
+						font-size: 38rpx;
+						font-weight: bold;
+					}
+					.tip{
+						font-size: 26rpx;
+						color: #808080;
+					}
+					
+				}
+
+				.over-container{
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					.left{
+						text-align: right;
+						width: 50%;
+						color: #757575;
+						.daynum-container{
+							margin: 10rpx 0;
+						}
+						.recordnum-content{
+							margin: 10rpx 0;
+						}
+						.over-text{
+							font-size: 56rpx;
+							color: #FF4500;
+							font-weight: bold;
+							margin-right: 5rpx;
+						}
+					}
+					.right{
+						width: 50%;
+						height: auto;
+						.summary-img{
+							width: 100%;
+							height: 250rpx;
+						}
+					}
+				}
+			}
+			.max-card{
+				margin-top: 48rpx;
+				background: #fff;
+				box-shadow:15rpx 15rpx 20rpx rgba(50,50,93,.1),5rpx 15rpx 20rpx rgba(0,0,0,.1);
+				box-sizing: border-box;
+				border-radius: 28rpx;
+				padding: 32rpx;
 				height: auto;
 				min-height: 500rpx;
+				.max-header{
+					margin: 10rpx 0 24rpx;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					.title{
+						font-size: 38rpx;
+						font-weight: bold;
+					}
+					.tip{
+						font-size: 26rpx;
+						color: #808080;
+					}
+					
+				}
+				.max-container{
+					margin-bottom: 32rpx;
+					.max-item{
+						overflow: hidden;
+						background: #fff;
+						box-shadow: 0rpx 5rpx 25rpx -8rpx rgba(41,41,41,0.2);
+						border-radius: 15rpx;
+						box-sizing: border-box;
+						padding: 20rpx 40rpx;
+						width: 100%;
+						height: 140rpx;
+						display: flex;
+						justify-content: space-between;
+						flex-wrap: nowrap;
+						position: relative;
+						.left-content{
+							box-sizing: border-box;
+							padding: 20rpx 0;
+							width: 16%;
+							.category-img{
+								width: 72rpx;
+								height: 72rpx;
+							}
+						}
+						.right-content{
+							box-sizing: border-box;
+						
+							box-sizing: border-box;
+							padding-left: 5rpx;
+							border-left: 2rpx solid rgb(230,210,240);
+							width: 84%;
+							display: flex;
+							justify-content: space-between;
+							.info{
+								text-align: left;
+								display: flex;
+								justify-content: flex-start;
+								align-items: center;
+								
+								.text{
+									
+									margin-left:20rpx ;
+									.category-text{
+										box-sizing: border-box;
+										padding-bottom:10rpx;
+										font-size: 34rpx;
+										// font-weight: bold;
+										color:#1D1C5C;
+										font-weight: bold;
+									}
+									.other-text{
+										box-sizing: border-box;
+										font-size: 26rpx;
+										
+										color: #C0C0C0	;
+									}
+								}
+							}
+							.num{
+								margin-top: 10rpx;
+								vertical-align: middle;
+								text-align: right;
+								.rmb{
+									font-size: 42rpx;
+									font-weight: bold;
+									color: #13BB16;
+								}
+								.time{
+									font-size: 24rpx;
+									color: #A9A9A9	;
+								}
+								
+							}
+						}
+					}
+				}
 			}
 		}
 	}

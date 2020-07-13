@@ -75,7 +75,7 @@
 							<view class="switch-text" :class="{close:gestureStatus == '-1',open:gestureStatus !='-1'}">
 								{{gestureStatus == '-1' ? '未开启':'已开启'}}
 							</view>
-							<view class="switch-btn" @tap="jumpToGuesture()">
+							<view class="switch-btn" @tap="checkIsSupportSoterAuthentication()">
 								{{gestureStatus == '-1' ? '前往开启':'关闭/修改'}}
 							</view>
 						</view>
@@ -268,17 +268,50 @@
 
 				
 			},
-			jumpToGuesture(){
-				if(this.gestureStatus == '-1'){
-					uni.navigateTo({
-						url:'../gesture/gesture?method=1&open=0'
-					})
-				} else {
-					uni.navigateTo({
-						url:'../gesture/gesture?method=1&open=1'
-					})
-				}
-				
+			checkIsSupportSoterAuthentication(){
+				let that = this
+				uni.checkIsSupportSoterAuthentication({
+				                    success(res) {
+				                        console.log("本设备支持生物认证");
+										uni.checkIsSoterEnrolledInDevice({
+										                    checkAuthMode: 'fingerPrint',
+										                    success(res) {
+										                       console.log("本设备已录入指纹，支持认证");
+															   uni.startSoterAuthentication({
+															                       requestAuthModes: ['fingerPrint'],
+															                       challenge: 'CoolRecord',
+															                       authContent: '请用指纹解锁',
+															                       async success(result) {
+																					   console.log("本地验证通过，即将请求后端验证")
+															                           const res = await that.$api.softerVerify(result.resultJSON,result.resultJSONSignature)
+															                           if(res){
+																						   console.log("后端验证结果：")
+															                           console.log(res)
+															                           }
+															                       },
+															                       fail(err) {
+															                           console.log(err);
+															                       },
+															                       complete(res) {
+															                           console.log(res);
+															                       }
+															                   })
+										                    },
+										                    fail(err) {
+										                        console.log(err);
+										                    },
+										                    complete(res) {
+										                        console.log(res);
+										                    }
+										                })
+				                    },
+				                    fail(err) {
+				                        console.log(err);
+				                    },
+				                    complete(res) {
+				                        console.log(res);
+				                    }
+				                })
 			},
 			animationfinish:function(e){
 				this.cardCur = e.detail.current;

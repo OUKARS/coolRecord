@@ -131,3 +131,12 @@ export const gestureSet = async (passowrd) => {
 			guesture:passowrd
 		})
 }
+
+export const softerVerify = async (resultJSON,resultJSONSignature) => {
+
+		console.log('请求预设数据接口...')
+		return fly.post('/login/verify',{
+			resultJSON:resultJSON,
+			resultJSONSignature:resultJSONSignature
+		})
+}

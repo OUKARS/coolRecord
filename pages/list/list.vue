@@ -32,56 +32,72 @@
 					貌似没有账单记录哦~
 				</view>
 		</view>
-		<view v-else class="orderlist-content">
-			<view :key="index" class="list-item" v-for="(item,index) in orderList" @touchstart="touchItemStart" @touchmove="touchItemMove" @touchend="touchItemEnd(item.orderId)">
-				<view :class="{menuactive:selectOrderId===item.orderId}" class="menu-container" >
-					<view class="edit" @tap="jumpToOrder(item.orderId)">
-						编辑
-					</view>
-					<view class="delete" @tap="deleteOrder(item.orderId)">
-						删除
-					</view>
-				</view>
-				<view class="left-content">
-					<image class="category-img" :src="item.categoryImgUrl" mode=""></image>
-				</view>
-				<view class="right-content">
-					<view class="info">
-						<view class="text">
-							<view class="category-text">
-								{{item.categoryName}}
+	<view  v-else class="listdata-container">
+		<load-refresh
+		  ref="loadRefresh"
+		  :isRefresh="true"
+		  :refreshTime="800"
+		  :heightReduce="10"
+		  :pageNo="currPage"
+		  :totalPageNo="totalPage" 
+		  @loadMore="loadMore" 
+		  @refresh="refresh">
+		  <view slot="content-list">
+			<view class="orderlist-content">
+					<view :key="index" class="list-item" v-for="(item,index) in orderList" @touchstart="touchItemStart" @touchmove="touchItemMove" @touchend="touchItemEnd(item.orderId)">
+						<view :class="{menuactive:selectOrderId===item.orderId}" class="menu-container" >
+							<view class="edit" @tap="jumpToOrder(item.orderId)">
+								编辑
 							</view>
-							<view class="other-text">
-								{{item.remark}}
+							<view class="delete" @tap="deleteOrder(item.orderId)">
+								删除
 							</view>
 						</view>
+						<view class="left-content">
+							<image class="category-img" :src="item.categoryImgUrl" mode=""></image>
+						</view>
+						<view class="right-content">
+							<view class="info">
+								<view class="text">
+									<view class="category-text">
+										{{item.categoryName}}
+									</view>
+									<view class="other-text">
+										{{item.remark}}
+									</view>
+								</view>
+							</view>
+							<view class="num">
+								<view v-if="item.type==0" class="rmb" style="color:red">
+									-{{item.money}}
+								</view>
+								<view v-else class="rmb">
+									+{{item.money}}
+								</view>
+								<view class="time">
+									{{item.date}}
+								</view>
+							</view>
+						</view>
 					</view>
-					<view class="num">
-						<view v-if="item.type==0" class="rmb" style="color:red">
-							-{{item.money}}
-						</view>
-						<view v-else class="rmb">
-							+{{item.money}}
-						</view>
-						<view class="time">
-							{{item.date}}
-						</view>
-					</view>
-				</view>
+				
 			</view>
-		
-	</view>
+		  </view>
+		</load-refresh>
+		</view>	
 	</view>
 </template>
 
 <script>
+	import loadRefresh from '@/components/load-refresh/load-refresh.vue'
 	import uniCalendar from '../../components/uni-calendar/uni-calendar.vue'
 	import {formatDate } from '../../utils/date.js'
 	var startX = 0;
 	var endX =0;
 	export default {
 	    components: {
-	        uniCalendar
+	        uniCalendar,
+			loadRefresh
 	    },
 	    data() {
 	        return {
@@ -94,12 +110,25 @@
 				},
 	            nowdate:'',
 				orderList:[],
+				currPage:1,//当前页码
+				totalPage: 2,// 总页数
 				selectOrderId:'',
 				firstLoad:true
 	        }
-	
 	    },
 	    methods: {
+			loadMore() {
+				console.log('loadMore')
+				let data = {"orderId":"1594614713297175617","categoryId":6,"categoryName":"学习","categoryImgUrl":"https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/06xuexi.png","type":0,"date":"2020-07-13 00:00:00","remark":"练习册1111","money":4.00}
+				this.orderList.push(data)
+				// 请求新数据完成后调用 组件内loadOver()方法
+				// 注意更新当前页码 currPage
+				this.currPage++;
+				this.$refs.loadRefresh.loadOver()
+			},
+			refresh() {
+			        console.log('refresh')
+			},
 			async fetchOrderListByDate(date){
 				this.firstLoad=false
 				const res = await this.$api.fetchOrderListByDate(date)
@@ -300,6 +329,10 @@
 			opacity: 0.8;
 			color: #A7A7F9;
 		}
+	}
+	.listdata-container{
+		width: 100%;
+		height: 100%;
 	}
 	.orderlist-content{
 		box-sizing: border-box;

@@ -1,5 +1,27 @@
 {
-	"pages": [ 
+	"pages": [
+		{
+		    "path" : "pages/setting/setting",
+		    "style": {
+		    	"navigationStyle": "custom"
+		    	
+		    }
+		},
+		{
+            "path" : "pages/ranking/ranking",
+            "style" : {
+				"navigationStyle": "custom"
+			}
+        },
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}
+		,
+		
+		
 		{
 		    "path" : "pages/data/data",
 		    "style": {
@@ -9,20 +31,16 @@
 		}
 		,
 		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		}
-		,
-		
-		{
-		    "path" : "pages/setting/setting",
+		    "path" : "pages/list/list",
 		    "style": {
 		    	"navigationStyle": "custom"
 		    	
 		    }
-		},
+		}
+		,
+		
+		
+		
 		{
 		    "path" : "pages/gesture/gesture",
 		    "style": {
@@ -50,23 +68,13 @@
 		    }
 		},
 		{
-		    "path" : "pages/list/list",
-		    "style": {
-		    	"navigationStyle": "custom"
-		    	
-		    }
-		}
-		,
-		
-		
-	    
-		{
             "path" : "pages/goal/goal",
             "style": {
             	"navigationStyle": "custom"
             	
             }
         }
+        
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",

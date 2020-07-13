@@ -28,6 +28,7 @@ const actions = {
 	addToken({ commit },token) {
 	  return new Promise(resolve => {
 	    setToken(token) 
+		console.log('token:',token)
 	    commit('SET_TOKEN', token)
 	    resolve()
 	  })
