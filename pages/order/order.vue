@@ -81,7 +81,7 @@
 		                ref="date" 
 		            ></w-picker>
 		<tabbar v-if="!orderid" currentPage="order"/> 
-		<lee-popup ref="popup" type="bottom" @closeHandler="closeHandler">
+		<order-popup ref="popup" type="bottom" @closeHandler="closeHandler">
 			<view class="category-choose-container">
 				<view class="header">
 					<image style="width: 36rpx;height: 35rpx;margin-right: 8rpx;" src="../../static/icon/choosecategory.png" mode=""></image>
@@ -103,13 +103,13 @@
 				</view>
 			</view>
 			
-		</lee-popup>
+		</order-popup>
 	</view>
 </template>
 
 <script>
 	import wPicker from "../../components/w-picker/w-picker.vue";
-	import LeePopup from '@/components/lee-popup/lee-popup.vue'
+	import orderPopup from '@/components/order-popup/order-popup.vue'
 	import {formatDate } from '../../utils/date.js'
 	export default {
 		props:{
@@ -120,7 +120,7 @@
 		},
 		components:{
 		        wPicker,
-				LeePopup 
+				orderPopup 
 		 },
 		data() {
 			return {

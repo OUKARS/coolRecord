@@ -1,6 +1,13 @@
 {
 	"pages": [
 		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}
+		,
+		{
 		    "path" : "pages/list/list",
 		    "style": {
 		    	"navigationStyle": "custom"
@@ -9,12 +16,21 @@
 		}
 		,
 		{
-			"path": "pages/index/index",
-			"style": {
+		    "path" : "pages/wish/wish",
+		    "style" : {
 				"navigationStyle": "custom"
 			}
-		}
-		,
+		},
+		{
+		    "path" : "pages/ranking/ranking",
+		    "style" : {
+				"navigationStyle": "custom"
+			}
+		},
+		
+		
+		
+		
 		{
 		    "path" : "pages/setting/setting",
 		    "style": {
@@ -24,12 +40,6 @@
 		},
 		
 		
-		{
-            "path" : "pages/ranking/ranking",
-            "style" : {
-				"navigationStyle": "custom"
-			}
-        },
 		
 		
 		
@@ -78,7 +88,7 @@
             	
             }
         }
-        
+       
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",

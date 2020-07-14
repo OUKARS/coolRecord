@@ -163,7 +163,7 @@
 				totalPage: 2,// 总页数
 				selectCategoryItem:'',
 				selectType:0,
-				selectCategoryId:null,
+				selectCategoryId:'',
 				popshow:false,
 				openpicker:false,
 				firstLoad:true
@@ -183,7 +183,7 @@
 			refresh() {
 			        console.log('refresh')
 			},
-			async fetchOrderList(nowdate,page,categoryid=null){
+			async fetchOrderList(nowdate,page,categoryid=''){
 				this.firstLoad=false
 				const res = await this.$api.fetchOrderList(nowdate,page,categoryid)
 				if(res.data.message!='无账单'){
@@ -192,10 +192,9 @@
 						e.date = e.date.replace(/-/g, '/')
 						e.date = formatDate(new Date(e.date))
 					})
-					// this.orderList = list.reverse()
+					this.orderList = list
 					console.log(this.orderList)
 				}
-				
 			},
 			async fetchCategoryData(){
 				const res = await this.$api.fetchCategoryData()
@@ -218,7 +217,7 @@
 			},
 			clearSelectItem(){
 				this.selectCategoryItem = ''
-				this.selectCategoryId = null
+				this.selectCategoryId = ''
 			},
 			changeSelectType(type){
 				this.selectType = !type

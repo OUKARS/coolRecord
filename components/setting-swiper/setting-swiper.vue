@@ -269,7 +269,7 @@
 				let that = this
 				uni.showModal({
 					title:'注意',
-					content:"指纹锁依赖于微信官方指纹数据。在开启指纹锁前，请确保该设备支持指纹解锁，并已在微信录入指纹数据",
+					content:"指纹锁依赖于设备录入的指纹数据。在开启指纹锁前，请确保该设备支持指纹解锁，并已在该设备录入指纹数据。",
 					showCancel:true,
 					cancelText:'取消',
 					confirmText:'继续验证',
@@ -309,11 +309,10 @@
 																								
 																							}
 																							console.log(res)
-																					   
 															                           }
 															                       },
 															                       fail(err) {
-															                           console.log(err);
+																					   console.log("验证失败")
 															                       },
 															                       complete(res) {
 															                           console.log(res);
@@ -321,7 +320,12 @@
 															                   })
 										                    },
 										                    fail(err) {
-										                        console.log(err);
+																console.log("本设备未录入指纹");
+																uni.showModal({
+																	title:'抱歉',
+																	content:"您未在手机内录入指纹数据，请先录入！",
+																	showCancel:false,
+																})
 										                    },
 										                    complete(res) {
 										                        console.log(res);
@@ -329,7 +333,13 @@
 										                })
 				                    },
 				                    fail(err) {
-				                        console.log(err);
+										console.log("本设备不支持生物认证");
+										uni.showModal({
+											title:'抱歉',
+											content:"本设备不支持指纹认证，无法使用指纹锁功能！",
+											showCancel:false,
+										})
+				                        // console.log(err);
 				                    },
 				                    complete(res) {
 				                        console.log(res);
