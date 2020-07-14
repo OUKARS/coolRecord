@@ -16,7 +16,7 @@
 			@touchstart="coverTouchstart"
 			@touchmove="coverTouchmove"
 			@touchend="coverTouchend">
-			<scroll-view scroll-y show-scrollbar="true" class="list" @scrolltolower="loadMore" :style="getHeight">
+			<scroll-view scroll-y show-scrollbar="true" class="list" @scrolltolower="loadMore">
 				<!-- 数据集插槽 -->
 				<slot name="content-list"></slot>
 				<!-- 上拉加载 -->
@@ -216,9 +216,9 @@
 		.list{
 			width: 100%;
 			.load-more{
-				font-size: 20rpx;
+				font-size: 24rpx;
 				text-align: center;
-				color: #AAAAAA;
+				color: #DCDCDC;
 				padding: 16rpx;
 			}
 		}

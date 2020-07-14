@@ -27,49 +27,60 @@
 				今天没有账单记录哦~
 			</view>
 		</view>
-		<view v-else class="recordlist-content">
-				<view v-if="showtip" class="tip">
-					左滑可以编辑和删除哦~
-				</view>
-				<view :key="item.orderId" class="list-item" v-for="item in orderList" @touchstart="touchItemStart" @touchmove="touchItemMove" @touchend="touchItemEnd(item.orderId)">
-					<view :class="{menuactive:selectOrderId===item.orderId}" class="menu-container" >
-						<view class="edit" @tap="jumpToOrder(item.orderId)">
-							编辑
-						</view>
-						<view class="delete" @tap="deleteOrder(item.orderId)">
-							删除
-						</view>
+		<load-refresh
+			v-else
+		  ref="loadRefresh"
+		  :isRefresh="false"
+		  :refreshTime="800"
+		  :heightReduce="10"
+		  :pageNo="currPage"
+		  :totalPageNo="totalPage" 
+		  @loadMore="loadMore" 
+		  @refresh="refresh">
+		  <view slot="content-list">
+			<view  class="recordlist-content">
+					<view v-if="showtip" class="tip">
+						左滑可以编辑和删除哦~
 					</view>
-					<view class="left-content">
-						<image class="category-img" :src="item.categoryImgUrl" mode=""></image>
-					</view>
-					<view class="right-content">
-						<view class="info">
-							<view class="text">
-								<view class="category-text">
-									{{item.categoryName}}
+					<view :key="item.orderId" class="list-item" v-for="item in orderList" @touchstart="touchItemStart" @touchmove="touchItemMove" @touchend="touchItemEnd(item.orderId)">
+						<view :class="{menuactive:selectOrderId===item.orderId}" class="menu-container" >
+							<view class="edit" @tap="jumpToOrder(item.orderId)">
+								编辑
+							</view>
+							<view class="delete" @tap="deleteOrder(item.orderId)">
+								删除
+							</view>
+						</view>
+						<view class="left-content">
+							<image class="category-img" :src="item.categoryImgUrl" mode=""></image>
+						</view>
+						<view class="right-content">
+							<view class="info">
+								<view class="text">
+									<view class="category-text">
+										{{item.categoryName}}
+									</view>
+									<view class="other-text">
+										{{item.remark}}
+									</view>
 								</view>
-								<view class="other-text">
-									{{item.remark}}
+							</view>
+							<view class="num">
+								<view v-if="item.type==0" class="rmb" style="color:red">
+									-{{item.money}}
+								</view>
+								<view v-else class="rmb">
+									+{{item.money}}
+								</view>
+								<view class="time">
+									{{item.date}}
 								</view>
 							</view>
 						</view>
-						<view class="num">
-							<view v-if="item.type==0" class="rmb" style="color:red">
-								-{{item.money}}
-							</view>
-							<view v-else class="rmb">
-								+{{item.money}}
-							</view>
-							<view class="time">
-								{{item.date}}
-							</view>
-						</view>
 					</view>
-				</view>
-				
-	
+			</view>
 		</view>
+		</load-refresh>
 	</view>
 </template>
 
@@ -85,17 +96,14 @@
 				orderList:[],
 				device:'',
 				showtip:true,
-				
+				currPage:1,
+				totalPage:1
 			};
 		},
 		mounted() {
 
 		},
 		created() {
-			let token = this.$store.state.user.token
-			if(token.length>0)
-				this.fetchTodayOrderList()
-			
 		},
 		methods:{
 			hidetip(){
@@ -125,14 +133,25 @@
 				else this.selectOrderId = ''
 				
 			},
-			refresh(){
-				this.fetchTodayOrderList()
+			loadMore() {
+				console.log('loadMore')
+				// let data = {"orderId":"1594614713297175617","categoryId":6,"categoryName":"学习","categoryImgUrl":"https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/06xuexi.png","type":0,"date":"2020-07-13 00:00:00","remark":"练习册1111","money":4.00}
+				// this.orderList.push(data)
+				// 请求新数据完成后调用 组件内loadOver()方法
+				// 注意更新当前页码 currPage
+				this.currPage++;
+				this.fetchTodayOrderList(this.currPage)
+				
+				this.$refs.loadRefresh.loadOver()
 			},
-			async fetchTodayOrderList(){
+			refresh(){
+				this.fetchTodayOrderList(1,'',true)
+			},
+			async fetchTodayOrderList(currPage = 1,categoryId = '',refresh = false){
 				
 				let date = new Date()
 				let formatdate = formatDate(date)
-				const res = await this.$api.fetchOrderListByDate(formatdate)
+				const res = await this.$api.fetchOrderList(formatdate,currPage,categoryId)
 				if(res.data && res.data.length>=0){
 					this.orderList = res.data
 					this.orderList.forEach(e=>{
@@ -140,6 +159,12 @@
 						e.date = formatDate(new Date(e.date))
 					})
 					this.orderList = this.orderList.reverse()
+					if(refresh == true){
+						uni.showToast({
+						    title: '刷新成功',
+						    duration: 2000
+						});
+					}
 				}
 				 
 			},
@@ -192,7 +217,7 @@
 <style lang="scss">
 .recordlist-container{
 	box-sizing: border-box;
-	margin-top: 50rpx;
+	margin-top: 30rpx;
 	padding-top: 10rpx;
 	
 	height: auto;
@@ -257,7 +282,7 @@
 	}
 	.recordlist-content{
 		box-sizing: border-box;
-		padding: 0rpx 0rpx 100rpx;
+		padding: 0rpx 0rpx 20rpx;
 		border-radius:20rpx ;
 		// background: #fff;
 		width: 100%;

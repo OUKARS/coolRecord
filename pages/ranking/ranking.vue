@@ -74,7 +74,7 @@
 				setNav:{
 					'color':'red',  //字体颜色
 					'isdisPlayNavTitle':true, //是否显示返回按钮，由于导航栏是共用的，把所有的东西封装好，
-					'navTitle':'账单排行' //导航标题
+					'navTitle':'账单TOP10' //导航标题
 				},
 				activeName:'out',
 				orderList:[{

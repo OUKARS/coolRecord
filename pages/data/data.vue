@@ -114,7 +114,7 @@
 				<view class="max-card animated fadeInUp delay-012s">
 					<view class="max-header">
 						<text class="title">本月最大支出</text>
-						<text class="tip">截止至7月10日</text>
+						<text class="tip ranking-tip" @tap="jumpToRanking()">查看账单排行></text>
 					</view>
 					<view class="max-container">
 						<view class="max-item">
@@ -383,6 +383,11 @@
 			      },
 			    });
 			  },
+			  jumpToRanking(){
+				  uni.navigateTo({
+				  	 url: '../ranking/ranking'
+				  })
+			  }
 		},
 		onShow() {
 		},
@@ -668,6 +673,7 @@
 						color: #808080;
 					}
 					
+					
 				}
 
 				.over-container{
@@ -722,6 +728,9 @@
 					.tip{
 						font-size: 26rpx;
 						color: #808080;
+					}
+					.ranking-tip{
+						font-weight: bold;
 					}
 					
 				}

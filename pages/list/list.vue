@@ -1,6 +1,7 @@
 <template>
 	<view class="container" >
 		<my-bar :nav="setNav"></my-bar>
+		
 		<view class="list-header">
 			<view class="text" @tap="showDatePicker()">
 				<view class="date">
@@ -160,7 +161,7 @@
 				orderList:[],
 				categoryList:{},
 				currPage:1,//当前页码
-				totalPage: 2,// 总页数
+				totalPage: 1,// 总页数
 				selectCategoryItem:'',
 				selectType:0,
 				selectCategoryId:'',
@@ -176,15 +177,21 @@
 				// this.orderList.push(data)
 				// 请求新数据完成后调用 组件内loadOver()方法
 				// 注意更新当前页码 currPage
-				this.fetchOrderList(this.nowdate,this.currPage)
 				this.currPage++;
+				this.fetchOrderList(this.nowdate,this.currPage)
 				this.$refs.loadRefresh.loadOver()
 			},
 			refresh() {
-			        console.log('refresh')
+				this.fetchOrderList(this.nowdate,1,this.selectCategoryId,true)
+				// console.log(res)
 			},
-			async fetchOrderList(nowdate,page,categoryid=''){
+			async fetchOrderList(nowdate,page,categoryid='',refresh = false){
 				this.firstLoad=false
+				if(refresh == false) {
+					uni.showLoading({
+					    title: '加载中...'
+					});
+				}
 				const res = await this.$api.fetchOrderList(nowdate,page,categoryid)
 				if(res.data.message!='无账单'){
 					var list = res.data
@@ -193,8 +200,16 @@
 						e.date = formatDate(new Date(e.date))
 					})
 					this.orderList = list
+					if(refresh == true){
+						uni.showToast({
+						    title: '刷新成功',
+						    duration: 2000
+						});
+					}
+					uni.hideLoading();
 					console.log(this.orderList)
 				}
+				
 			},
 			async fetchCategoryData(){
 				const res = await this.$api.fetchCategoryData()
@@ -329,6 +344,7 @@
 .container{
 	background: linear-gradient(0deg, #5153F6 0%, #4A34D5 100%);
 	min-height: 100vh;
+
 	.list-header{
 		box-sizing: border-box;
 		padding: 20rpx 20rpx;

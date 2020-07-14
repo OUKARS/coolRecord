@@ -1,6 +1,7 @@
 <template>
 	<view class="container">
 		<my-bar :nav="setNav"></my-bar>
+		
 		<view class="swiper-header">
 			<image class="header-img" src="https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/bg/bg-index.png" mode=""></image>
 			<view class="daily header animated fadeInLeft delay-08s" :class="{headerctive:current==0}" @tap="swipeToIndex0()">
@@ -62,6 +63,24 @@
 				￥{{current===0?dailychartData.dailyBudget:(current===1?weeklychartData.weeklyBudget:monthlychartData.monthBudget)}}
 			</view>
 		</view>
+		<view class="index-tool">
+			<view class="wish-card" @tap="JumpToTool('wish')">
+				<view class="card-icon">
+					<image class="icon-img" src="../../static/icon/wish.png" mode=""></image>
+				</view>
+				<view class="card-title">
+					本月愿望
+				</view>
+			</view>
+			<view class="achievement-card" @tap="JumpToTool('achievement')">
+				<view class="card-icon">
+					<image class="icon-img" src="../../static/icon/achievement.png" mode=""></image>
+				</view>
+				<view class="card-title">
+					本月成就
+				</view>
+			</view>
+		</view>
 		<view class="content">
 			<recordlist @updateInfo="updateInfo" ref="indexlist"/>
 		</view>
@@ -77,6 +96,7 @@
 	import uCharts from '../../common/u-charts/u-charts.js';
 	import onloading from '../../components/loading/loading.vue'
 	import {formatDate } from '../../utils/date.js'
+
 	var _self;
 	import {
 	        mapActions,
@@ -188,6 +208,11 @@
 			 },
 		},
 		methods: {
+			JumpToTool(name){
+				uni.navigateTo({
+					url:'../'+name+'/'+name
+				})
+			},
 			updateInfo(){
 				this.fetchHomeChart()
 			},
@@ -287,6 +312,58 @@
 		width: 100%;
 		overflow:hidden;
 		min-height: 100vh;
+		.index-tool{
+			width: 80%;
+			margin: 20rpx auto 0;
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+			.wish-card{
+				border-radius: 14rpx;
+				box-sizing: border-box;
+				justify-content: space-around;
+				padding: 12rpx 18rpx;
+				background: #4331C1;
+				width: 210rpx;
+				display: flex;
+				justify-content: space-around;
+				align-items: center;
+				.card-icon{
+					width: 48rpx;
+					height: 48rpx;
+					.icon-img{
+						width: 48rpx;
+						height: 48rpx;
+					}
+				}
+				.card-title{
+					color: #fff;
+				}
+			}
+			.achievement-card{
+				border-radius: 14rpx;
+				box-sizing: border-box;
+				justify-content:space-around;
+				padding: 12rpx 18rpx;
+				background: #4331C1;
+				align-items: center;
+				width: 210rpx;
+				display: flex;
+				justify-content: space-around;
+				.card-icon{
+					width: 48rpx;
+					height: 48rpx;
+					.icon-img{
+						width: 48rpx;
+						height: 48rpx;
+					}
+				}
+				.card-title{
+					color: #fff;
+				}
+			}
+			
+		}
 		.info-container{
 			width: 80%;
 			margin: 0 auto 24rpx;
@@ -331,7 +408,7 @@
 			width: 100%;
 			height: auto;
 			padding:10rpx 50rpx;
-			margin: 0 auto;	
+			margin: 0 auto 120rpx;	
 			
 		}
 		
@@ -339,7 +416,7 @@
 			transition: all 1s;
 			-webkit-transition: all 1s;
 			width: 80%;
-			margin:60rpx auto 50rpx;
+			margin:40rpx auto 30rpx;
 			height: 120rpx;
 			color: #fff;
 			font-weight: bold;

@@ -8,6 +8,19 @@
 		}
 		,
 		{
+		    "path" : "pages/ranking/ranking",
+		    "style" : {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+		    "path" : "pages/achievement/achievement",
+		    "style" : {
+				"navigationStyle": "custom"
+			}
+		},
+		
+		{
 		    "path" : "pages/list/list",
 		    "style": {
 		    	"navigationStyle": "custom"
@@ -21,12 +34,7 @@
 				"navigationStyle": "custom"
 			}
 		},
-		{
-		    "path" : "pages/ranking/ranking",
-		    "style" : {
-				"navigationStyle": "custom"
-			}
-		},
+		
 		
 		
 		
@@ -89,6 +97,7 @@
             }
         }
        
+        
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
