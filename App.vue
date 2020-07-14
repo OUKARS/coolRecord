@@ -62,7 +62,7 @@
 						if(res.data === 'yes')
 						{
 							console.log('目标已经设置')
-							that.checkGesture()
+							that.checkFingerPrint()
 						} else {   
 							console.log("success jump to onboarding")
 							uni.redirectTo({
@@ -82,16 +82,16 @@
 					}
 				});
 			},
-			async checkGesture(){
+			async checkFingerPrint(){
 				// const res = await this.$api.gestureSet('856')
-				await this.$api.gestureCheck('-1').then((res)=>{
-					if(res.data != '-1') { //手势密码已经开启
-						uni.navigateTo({
-						  url:'../gesture/gesture?method=0'
-						})
-					}
-					this.$store.dispatch('user/addGestureStatus',res.data.data)
-				})
+				const res = await this.$api.checkFingerPrint()
+				let blockStatus = res.data
+				if(blockStatus == 1) { //指纹锁已经开启
+					console.log("指纹锁已开启")
+					// uni.navigateTo({
+					//   url:'../finger/finger?method=0'
+					// })
+				}
 			}
 			
 			
@@ -100,7 +100,6 @@
 			console.log('App Launch')
 			this.checkToken()	
 			this.wxGetDevice()
-			// this.checkGesture()
 			console.log('用户设备：'+this.$store.state.app.device)
 			
 		},

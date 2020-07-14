@@ -50,10 +50,10 @@ export const fetchHomeChart = async () => {
 		return fly.get('/chart/home')
 }
 
-export const fetchOrderListByDate = async (date) => {
+export const fetchOrderList = async (date,page,categoryid) => {
 
 		console.log('请求账单列表接口...')
-		return fly.get('/order/list',{date:date})
+		return fly.get('/order/list',{categoryId:categoryid,date:date,page:page})
 }
 
 export const fetchOrderDetail = async (id) => {
@@ -115,28 +115,25 @@ export const importData = async () => {
 		return fly.get('/pingwei/api')
 }
 
-
-export const gestureCheck = async (passowrd) => {
-
-		console.log('请求预设数据接口...')
-		return fly.post('/guesture/check',{
-			guesture:passowrd
-		})
-}
-
-export const gestureSet = async (passowrd) => {
-
-		console.log('请求预设数据接口...')
-		return fly.post('/guesture/set',{
-			guesture:passowrd
-		})
-}
-
 export const softerVerify = async (resultJSON,resultJSONSignature) => {
 
-		console.log('请求预设数据接口...')
+		console.log('请求生物认证接口...')
 		return fly.post('/login/verify',{
 			resultJSON:resultJSON,
 			resultJSONSignature:resultJSONSignature
+		})
+}
+
+export const checkFingerPrint = async () => {
+
+		console.log('请求查看指纹锁状态接口...')
+		return fly.post('/fingerprint/check')
+}
+
+export const setFingerPrint = async (blockStatus) => {
+
+		console.log('请求设置指纹锁状态接口...')
+		return fly.post('/fingerprint/set',{
+			blockStatus:blockStatus,
 		})
 }

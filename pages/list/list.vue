@@ -1,28 +1,27 @@
 <template>
-	<view class="container">
+	<view class="container" >
 		<my-bar :nav="setNav"></my-bar>
 		<view class="list-header">
-			<view class="text">
-				{{nowdate}}
+			<view class="text" @tap="showDatePicker()">
+				<view class="date">
+					{{nowMonth}}
+				</view>
+				<view class="fold-icon">
+					<image src="../../static/icon/fold.png" class="fold-img"></image>
+				</view>
 			</view>
 			<view class="btn-container">
 				<view class="category-btn">
-					<image class="search-img" src="../../static/icon/search.png"></image>
-					 <view class="text" @tap="open">选择分类</view>
-				</view>
-				<view class="calendar-btn">
-					<image class="search-img" src="../../static/icon/search.png"></image>
-					 <view class="text" @tap="openCalendar">选择日期</view>
+					<image v-if="selectCategoryItem == ''" class="search-img" src="../../static/icon/search.png"></image>
+					<image v-if="selectCategoryItem != ''" class="categoryitem-img" :src="selectCategoryItem.categoryImgUrl"></image>
+					 <view class="text" @tap="openPop()">
+					 {{selectCategoryItem == ''?'选择分类':selectCategoryItem.categoryName}}</view>
+					 <view v-if="selectCategoryItem != ''" class="clear-btn" @tap="clearSelectItem()">
+					 	<image src="../../static/icon/clear.png" class="clear-img"></image>
+					 </view>
 				</view>
 			</view>
 			
-		</view>
-		<view class="calendar-content">
-		         <uni-calendar 
-		             ref="calendar"
-		             :insert="false"
-		             @confirm="confirm"
-		              />     
 		</view>
 		<view v-if="orderList.length==0" class="nodata-container">
 				<view class="img-container">
@@ -85,18 +84,66 @@
 		  </view>
 		</load-refresh>
 		</view>	
+		<lee-popup ref="popup" type="bottom">
+			<view class="category-choose-container">
+				<view class="close" @tap="closePop()" v-if="popshow == true">
+					<image class="close-img" src="../../static/icon/close.png"></image>
+				</view>
+				<view class="header">
+					<view class="title">
+						<image style="width: 36rpx;height: 35rpx;margin-right: 8rpx;" src="../../static/icon/choosecategory.png" mode=""></image>
+						选择分类
+					</view>
+					<view class="type">
+						<text class="type-btn" :class="{'active':selectType == 0}" @tap="changeSelectType(1)">支出</text>
+						<text class="type-btn" :class="{'active':selectType == 1}"  @tap="changeSelectType(0)">收入</text>
+						 
+					</view>
+					
+				</view>
+				<view class="content">
+					<view v-if="selectType==0" class="category-item" :key="item.categoryId" v-for="item in categoryList.outdata" @tap="selectCategory(item)">
+						<image class="category-img" :src="item.categoryImgUrl"></image>
+						<view class="category-name">
+							{{item.categoryName}}
+						</view>
+					</view>
+					<view v-if="selectType==1" class="category-item" :key="item.categoryId" v-for="item in categoryList.indata" @tap="selectCategory(item)">
+							<image class="category-img" :src="item.categoryImgUrl"></image>
+							<view class="category-name">
+								{{item.categoryName}}
+							</view>
+					</view>
+				</view>
+			</view>
+			
+		</lee-popup>
+		<view class="calendar-content">
+				 <w-picker
+								mode="date" 
+								startYear="2019" 
+								endYear="2029"
+								:value=nowdate
+								:current="true"
+								fields="month"
+								@confirm="onConfirm($event,'date')"
+								@cancel="onCancel"
+								:disabled-after="false"
+								ref="date" 
+							></w-picker>   
+		</view>
 	</view>
 </template>
 
 <script>
 	import loadRefresh from '@/components/load-refresh/load-refresh.vue'
-	import uniCalendar from '../../components/uni-calendar/uni-calendar.vue'
+	import LeePopup from '@/components/lee-popup/lee-popup.vue'
 	import {formatDate } from '../../utils/date.js'
 	var startX = 0;
 	var endX =0;
 	export default {
 	    components: {
-	        uniCalendar,
+			LeePopup,
 			loadRefresh
 	    },
 	    data() {
@@ -108,51 +155,90 @@
 					'isShowSetting':false,
 					'navTitle':'账单列表' //导航标题
 				},
+				nowMonth:'',
 	            nowdate:'',
 				orderList:[],
+				categoryList:{},
 				currPage:1,//当前页码
 				totalPage: 2,// 总页数
-				selectOrderId:'',
+				selectCategoryItem:'',
+				selectType:0,
+				selectCategoryId:null,
+				popshow:false,
+				openpicker:false,
 				firstLoad:true
 	        }
 	    },
 	    methods: {
 			loadMore() {
 				console.log('loadMore')
-				let data = {"orderId":"1594614713297175617","categoryId":6,"categoryName":"学习","categoryImgUrl":"https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/06xuexi.png","type":0,"date":"2020-07-13 00:00:00","remark":"练习册1111","money":4.00}
-				this.orderList.push(data)
+				// let data = {"orderId":"1594614713297175617","categoryId":6,"categoryName":"学习","categoryImgUrl":"https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/06xuexi.png","type":0,"date":"2020-07-13 00:00:00","remark":"练习册1111","money":4.00}
+				// this.orderList.push(data)
 				// 请求新数据完成后调用 组件内loadOver()方法
 				// 注意更新当前页码 currPage
+				this.fetchOrderList(this.nowdate,this.currPage)
 				this.currPage++;
 				this.$refs.loadRefresh.loadOver()
 			},
 			refresh() {
 			        console.log('refresh')
 			},
-			async fetchOrderListByDate(date){
+			async fetchOrderList(nowdate,page,categoryid=null){
 				this.firstLoad=false
-				const res = await this.$api.fetchOrderListByDate(date)
+				const res = await this.$api.fetchOrderList(nowdate,page,categoryid)
 				if(res.data.message!='无账单'){
 					var list = res.data
 					list.forEach(e=>{
 						e.date = e.date.replace(/-/g, '/')
 						e.date = formatDate(new Date(e.date))
 					})
-					this.orderList = list.reverse()
+					// this.orderList = list.reverse()
 					console.log(this.orderList)
 				}
 				
 			},
-			openCalendar(){
-			    this.$refs.calendar.open();
+			async fetchCategoryData(){
+				const res = await this.$api.fetchCategoryData()
+				this.categoryList = res.data
 			},
-			confirm(e) {
-				console.log(e);
-				this.nowdate = e.fulldate;
-				this.fetchOrderListByDate(this.nowdate)
+			openPop(){
+				this.popshow = true
+			    this.$refs.popup.open()
+			},
+			closePop(){
+				
+				this.$refs.popup.close()
+				this.popshow = false
+			},
+			selectCategory(item){
+				wx.vibrateShort()
+				this.selectCategoryItem = item
+				this.selectCategoryId = item.categoryId
+				this.$refs.popup.close()
+			},
+			clearSelectItem(){
+				this.selectCategoryItem = ''
+				this.selectCategoryId = null
+			},
+			changeSelectType(type){
+				this.selectType = !type
 			},
 			completeDate(value) {
 			        return value < 10 ? "0"+value:value;
+			},
+			showDatePicker(){
+				this.openpicker = true
+				this.$refs.date.show()
+			},
+			onConfirm(event,type){
+				wx.vibrateShort()
+				this.nowMonth = event.value
+				this.nowdate = event.value+'-01'
+				this.fetchOrderList(this.nowdate,1,this.selectCategoryId)
+				this.openpicker = false
+			},
+			onCancel(){
+				this.openpicker = false
 			},
 			getNowFormatDay(nowDate){
 				var char = "-";
@@ -190,7 +276,7 @@
 						content:"删除成功！",
 						showCancel:false,
 					})
-					this.fetchOrderListByDate(this.nowdate)
+					this.fetchOrderList(this.nowdate,1)
 				} else {
 					uni.showModal({
 						title:'咦',
@@ -225,14 +311,17 @@
 	    },
 		onShow() {
 			if(this.firstLoad==false)
-				this.fetchOrderListByDate(this.nowdate)
+				this.fetchOrderList(this.nowdate,1)
 			
 		},
 		onLoad() {
 			var nowDate = new Date();
 			var today = this.getNowFormatDay(nowDate)
+			this.nowMonth = this.completeDate(nowDate.getFullYear()+'-'+(nowDate.getMonth()+1))
 			this.nowdate = today
-			this.fetchOrderListByDate(this.nowdate)
+			console.log(this.nowdate)
+			this.fetchCategoryData()
+			this.fetchOrderList(this.nowdate,1)
 		}
 	}
 </script>
@@ -249,11 +338,28 @@
 		vertical-align: middle;
 		font-size: 36rpx;
 		.text{
+			background: #4331C1;
+			border-radius: 24rpx;
 			box-sizing: border-box;
 			padding: 10rpx 20rpx;
 			color: #fff;
 			font-weight: bold;
 			vertical-align: middle;
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			.date{
+				
+			}
+			.fold-icon{
+				margin-left: 8rpx;
+				width: 40rpx;
+				height: 40rpx;
+				.fold-img{
+					width: 36rpx;
+					height: 36rpx;
+				}
+			}
 		}
 		.btn-container{
 			display: flex;
@@ -262,12 +368,13 @@
 				font-size: 32rpx;
 				border-radius: 24rpx;
 				box-sizing: border-box;
-				
+				padding: 6rpx 12rpx;
 				color: #DCDCDC;
 				background: #4331C1;
 				font-weight: bold;
 				display: flex;
 				justify-content: center;
+				align-items: center;
 				vertical-align: middle;
 				.search-img{
 					margin-top: 4rpx;
@@ -276,10 +383,25 @@
 					width: 36rpx;
 					height: 36rpx;
 				}
+				.categoryitem-img{
+					margin: 0 0 0 2rpx;
+					width: 42rpx;
+					height: 42rpx;
+				}
 				.text{
 					padding: 10rpx 20rpx 10rpx 5rpx;
 					vertical-align: middle;
 					margin-left: 2rpx;
+				}
+				.clear-btn{
+					color: white;
+					margin-right: 4rpx;
+					width: 36rpx;
+					height: 36rpx;
+					.clear-img{
+						width: 36rpx;
+						height: 36rpx;
+					}
 				}
 			}
 			.calendar-btn{
@@ -454,6 +576,79 @@
 					}
 					
 				}
+			}
+		}
+	}
+	.category-choose-container{
+		height: auto;
+		position: relative;
+		.close{
+			text-align: center;
+			line-height: 72rpx;
+			top:-120rpx;
+			left: 50%;
+			margin-left: -36rpx;
+			color: #fff;
+			font-size: 56rpx;
+			position: absolute;
+			width: 72rpx;
+			height: 72rpx;
+			.close-img{
+				width: 72rpx;
+				height: 72rpx;
+			}
+		}
+		.header{
+			
+			margin-bottom:20rpx ;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			color: rgb(75,60,221);
+			.title{
+				font-size:42rpx;
+				font-weight: bold;
+				
+			}
+			.type{
+				.type-btn{
+					margin: 0 10rpx;
+					box-sizing: border-box;
+					padding: 6rpx 12rpx;
+					border: 5rpx;
+				}
+				.active{
+					background:  rgb(75,60,221);
+					color: white;
+				}
+			}
+		}
+		.content{
+			box-sizing: border-box;
+			padding: 10rpx 0rpx;
+			border-top: 1rpx sold red;
+			display: flex;
+			width: 700rpx;
+			margin:0 auto;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+			height: auto;
+			.category-item{
+				text-align: center;
+				box-sizing: border-box;
+				padding: 20rpx;
+				width: 140rpx;
+				height: 180rpx;
+					.category-img{
+						width: 80rpx !important;
+						height: 80rpx !important;
+						// box-shadow: 0rpx 10rpx 25rpx -8rpx rgba(41,41,41,0.1);
+					}
+					.category-name{
+						margin-top: 5rpx;
+						color: #696969;
+					}
+	
 			}
 		}
 	}

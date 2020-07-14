@@ -1,5 +1,5 @@
 <template>
-	<view class="lee-popup-mask" :class="maskClass" @click="maskClickHandler" data-role="mask">
+	<view class="lee-popup-mask" :class="maskClass"  data-role="mask">
 		<view class="lee-popup" :style="popupStyle" @transitionend="onAnimationEnd">
 			<slot></slot>
 		</view>
@@ -139,15 +139,6 @@
 			close() {
 				this.status = this.animation ? Status.CLOSE : Status.CLOSED
 			},
-			
-			// 点击遮罩层
-			maskClickHandler(e) {
-				if (e.target.dataset.role === 'mask') {
-					this.close()
-					this.$emit('closeHandler')
-				}
-			},
-			
 			// 动画结束
 			onAnimationEnd() {
 				if (this.status === Status.OPEN) {
@@ -179,7 +170,6 @@
 	
 	.lee-popup {
 		box-sizing: border-box;
-		
 		//默认初始时就在底部收起
 		transform: translate(0, 100%);
 		background-color: $uni-bg-color;

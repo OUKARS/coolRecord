@@ -57,7 +57,7 @@
 				</view>
 				<view v-if="item.name === 'gesture'" class="card-container">
 					<view class="header">
-						手势密码
+						指纹锁
 					</view>
 					<view class="card">
 						<view class="img-content">
@@ -68,15 +68,15 @@
 								保护数据与隐私安全
 							</view>
 							<view class="top-text">
-								访问小程序前需验证手势密码
+								对接官方接口，进入小程序需验证指纹
 							</view>
 						</view>
 						<view class="switch-bottom">
-							<view class="switch-text" :class="{close:gestureStatus == '-1',open:gestureStatus !='-1'}">
-								{{gestureStatus == '-1' ? '未开启':'已开启'}}
+							<view class="switch-text" :class="{close:blockStatus == 0,open:blockStatus == 1}">
+								{{blockStatus == 0 ? '未开启':'已开启'}}
 							</view>
-							<view class="switch-btn" @tap="checkIsSupportSoterAuthentication()">
-								{{gestureStatus == '-1' ? '前往开启':'关闭/修改'}}
+							<view class="switch-btn" @tap="changeFingerPrint()">
+								{{blockStatus == 0 ? '点击开启':'点击关闭'}}
 							</view>
 						</view>
 					</view>
@@ -236,7 +236,7 @@
 				rangeVal:[],
 				startDate:'',
 				endDate:'',
-				gestureStatus:-1,
+				blockStatus:0,
 				guesture:'',
 				
 			}
@@ -261,14 +261,28 @@
 			change:function(e){
 				this.$emit('change',e)
 			},
-			async fetchGesture(){
-				await this.$api.gestureCheck('-1').then(res=>{
-					this.gestureStatus = res.data
+			async fetchFingerPrint(){
+				const res = await this.$api.checkFingerPrint()
+				this.blockStatus = res.data
+			},
+			changeFingerPrint(){
+				let that = this
+				uni.showModal({
+					title:'注意',
+					content:"指纹锁依赖于微信官方指纹数据。在开启指纹锁前，请确保该设备支持指纹解锁，并已在微信录入指纹数据",
+					showCancel:true,
+					cancelText:'取消',
+					confirmText:'继续验证',
+					success:function(res){
+						if (res.confirm) {
+								that.checkIsSupportSoterAuthentication(that.blockStatus)
+								console.log('用户点击确定');
+						}
+					}
 				})
-
 				
 			},
-			checkIsSupportSoterAuthentication(){
+			checkIsSupportSoterAuthentication(blockStatus){
 				let that = this
 				uni.checkIsSupportSoterAuthentication({
 				                    success(res) {
@@ -286,7 +300,16 @@
 															                           const res = await that.$api.softerVerify(result.resultJSON,result.resultJSONSignature)
 															                           if(res){
 																						   console.log("后端验证结果：")
-															                           console.log(res)
+																						   if(res.data == '成功')
+																							{
+																								const res = await that.$api.setFingerPrint(!blockStatus)
+																								console.log("设置指纹锁状态")
+																								that.blockStatus = !blockStatus
+																								console.log(res)
+																								
+																							}
+																							console.log(res)
+																					   
 															                           }
 															                       },
 															                       fail(err) {
