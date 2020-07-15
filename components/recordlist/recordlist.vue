@@ -373,7 +373,7 @@
 				.info{
 					text-align: left;
 					display: flex;
-					justify-content: flex-start;
+					justify-content: space-between;
 					align-items: center;
 					
 					.text{
@@ -388,9 +388,11 @@
 							font-weight: bold;
 						}
 						.other-text{
+							width: 300rpx;
+							height: 40rpx;
 							box-sizing: border-box;
 							font-size: 26rpx;
-							
+							overflow: hidden;
 							color: #C0C0C0	;
 						}
 					}
