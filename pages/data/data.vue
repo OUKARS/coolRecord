@@ -730,6 +730,8 @@
 						color: #808080;
 					}
 					.ranking-tip{
+						animation: shanshuo 1s infinite;
+						-webkit-animation: shanshuo 1s infinite;
 						font-weight: bold;
 					}
 					
@@ -814,4 +816,5 @@
 		}
 	}
 }
+
 </style>

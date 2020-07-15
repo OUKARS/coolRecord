@@ -1,11 +1,6 @@
 <template>
 	<view class="load-refresh">
 		<!-- 刷新动画 -->
-		<view v-if="isRefresh" class="refresh hollow-dots-spinner">
-			<view class="dot" :style="[{animationPlayState: playState}]"></view>
-			<view class="dot" :style="[{animationPlayState: playState}]"></view>
-			<view class="dot" :style="[{animationPlayState: playState}]"></view>
-		</view>
 		<view
 			class="cover-container"
 			:style="[{
@@ -13,9 +8,6 @@
 				transform: coverTransform,
 				transition: coverTransition
 			}]"
-			@touchstart="coverTouchstart"
-			@touchmove="coverTouchmove"
-			@touchend="coverTouchend">
 			<scroll-view scroll-y show-scrollbar="true" class="list" @scrolltolower="loadMore">
 				<!-- 数据集插槽 -->
 				<slot name="content-list"></slot>
@@ -27,7 +19,7 @@
 </template>
 
 <script>
-	let startY = 0, moveY = 0, pageAtTop = true;
+	let startY = 0, moveY = 0, startX =0,endX =0,pageAtTop = true;
 	export default {
 		name: 'loadRefresh',
 		props: {
@@ -108,51 +100,6 @@
 				this.loading = false
 			},
 			// 回弹效果
-			coverTouchstart(e) {
-				if (!this.isRefresh) {
-					return
-				}
-				if (pageAtTop === false) {
-					return
-				}
-				this.coverTransition = 'transform .1s linear'
-				startY = e.touches[0].clientY
-				this.playState = 'running'
-			},
-			coverTouchmove(e) {
-				if (!this.isRefresh) {
-					return
-				}
-				moveY = e.touches[0].clientY
-				let moveDistance = moveY - startY
-				if(moveDistance < 0){
-					this.moving = false
-					return
-				}
-				this.moving = true
-				if(moveDistance >= 60 && moveDistance < 100){
-					moveDistance = 60
-				}
-				if(moveDistance > 40 && moveDistance <= 60){
-					this.refresh = true
-					this.coverTransform = `translateY(${moveDistance}px)`
-				}
-			},
-			coverTouchend() {
-				if (!this.isRefresh) {
-					return
-				}
-				setTimeout(() => {
-					if(this.moving === false){
-						return
-					}
-					this.moving = false
-					this.refresh = false
-					this.coverTransition = 'transform 0.3s cubic-bezier(.21,1.93,.53,.64)'
-					this.coverTransform = 'translateY(0px)'
-					this.playState = 'paused'
-				}, this.refreshTime)
-			}
 		}
 	}
 </script>

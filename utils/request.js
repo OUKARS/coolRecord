@@ -35,6 +35,7 @@ fly.interceptors.response.use(
 				// 	showCancel:false
 				// })
 			} else {
+				console.log('发生报错：',err)
 			uni.showModal({
 				title:'咦',
 				content:"网络好像出现了点问题o(╥﹏╥)o",

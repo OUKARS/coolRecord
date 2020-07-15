@@ -165,6 +165,7 @@
 				selectCategoryItem:'',
 				selectType:0,
 				selectCategoryId:'',
+				selectOrderId:'',
 				popshow:false,
 				openpicker:false,
 				firstLoad:true
@@ -187,11 +188,9 @@
 			},
 			async fetchOrderList(nowdate,page,categoryid='',refresh = false){
 				this.firstLoad=false
-				if(refresh == false) {
 					uni.showLoading({
 					    title: '加载中...'
 					});
-				}
 				const res = await this.$api.fetchOrderList(nowdate,page,categoryid)
 				if(res.data.message!='无账单'){
 					var list = res.data
@@ -200,12 +199,6 @@
 						e.date = formatDate(new Date(e.date))
 					})
 					this.orderList = list
-					if(refresh == true){
-						uni.showToast({
-						    title: '刷新成功',
-						    duration: 2000
-						});
-					}
 					uni.hideLoading();
 					console.log(this.orderList)
 				}
@@ -229,6 +222,7 @@
 				this.selectCategoryItem = item
 				this.selectCategoryId = item.categoryId
 				this.$refs.popup.close()
+				this.fetchOrderList(this.nowdate,1,this.selectCategoryId)
 			},
 			clearSelectItem(){
 				this.selectCategoryItem = ''
@@ -323,15 +317,10 @@
 			this.selectOrderId = ''
 			}
 	    },
-		onShow() {
-			if(this.firstLoad==false)
-				this.fetchOrderList(this.nowdate,1)
-			
-		},
 		onLoad() {
 			var nowDate = new Date();
 			var today = this.getNowFormatDay(nowDate)
-			this.nowMonth = this.completeDate(nowDate.getFullYear()+'-'+(nowDate.getMonth()+1))
+			this.nowMonth =nowDate.getFullYear()+'-'+ this.completeDate(nowDate.getMonth()+1)
 			this.nowdate = today
 			console.log(this.nowdate)
 			this.fetchCategoryData()

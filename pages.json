@@ -8,13 +8,31 @@
 		}
 		,
 		{
-		    "path" : "pages/ranking/ranking",
+		    "path" : "pages/wish/wish",
 		    "style" : {
 				"navigationStyle": "custom"
 			}
 		},
+		
 		{
-		    "path" : "pages/achievement/achievement",
+		    "path" : "pages/fingerprint/fingerprint",
+		    "style": {
+		    	"navigationStyle": "custom"
+		    	
+		    }
+		}
+		,
+		
+		{
+		    "path" : "pages/data/data",
+		    "style": {
+		    	"navigationStyle": "custom"
+		    	
+		    }
+		}
+		,
+		{
+		    "path" : "pages/ranking/ranking",
 		    "style" : {
 				"navigationStyle": "custom"
 			}
@@ -29,17 +47,6 @@
 		}
 		,
 		{
-		    "path" : "pages/wish/wish",
-		    "style" : {
-				"navigationStyle": "custom"
-			}
-		},
-		
-		
-		
-		
-		
-		{
 		    "path" : "pages/setting/setting",
 		    "style": {
 		    	"navigationStyle": "custom"
@@ -50,27 +57,13 @@
 		
 		
 		
-		
 		{
-		    "path" : "pages/data/data",
-		    "style": {
-		    	"navigationStyle": "custom"
-		    	
-		    }
-		}
-		,
-		
-		
-		
-		
-		{
-		    "path" : "pages/gesture/gesture",
-		    "style": {
-		    	"navigationStyle": "custom"
-		    	
-		    }
-		}
-		,
+		    "path" : "pages/achievement/achievement",
+		    "style" : {
+				"navigationStyle": "custom"
+			}
+		},
+	
 		
 		
 		{

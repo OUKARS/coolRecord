@@ -159,12 +159,12 @@
 						e.date = formatDate(new Date(e.date))
 					})
 					this.orderList = this.orderList.reverse()
-					if(refresh == true){
-						uni.showToast({
-						    title: '刷新成功',
-						    duration: 2000
-						});
-					}
+					// if(refresh == true){
+					// 	uni.showToast({
+					// 	    title: '刷新成功',
+					// 	    duration: 2000
+					// 	});
+					// }
 				}
 				 
 			},

@@ -244,7 +244,7 @@
 				var _self = this
 				var monthCost = parseFloat(this.goalData.monthCost)
 				var monthSave = parseFloat(this.goalData.monthSave)
-				if(monthCost >0 && monthSave >0){
+				if(monthCost >=0 && monthSave >=0){
 					const res = await this.$api.PostGoal({monthCost,monthSave})
 					if(res.data.message==='设置成功'){
 						_self.$store.dispatch('user/addGoal','yes')

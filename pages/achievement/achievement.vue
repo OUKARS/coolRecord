@@ -51,21 +51,21 @@
 							title:'学习小将',
 							desc:'本月学习金额超过50',
 							num:30,
-							url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/06xuexi.png?x-oss-process=style/blog_img'
+							url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/co-study.png?x-oss-process=style/blog_img'
 							},
 							{
 								id:2,
 								title:'学习能手',
 								desc:'本月学习金额超过100',
 								num:100,
-								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/06xuexi.png?x-oss-process=style/blog_img'
+								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/silver-study.png?x-oss-process=style/blog_img'
 							},
 							{
 								id:3,
 								title:'学霸附体',
 								desc:'本月学习金额超过200',
 								num:200,
-								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/06xuexi.png?x-oss-process=style/blog_img'
+								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/gold-study.png?x-oss-process=style/blog_img'
 							},
 						],
 						[
@@ -74,21 +74,21 @@
 							title:'点头之交',
 							desc:'本月社交金额超过50',
 							num:50,
-							url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/08shejiao.png?x-oss-process=style/blog_img'
+							url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/co-shejiao.png?x-oss-process=style/blog_img'
 							},
 							{
 								id:2,
 								title:'社交能手',
 								desc:'本月社交金额超过100',
 								num:100,
-								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/08shejiao.png?x-oss-process=style/blog_img'
+								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/silver-shejiao.png?x-oss-process=style/blog_img'
 							},
 							{
 								id:3,
-								title:'朋友圈',
+								title:'大朋友圈',
 								desc:'本月社交金额超过200',
 								num:200,
-								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/08shejiao.png?x-oss-process=style/blog_img'
+								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/gold-shejiao.png?x-oss-process=style/blog_img'
 							},
 						],
 						[
@@ -97,21 +97,21 @@
 							title:'赚点零花钱',
 							desc:'本月兼职金额超过100',
 							num:100,
-							url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/22jianzhi.png?x-oss-process=style/blog_img'
+							url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/co-jianzhi.png?x-oss-process=style/blog_img'
 							},
 							{
 								id:2,
 								title:'勤工俭学',
 								desc:'本月兼职金额超过200',
 								num:200,
-								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/22jianzhi.png?x-oss-process=style/blog_img'
+								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/silver-jianzhi.png?x-oss-process=style/blog_img'
 							},
 							{
 								id:3,
 								title:'兼职达人',
 								desc:'本月兼职金额超过400',
 								num:400,
-								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/22jianzhi.png?x-oss-process=style/blog_img'
+								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/gold-jianzhi.png?x-oss-process=style/blog_img'
 							},
 						],
 						[
@@ -120,21 +120,21 @@
 							title:'劳逸结合',
 							desc:'本月娱乐金额超过100',
 							num:100,
-							url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/12yule.png?x-oss-process=style/blog_img'
+							url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/co-yule.png?x-oss-process=style/blog_img'
 							},
 							{
 								id:2,
 								title:'享受生活',
 								desc:'本月娱乐金额超过200',
 								num:200,
-								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/12yule.png?x-oss-process=style/blog_img'
+								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/silver-yule.png?x-oss-process=style/blog_img'
 							},
 							{
 								id:3,
 								title:'城会玩',
 								desc:'本月娱乐金额超过300',
 								num:300,
-								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/12yule.png?x-oss-process=style/blog_img'
+								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/gold-yule.png?x-oss-process=style/blog_img'
 							},
 						],
 						[
@@ -143,21 +143,21 @@
 							title:'点滴爱心',
 							desc:'本月捐赠金额超过20',
 							num:20,
-							url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/11juanzeng.png?x-oss-process=style/blog_img'
+							url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/co-juanzeng.png?x-oss-process=style/blog_img'
 							},
 							{
 								id:2,
 								title:'奉献互助',
 								desc:'本月捐赠金额超过50',
 								num:50,
-								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/11juanzeng.png?x-oss-process=style/blog_img'
+								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/silver-juanzeng.png?x-oss-process=style/blog_img'
 							},
 							{
 								id:3,
 								title:'爱心大使',
 								desc:'本月捐赠金额超过100',
 								num:100,
-								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/11juanzeng.png?x-oss-process=style/blog_img'
+								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/gold-juanzeng.png?x-oss-process=style/blog_img'
 							},
 						],
 					
@@ -189,29 +189,26 @@
 						align-items: center;
 						justify-content: space-around;
 						.icon{
-							// filter: grayscale(100%);
-							margin-bottom: 10rpx;
-							width: 120rpx;
-							height: 120rpx;
-							border-radius: 120rpx;
+							filter: grayscale(100%);
+							width: 200rpx;
+							height: 200rpx;
 							.icon-img{
-								width: 120rpx;
-								height: 120rpx;
-								border-radius: 120rpx;
+								width: 200rpx;
+								height: 200rpx;
 							}
 						}
-						.gold-bg{
-							border: 10rpx solid #FFD700;
+						// .gold-bg{
+						// 	border: 10rpx solid #FFD700;
 							
-						}
-						.silver-bg{
-							border: 10rpx solid #F5F5F5;
+						// }
+						// .silver-bg{
+						// 	border: 10rpx solid #F5F5F5;
 							
-						}
-						.copper-bg{
-							border: 10rpx solid #EF9F45;
+						// }
+						// .copper-bg{
+						// 	border: 10rpx solid #EF9F45;
 							
-						}
+						// }
 						.title{
 							// filter: grayscale(100%);
 							margin: 10rpx 0;

@@ -61,7 +61,7 @@
 					备注
 				</view>
 				<view v-if="remarkshow" class="order-textarea">
-					<textarea :value="orderData.remark" auto-height adjust-position placeholder="账单备注(选填)" @input="remarkInput"/>
+					<textarea :value="orderData.remark"  show-confirm-bar="false" auto-height adjust-position placeholder="账单备注(选填)" @input="remarkInput"/>
 				</view>
 			</view>
 			<view class="btn-container">
@@ -467,7 +467,7 @@
 			height: 82rpx;
 			line-height: 82rpx;
 			align-items: center;
-			border-radius: 24rpx;
+			border-radius: 20rpx;
 			box-sizing: border-box;
 			font-size: 36rpx;
 			padding: 20rpx 24rpx;
@@ -524,7 +524,7 @@
 			.order-textarea{
 				line-height: auto;
 				align-items: center;
-				border-radius: 24rpx;
+				border-radius: 20rpx;
 				box-sizing: border-box;
 				font-size: 36rpx;
 				padding: 20rpx 24rpx;

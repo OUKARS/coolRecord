@@ -3,15 +3,26 @@
 		<my-bar :nav="setNav"></my-bar>
 		<view class="wrapper">
 			<view class="ranking-header">
-				<view class="header-item peopleinfo" :class="{active:activeName == 'out'}"  @tap="toIndex('out')">
-					支出
+				<view class="ranking-date" @tap="showDatePicker()">
+					<view class="date">
+						{{nowMonth}}
+					</view>
+					<view class="fold-icon">
+						<image src="../../static/icon/fold.png" class="fold-img"></image>
+					</view>
 				</view>
-				<view class="header-item line" >
-					|
+				<view class="type-container">
+					<view class="header-item peopleinfo" :class="{active:activeName == 'out'}"  @tap="toIndex('out')">
+						支出
+					</view>
+					<view class="header-item line" >
+						|
+					</view>
+					<view class="header-item graph" :class="{active:activeName == 'in'}" @tap="toIndex('in')">
+						收入
+					</view>
 				</view>
-				<view class="header-item graph" :class="{active:activeName == 'in'}" @tap="toIndex('in')">
-					收入
-				</view>
+				
 			</view>
 			<view v-if="orderList.length==0" class="nodata-container">
 				<view class="img-container">
@@ -19,7 +30,7 @@
 				</view>
 				
 				<view class="text">
-					今天没有账单记录哦~
+					没有账单记录,无法进行排行哦~
 				</view>
 			</view>
 			<view v-else class="recordlist-content">
@@ -64,6 +75,20 @@
 				
 			</view>
 		</view>
+		<view class="calendar-content">
+				 <w-picker
+								mode="date" 
+								startYear="2019" 
+								endYear="2029"
+								:value=nowdate
+								:current="true"
+								fields="month"
+								@confirm="onConfirm($event,'date')"
+								@cancel="onCancel"
+								:disabled-after="false"
+								ref="rankingdate" 
+							></w-picker>   
+		</view>
 	</view>
 </template>
 
@@ -77,88 +102,9 @@
 					'navTitle':'账单TOP10' //导航标题
 				},
 				activeName:'out',
-				orderList:[{
-				  "orderId": 1,
-				  "categoryId": 1,
-				  "categoryName":"早餐",
-				  "categoryImgUrl":'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/01eat.png?x-oss-process=style/blog_img',
-				  "type": 0,
-				  "date": "2020-05-10",
-				  "remark": "暂无备注",
-				  "money":2
-				},{
-				  "orderId": 1,
-				  "categoryId": 1,
-				  "categoryName":"早餐",
-				  "categoryImgUrl":'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/01eat.png?x-oss-process=style/blog_img',
-				  "type": 0,
-				  "date": "2020-05-10",
-				  "remark": "暂无备注",
-				  "money":2
-				},{
-				  "orderId": 1,
-				  "categoryId": 1,
-				  "categoryName":"早餐",
-				  "categoryImgUrl":'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/01eat.png?x-oss-process=style/blog_img',
-				  "type": 0,
-				  "date": "2020-05-10",
-				  "remark": "暂无备注",
-				  "money":2
-				},{
-				  "orderId": 1,
-				  "categoryId": 1,
-				  "categoryName":"早餐",
-				  "categoryImgUrl":'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/01eat.png?x-oss-process=style/blog_img',
-				  "type": 0,
-				  "date": "2020-05-10",
-				  "remark": "暂无备注",
-				  "money":2
-				},{
-				  "orderId": 1,
-				  "categoryId": 1,
-				  "categoryName":"早餐",
-				  "categoryImgUrl":'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/01eat.png?x-oss-process=style/blog_img',
-				  "type": 0,
-				  "date": "2020-05-10",
-				  "remark": "暂无备注",
-				  "money":2
-				},{
-				  "orderId": 1,
-				  "categoryId": 1,
-				  "categoryName":"早餐",
-				  "categoryImgUrl":'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/01eat.png?x-oss-process=style/blog_img',
-				  "type": 0,
-				  "date": "2020-05-10",
-				  "remark": "暂无备注",
-				  "money":2
-				},{
-				  "orderId": 1,
-				  "categoryId": 1,
-				  "categoryName":"早餐",
-				  "categoryImgUrl":'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/01eat.png?x-oss-process=style/blog_img',
-				  "type": 0,
-				  "date": "2020-05-10",
-				  "remark": "暂无备注",
-				  "money":2
-				},{
-				  "orderId": 1,
-				  "categoryId": 1,
-				  "categoryName":"早餐",
-				  "categoryImgUrl":'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/01eat.png?x-oss-process=style/blog_img',
-				  "type": 0,
-				  "date": "2020-05-10",
-				  "remark": "暂无备注",
-				  "money":2
-				},{
-				  "orderId": 1,
-				  "categoryId": 1,
-				  "categoryName":"早餐",
-				  "categoryImgUrl":'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/01eat.png?x-oss-process=style/blog_img',
-				  "type": 0,
-				  "date": "2020-05-10",
-				  "remark": "暂无备注",
-				  "money":2
-				},],
+				nowMonth:'',
+				openpicker:false,
+				orderList:[],
 				outList:[],
 				inList:[]
 			};
@@ -166,7 +112,54 @@
 		methods:{
 			toIndex(indexName){
 				this.activeName = indexName
+				this.getRankingList(this.orderType,this.nowMonth+'-01')
 			},
+			showDatePicker(){
+				this.openpicker = true
+				this.$refs.rankingdate.show()
+			},
+			onConfirm(event,type){
+				wx.vibrateShort()
+				this.nowMonth = event.value
+				this.getRankingList(this.orderType,this.nowMonth+'-01')
+				
+				this.openpicker = false
+			},
+			onCancel(){
+				this.openpicker = false
+			},
+			completeDate(value) {
+			        return value < 10 ? "0"+value:value;
+			},
+			async getRankingList(type,date){
+				uni.showLoading({
+				    title: '加载中'
+				});
+				const res = await this.$api.getRankingList(type,date)
+				if(res.data && res.data.length > 0){
+					this.orderList = res.data
+					uni.hideLoading();
+				} else {
+					 uni.hideLoading();
+					 uni.showToast({
+					     title: '加载错误',
+						 icon:'none',
+					     duration: 2000
+					 });
+				}
+				console.log(res)
+			}
+		},
+		computed:{
+			orderType(){
+				return this.activeName == 'out'?0:1
+			}
+		},
+		onLoad() {
+			var nowDate = new Date();
+			this.nowMonth = nowDate.getFullYear()+'-'+this.completeDate(nowDate.getMonth()+1)
+			
+			this.getRankingList(this.orderType,this.nowMonth+'-01')
 		}
 	}
 </script>
@@ -180,25 +173,57 @@
 		.wrapper{
 			margin-top: 10rpx;
 			.ranking-header{
+				width: 90%;
+				margin: 0 auto;
 				display: flex;
-				justify-content: center;
+				justify-content: space-between;
 				color: white;
 				font-weight: bold;
 				font-size: 36rpx;
 				transition: all 1s;
 				-webkit-transition: all 1s;
-				.header-item{
+				.ranking-date{
+					background: #4331C1;
+					border-radius: 24rpx;
 					box-sizing: border-box;
-					padding: 12rpx 20rpx;
-					border-radius: 16rpx;
+					padding: 10rpx 20rpx;
+					color: #fff;
+					font-weight: bold;
+					vertical-align: middle;
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					.date{
+						
+					}
+					.fold-icon{
+						margin-left: 8rpx;
+						width: 40rpx;
+						height: 40rpx;
+						.fold-img{
+							width: 36rpx;
+							height: 36rpx;
+						}
+					}
 				}
-				.line{
-					margin: 0 10rpx;
+				.type-container{
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					.header-item{
+						box-sizing: border-box;
+						padding: 10rpx 16rpx;
+						border-radius: 16rpx;
+					}
+					.line{
+						margin: 0 10rpx;
+					}
+					.active{
+						background: white;
+						color: black;
+					}
 				}
-				.active{
-					background: white;
-					color: black;
-				}
+				
 			}
 			.nodata-container{
 				margin: 60rpx 0;

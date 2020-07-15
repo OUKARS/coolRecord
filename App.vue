@@ -83,18 +83,16 @@
 				});
 			},
 			async checkFingerPrint(){
-				// const res = await this.$api.gestureSet('856')
 				const res = await this.$api.checkFingerPrint()
 				let blockStatus = res.data
 				if(blockStatus == 1) { //指纹锁已经开启
 					console.log("指纹锁已开启")
-					// uni.navigateTo({
-					//   url:'../finger/finger?method=0'
-					// })
+					uni.redirectTo({
+					  url:'../fingerprint/fingerprint'
+					})
 				}
 			}
-			
-			
+
 		},
 		onLaunch: function() {
 			console.log('App Launch')
@@ -147,5 +145,29 @@ page {
 }
 .weight{
 	font-weight: bold;
+}
+
+@keyframes shanshuo {
+    from {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    to {
+        opacity: 1.0;
+    }
+}
+
+@-webkit-keyframes shanshuo {
+    from {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    to {
+        opacity: 1.0;
+    }
 }
 </style>

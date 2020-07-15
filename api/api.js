@@ -127,7 +127,7 @@ export const softerVerify = async (resultJSON,resultJSONSignature) => {
 export const checkFingerPrint = async () => {
 
 		console.log('请求查看指纹锁状态接口...')
-		return fly.post('/fingerprint/check')
+		return fly.get('/fingerprint/check')
 }
 
 export const setFingerPrint = async (blockStatus) => {
@@ -135,5 +135,15 @@ export const setFingerPrint = async (blockStatus) => {
 		console.log('请求设置指纹锁状态接口...')
 		return fly.post('/fingerprint/set',{
 			blockStatus:blockStatus,
+		})
+}
+
+
+export const getRankingList = async (type,date) => {
+
+		console.log('请求排行榜接口...')
+		return fly.get('/order/ranking',{
+			type:type,
+			date:date
 		})
 }

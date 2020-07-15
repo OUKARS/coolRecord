@@ -322,18 +322,18 @@
 				border-radius: 14rpx;
 				box-sizing: border-box;
 				justify-content: space-around;
-				padding: 12rpx 18rpx;
+				padding: 10rpx 16rpx;
 				background: #4331C1;
 				width: 210rpx;
 				display: flex;
 				justify-content: space-around;
 				align-items: center;
 				.card-icon{
-					width: 48rpx;
-					height: 48rpx;
+					width: 42rpx;
+					height: 42rpx;
 					.icon-img{
-						width: 48rpx;
-						height: 48rpx;
+						width: 42rpx;
+						height: 42rpx;
 					}
 				}
 				.card-title{
@@ -351,11 +351,11 @@
 				display: flex;
 				justify-content: space-around;
 				.card-icon{
-					width: 48rpx;
-					height: 48rpx;
+					width: 36rpx;
+					height: 36rpx;
 					.icon-img{
-						width: 48rpx;
-						height: 48rpx;
+						width: 38rpx;
+						height: 38rpx;
 					}
 				}
 				.card-title{

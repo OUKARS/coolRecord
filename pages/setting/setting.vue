@@ -24,7 +24,7 @@
 			}
 		},
 		onShow() {
-			// this.$refs.setswiper.fetchGesture()
+			this.$refs.setswiper.fetchFingerPrint()
 		},
 		
 		methods: {

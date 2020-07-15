@@ -45,7 +45,13 @@
 		},
 		methods: {
 			async fetchGoalDetail(){
+				uni.showLoading({
+				    title: '加载中...'
+				});
 				const res = await this.$api.fetchGoalDetail()
+				if(res.data){
+					uni.hideLoading();
+				}
 				this.goalData = res.data
 			},
 			async PostGoal(){

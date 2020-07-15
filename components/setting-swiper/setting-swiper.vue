@@ -262,14 +262,28 @@
 				this.$emit('change',e)
 			},
 			async fetchFingerPrint(){
+				uni.showLoading({
+				    title: '加载中...'
+				});
 				const res = await this.$api.checkFingerPrint()
-				this.blockStatus = res.data
+				if(res.data == 0 || res.data ==1){
+					this.blockStatus = res.data
+					uni.hideLoading();
+				} else {
+					uni.showToast({
+					    title: '加载错误',
+						icon:'none',
+					    duration: 2000
+					});
+				}
+				
 			},
 			changeFingerPrint(){
 				let that = this
+				let modalContent = this.blockStatus == 0?'指纹锁依赖于设备录入的指纹数据。在开启指纹锁前，请确保该设备支持指纹解锁，并已在该设备录入指纹数据并在微信支付验证。':'关闭指纹锁前,请先验证指纹。'
 				uni.showModal({
 					title:'注意',
-					content:"指纹锁依赖于设备录入的指纹数据。在开启指纹锁前，请确保该设备支持指纹解锁，并已在该设备录入指纹数据。",
+					content:modalContent,
 					showCancel:true,
 					cancelText:'取消',
 					confirmText:'继续验证',
@@ -284,6 +298,7 @@
 			},
 			checkIsSupportSoterAuthentication(blockStatus){
 				let that = this
+				console.log(blockStatus)
 				uni.checkIsSupportSoterAuthentication({
 				                    success(res) {
 				                        console.log("本设备支持生物认证");
@@ -297,14 +312,33 @@
 															                       authContent: '请用指纹解锁',
 															                       async success(result) {
 																					   console.log("本地验证通过，即将请求后端验证")
+																					   uni.showLoading({
+																					       title: '验证中'
+																					   });
 															                           const res = await that.$api.softerVerify(result.resultJSON,result.resultJSONSignature)
 															                           if(res){
 																						   console.log("后端验证结果：")
+																						   console.log(res)
 																						   if(res.data == '成功')
-																							{
-																								const res = await that.$api.setFingerPrint(!blockStatus)
+																							{	let newStatus = blockStatus == 0?1:0
+																								const res = await that.$api.setFingerPrint(newStatus)
+																								if(res.data == '设置成功'){
+																									uni.hideLoading();
+																									uni.showToast({
+																									    title: '设置成功！',
+																									    duration: 2000
+																									});
+																								} else {
+																									uni.hideLoading();
+																									uni.showToast({
+																									    title: '设置失败',
+																										icon:'none',
+																									    duration: 2000
+																									});
+																								}
 																								console.log("设置指纹锁状态")
-																								that.blockStatus = !blockStatus
+																								
+																								that.blockStatus = newStatus
 																								console.log(res)
 																								
 																							}
