@@ -147,17 +147,43 @@
 			refresh(){
 				this.fetchTodayOrderList(1,'',true)
 			},
+			getLength(str){
+				var len = 0;
+					for (var i = 0; i < str.length; i++) {
+						var c = str.charCodeAt(i);
+						//单字节加1
+						if ((c >= 0x0001 && c <= 0x007e) || (0xff60 <= c && c <= 0xff9f)) {
+							len++;
+						}
+						else {
+							len += 2;
+						}
+					}
+				return len;
+
+			},
+			formateRemark(remark){
+				let length = this.getLength(remark)
+				if(length > 16){
+					// remark= remark.slice(0,16)
+					remark = remark.substring(0,10)
+					remark = remark + '...'
+				}
+				return remark
+			},
 			async fetchTodayOrderList(currPage = 1,categoryId = '',refresh = false){
-				
 				let date = new Date()
 				let formatdate = formatDate(date)
 				const res = await this.$api.fetchOrderList(formatdate,currPage,categoryId)
-				if(res.data && res.data.length>=0){
+				
+				if(res.data && res.data.data.length>=0){
 					this.totalPage = res.data.totalPage
 					this.orderList = res.data.data
+					console.log('今日账单列表',this.orderList)
 					this.orderList.forEach(e=>{
 						e.date = e.date.replace(/-/g, '/')
 						e.date = formatDate(new Date(e.date))
+						e.remark =this.formateRemark(e.remark)
 					})
 					this.orderList = this.orderList.reverse()
 					// if(refresh == true){

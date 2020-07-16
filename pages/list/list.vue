@@ -186,6 +186,30 @@
 				this.fetchOrderList(this.nowdate,1,this.selectCategoryId,true)
 				// console.log(res)
 			},
+			getLength(str){
+				var len = 0;
+					for (var i = 0; i < str.length; i++) {
+						var c = str.charCodeAt(i);
+						//单字节加1
+						if ((c >= 0x0001 && c <= 0x007e) || (0xff60 <= c && c <= 0xff9f)) {
+							len++;
+						}
+						else {
+							len += 2;
+						}
+					}
+				return len;
+			
+			},
+			formateRemark(remark){
+				let length = this.getLength(remark)
+				if(length > 16){
+					// remark= remark.slice(0,16)
+					remark = remark.substring(0,10)
+					remark = remark + '...'
+				}
+				return remark
+			},
 			async fetchOrderList(nowdate,page,categoryid='',refresh = false){
 				this.firstLoad=false
 					uni.showLoading({
@@ -198,6 +222,7 @@
 					list.forEach(e=>{
 						e.date = e.date.replace(/-/g, '/')
 						e.date = formatDate(new Date(e.date))
+						e.remark =this.formateRemark(e.remark)
 					})
 					this.orderList = list
 					uni.hideLoading();
@@ -544,7 +569,7 @@
 				.info{
 					text-align: left;
 					display: flex;
-					justify-content: flex-start;
+					justify-content: space-between;
 					align-items: center;
 					
 					.text{
@@ -559,9 +584,11 @@
 							font-weight: bold;
 						}
 						.other-text{
+							width: 300rpx;
+							height: 40rpx;
 							box-sizing: border-box;
 							font-size: 26rpx;
-							
+							overflow: hidden;
 							color: #C0C0C0	;
 						}
 					}

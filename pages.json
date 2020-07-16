@@ -1,13 +1,12 @@
 {
 	"pages": [
 		{
-		    "path" : "pages/data/data",
-		    "style": {
-		    	"navigationStyle": "custom"
-		    	
-		    }
-		}
-		,
+		    "path" : "pages/wish/wish",
+		    "style" : {
+				"navigationStyle": "custom"
+			}
+		},
+		
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -16,19 +15,22 @@
 		}
 		,
 		{
+		    "path" : "pages/data/data",
+		    "style": {
+		    	"navigationStyle": "custom"
+		    	
+		    }
+		}
+		,
+		
+		{
 		    "path" : "pages/achievement/achievement",
 		    "style" : {
 				"navigationStyle": "custom"
 			}
 		},
 		
-		{
-		    "path" : "pages/wish/wish",
-		    "style" : {
-				"navigationStyle": "custom"
-			}
-		},
-		
+	
 		{
 		    "path" : "pages/fingerprint/fingerprint",
 		    "style": {

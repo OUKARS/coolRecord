@@ -162,13 +162,15 @@
 		width: 100%;
 		.list{
 			width: 100%;
-			.load-more{
-				font-size: 24rpx;
-				text-align: center;
-				color: #DCDCDC;
-				padding: 16rpx;
-			}
+			
 		}
+		
+	}
+	.load-more{
+		font-size: 24rpx;
+		text-align: center;
+		color: #DCDCDC;
+		padding: 16rpx;
 	}
 }
 </style>
