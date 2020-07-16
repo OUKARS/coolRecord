@@ -193,7 +193,8 @@
 					});
 				const res = await this.$api.fetchOrderList(nowdate,page,categoryid)
 				if(res.data.message!='无账单'){
-					var list = res.data
+					this.totalPage = res.data.totalPage
+					var list = res.data.data
 					list.forEach(e=>{
 						e.date = e.date.replace(/-/g, '/')
 						e.date = formatDate(new Date(e.date))

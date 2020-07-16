@@ -1,12 +1,27 @@
 {
 	"pages": [
 		{
+		    "path" : "pages/data/data",
+		    "style": {
+		    	"navigationStyle": "custom"
+		    	
+		    }
+		}
+		,
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationStyle": "custom"
 			}
 		}
 		,
+		{
+		    "path" : "pages/achievement/achievement",
+		    "style" : {
+				"navigationStyle": "custom"
+			}
+		},
+		
 		{
 		    "path" : "pages/wish/wish",
 		    "style" : {
@@ -23,14 +38,7 @@
 		}
 		,
 		
-		{
-		    "path" : "pages/data/data",
-		    "style": {
-		    	"navigationStyle": "custom"
-		    	
-		    }
-		}
-		,
+		
 		{
 		    "path" : "pages/ranking/ranking",
 		    "style" : {
@@ -57,12 +65,7 @@
 		
 		
 		
-		{
-		    "path" : "pages/achievement/achievement",
-		    "style" : {
-				"navigationStyle": "custom"
-			}
-		},
+		
 	
 		
 		

@@ -153,7 +153,8 @@
 				let formatdate = formatDate(date)
 				const res = await this.$api.fetchOrderList(formatdate,currPage,categoryId)
 				if(res.data && res.data.length>=0){
-					this.orderList = res.data
+					this.totalPage = res.data.totalPage
+					this.orderList = res.data.data
 					this.orderList.forEach(e=>{
 						e.date = e.date.replace(/-/g, '/')
 						e.date = formatDate(new Date(e.date))

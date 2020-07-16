@@ -170,4 +170,28 @@ page {
         opacity: 1.0;
     }
 }
+
+@keyframes icon-shanshuo {
+    from {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    to {
+        opacity: 1.0;
+    }
+}
+
+@-webkit-keyframes icon-shanshuo {
+    from {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    to {
+        opacity: 1.0;
+    }
+}
 </style>

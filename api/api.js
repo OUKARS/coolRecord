@@ -147,3 +147,15 @@ export const getRankingList = async (type,date) => {
 			date:date
 		})
 }
+
+export const getAchievement = async () => {
+
+		console.log('请求成就接口...')
+		return fly.get('/achievement/detail')
+}
+
+export const getSummary = async () => {
+
+		console.log('请求总结接口...')
+		return fly.get('/order/summary')
+}

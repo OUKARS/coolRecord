@@ -78,10 +78,10 @@
 						<view class="left">
 							
 							<view class="daynum-content">
-								您记录了<br /><text class="overview-text">5</text>天，
+								您记录了<br /><text class="overview-text">{{summary.dayNum}}</text>天，
 							</view>
 							<view class="recordnum-content">
-								记录了<br /><text class="overview-text">5</text>笔账单
+								记录了<br /><text class="overview-text">{{summary.recordNum}}</text>笔账单
 							</view>
 							
 						</view>
@@ -92,7 +92,7 @@
 				</view>
 				<view class="over-card animated fadeInUp .delay-08s">
 					<view class="over-header">
-						<text class="title">本月达标情况</text>
+						<text class="title">本月目标情况</text>
 						<text class="tip">截止至7月10日</text>
 					</view>
 					<view class="over-container">
@@ -102,10 +102,10 @@
 						<view class="left">
 							
 							<view class="daynum-content">
-								您在实际支出上<br />超出预算天数<br /><text class="over-text">5</text>天
+								您在实际支出上<br />超出预算天数<br /><text class="over-text">{{summary.overDayNum}}</text>天
 							</view>
 							<view class="recordnum-content">
-								超出预算周数<br /><text class="over-text">5</text>周
+								本月完成成就<br /><text class="over-text">5</text>个
 							</view>
 							
 						</view>
@@ -119,28 +119,28 @@
 					<view class="max-container">
 						<view class="max-item">
 							<view class="left-content">
-								<image class="category-img" :src="maxpayItem.categoryImgUrl" mode=""></image>
+								<image class="category-img" :src="summary.maxPay.categoryImgUrl" mode=""></image>
 							</view>
 							<view class="right-content">
 								<view class="info">
 									<view class="text">
 										<view class="category-text">
-											{{maxpayItem.categoryName}}
+											{{summary.maxPay.categoryName}}
 										</view>
 										<view class="other-text">
-											{{maxpayItem.remark}}
+											{{summary.maxPay.remark}}
 										</view>
 									</view>
 								</view>
 								<view class="num">
-									<view v-if="maxpayItem.type==0" class="rmb" style="color:red">
-										-{{maxpayItem.money}}
+									<view v-if="summary.maxPay.type==0" class="rmb" style="color:red">
+										-{{summary.maxPay.money}}
 									</view>
 									<view v-else class="rmb">
-										+{{maxpayItem.money}}
+										+{{summary.maxPay.money}}
 									</view>
 									<view class="time">
-										{{maxpayItem.date}}
+										{{summary.maxPay.date}}
 									</view>
 								</view>
 							</view>
@@ -152,28 +152,28 @@
 					<view class="max-container">
 						<view class="max-item">
 							<view class="left-content">
-								<image class="category-img" :src="maxpayItem.categoryImgUrl" mode=""></image>
+								<image class="category-img" :src="summary.maxIncome.categoryImgUrl" mode=""></image>
 							</view>
 							<view class="right-content">
 								<view class="info">
 									<view class="text">
 										<view class="category-text">
-											{{maxpayItem.categoryName}}
+											{{summary.maxIncome.categoryName}}
 										</view>
 										<view class="other-text">
-											{{maxpayItem.remark}}
+											{{summary.maxIncome.remark}}
 										</view>
 									</view>
 								</view>
 								<view class="num">
-									<view v-if="maxpayItem.type==0" class="rmb" style="color:red">
-										-{{maxpayItem.money}}
+									<view v-if="summary.maxIncome.type==0" class="rmb" style="color:red">
+										-{{summary.maxIncome.money}}
 									</view>
 									<view v-else class="rmb">
-										+{{maxpayItem.money}}
+										+{{summary.maxIncome.money}}
 									</view>
 									<view class="time">
-										{{maxpayItem.date}}
+										{{summary.maxIncome.date}}
 									</view>
 								</view>
 							</view>
@@ -219,15 +219,28 @@
 				openpicker:false,
 				activeName:'info',
 				firstLoad:true,
-				maxpayItem:{
-				  "orderId": 1,
-				  "categoryId": 1,
-				  "categoryName":"早餐",
-				  "categoryImgUrl":'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/01eat.png?x-oss-process=style/blog_img',
-				  "type": 0,
-				  "date": "2020-05-10",
-				  "remark": "暂无备注",
-				  "money":2
+				summary:{
+					dayNum:0,
+					overDayNum:0,
+					recordNum:0,
+					maxPay:{
+						categoryId:0,
+						categoryImgUrl:'',
+						categoryName:'暂无数据',
+						date:'暂无数据',
+						money:0,
+						remark:'暂无数据',
+						type:0
+					},
+					maxIncome:{
+						categoryId:0,
+						categoryImgUrl:'',
+						categoryName:'暂无数据',
+						date:'暂无数据',
+						money:0,
+						remark:'暂无数据',
+						type:1
+					}
 				},
 
 			}
@@ -266,7 +279,7 @@
 				}
 				var month = nowDate.getMonth() + 1;//注意月份需要+1
 				var year = nowDate.getFullYear();
-				var time =  year + char + this.completeDate(month) 
+				var time =  year + '-' + this.completeDate(month) 
 				return time
 			},
 			async fetchRoseData(type,date){
@@ -387,6 +400,53 @@
 				  uni.navigateTo({
 				  	 url: '../ranking/ranking'
 				  })
+			  },
+			  checkLocalSummary(){
+				  let that = this
+
+				  uni.getStorage({
+				      key: 'date_summary',
+				      success: function (res) {
+						  let nowDate = new Date();
+						  let time = nowDate.getFullYear()+'-'+that.completeDate(nowDate.getMonth()+1)+'-'+that.completeDate(nowDate.getDate())
+						  let summaryObject = res.data
+						  if(summaryObject.summaryDate == time)
+						  {
+							  console.log("今日已获取过")
+							  that.summary = summaryObject
+						  } else {
+							  console.log('今日未生成，发送总结请求')
+							  that.fetchSummary()}
+						  
+				      },
+					  fail:function(err){
+						  console.log("没有本地数据，发送请求")
+						  that.fetchSummary()
+					 }
+				  });
+			  },
+			  async fetchSummary(){
+				  // 查看本地是否有今日生成的
+				  const res = await this.$api.getSummary()
+				  
+				  if(res.data){
+					  let summaryDate = new Date(res.data.summaryDate)
+					  var day = summaryDate.getDate()
+					  var month = summaryDate.getMonth() + 1;//注意月份需要+1
+					  var year = summaryDate.getFullYear();
+					  var time =  year + '-' + this.completeDate(month) +'-'+this.completeDate(day) 
+					  res.data.summaryDate = time
+					  console.log(res.data.summaryDate)
+					  this.summary = res.data
+					  uni.setStorage({
+					      key: 'date_summary',
+					      data: res.data,
+					      success: function () {
+					          console.log('success');
+					      }
+					  });
+					  
+				  }
 			  }
 		},
 		onShow() {
@@ -401,6 +461,7 @@
 			var today = this.getNowFormatDay(nowDate)
 			this.nowdate = today
 			today = today+'-01'
+			this.checkLocalSummary()
 			this.fetchRoseData(0,today)
 			this.fetchLineData(today)
 			
@@ -818,3 +879,4 @@
 }
 
 </style>
+
