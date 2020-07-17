@@ -185,7 +185,7 @@
 						e.date = formatDate(new Date(e.date))
 						e.remark =this.formateRemark(e.remark)
 					})
-					this.orderList = this.orderList.reverse()
+					// this.orderList = this.orderList.reverse()
 					// if(refresh == true){
 					// 	uni.showToast({
 					// 	    title: '刷新成功',
