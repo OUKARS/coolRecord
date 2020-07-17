@@ -72,7 +72,7 @@
 				<view class="info-card animated fadeInUp">
 					<view class="info-header">
 						<text class="title">本月实时日报</text>
-						<text class="tip">截止至7月10日</text>
+						<text class="tip">{{endDate}}之前</text>
 					</view>
 					<view class="overview-container">
 						<view class="left">
@@ -83,6 +83,9 @@
 							<view class="recordnum-content">
 								记录了<br /><text class="overview-text">{{summary.recordNum}}</text>笔账单
 							</view>
+							<view class="totalsavenum-content">
+								总共存款：<br /> <text class="overview-text"> {{summary.totalSaveNum}}</text>元
+							</view>
 							
 						</view>
 						<view class="right">
@@ -92,8 +95,8 @@
 				</view>
 				<view class="over-card animated fadeInUp .delay-08s">
 					<view class="over-header">
-						<text class="title">本月目标情况</text>
-						<text class="tip">截止至7月10日</text>
+						<text class="title">本月达标情况</text>
+						<text class="tip">{{endDate}}之前</text>
 					</view>
 					<view class="over-container">
 						<view class="right">
@@ -104,8 +107,8 @@
 							<view class="daynum-content">
 								您在实际支出上<br />超出预算天数<br /><text class="over-text">{{summary.overDayNum}}</text>天
 							</view>
-							<view class="recordnum-content">
-								本月完成成就<br /><text class="over-text">5</text>个
+							<view class="wish-content">
+								本月完成愿望<br /><text class="wish-text">{{wishcompleteNum}}</text>个
 							</view>
 							
 						</view>
@@ -212,6 +215,7 @@
 				cHeight:'',
 				lineWidth:'',
 				lineHeight:'',
+				wishcompleteNum:0,
 				pixelRatio:1,
 				selectRoseType:0,
 				roseChartData:{},
@@ -219,10 +223,12 @@
 				openpicker:false,
 				activeName:'info',
 				firstLoad:true,
+				endDate:'暂无数据',
 				summary:{
 					dayNum:0,
 					overDayNum:0,
 					recordNum:0,
+					totalSaveNum:0,
 					maxPay:{
 						categoryId:0,
 						categoryImgUrl:'',
@@ -287,14 +293,14 @@
 				const res = await this.$api.fetchRoseData(type,1,date)
 				if(res.data){
 					this.roseChartData = res.data
-					// _self.showPie("canvasPie",this.roseChartData);
+					_self.showPie("canvasPie",this.roseChartData);
 				}
 			},
 			async fetchLineData(date){
 				const res = await this.$api.fetchLineData(0,date)
 				if(res.data){
 					this.lineChartData = res.data
-					// _self.showLineA("canvasLineA",this.lineChartData);
+					_self.showLineA("canvasLineA",this.lineChartData);
 				}
 				
 			},
@@ -401,6 +407,10 @@
 				  	 url: '../ranking/ranking'
 				  })
 			  },
+			  getNowDate(){
+				  let nowDate = new Date();
+				  this.endDate =(nowDate.getMonth()+1)+'月'+nowDate.getDate()+'日'
+			  },
 			  checkLocalSummary(){
 				  let that = this
 
@@ -447,7 +457,17 @@
 					  });
 					  
 				  }
-			  }
+			  },
+			  async fetchWishList(){
+				  let that = this
+			  	const res = await this.$api.wishGet()
+			  	if(res.data != '无愿望单') {
+			  		res.data.wishList.forEach(e => {
+						if(e.complete == 1)
+							that.wishcompleteNum++;
+					})
+			  	}
+			  },
 		},
 		onShow() {
 		},
@@ -464,6 +484,8 @@
 			this.checkLocalSummary()
 			this.fetchRoseData(0,today)
 			this.fetchLineData(today)
+			this.fetchWishList()
+			this.getNowDate()
 			
 		}
 	}
@@ -694,6 +716,10 @@
 						.recordnum-content{
 							margin: 10rpx 0;
 						}
+						.totalsavenum-content{
+							margin: 10rpx 0;
+							
+						}
 						.overview-text{
 							font-size: 56rpx;
 							color: #6327F6;
@@ -754,6 +780,12 @@
 						.over-text{
 							font-size: 56rpx;
 							color: #FF4500;
+							font-weight: bold;
+							margin-right: 5rpx;
+						}
+						.wish-text{
+							font-size: 56rpx;
+							color: #6327F6;
 							font-weight: bold;
 							margin-right: 5rpx;
 						}

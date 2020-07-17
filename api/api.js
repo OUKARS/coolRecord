@@ -50,10 +50,10 @@ export const fetchHomeChart = async () => {
 		return fly.get('/chart/home')
 }
 
-export const fetchOrderList = async (date,page,categoryid) => {
+export const fetchOrderList = async (date,page,categoryid,type) => {
 
 		console.log('请求账单列表接口...')
-		return fly.get('/order/list',{categoryId:categoryid,date:date,page:page})
+		return fly.get('/order/list',{categoryId:categoryid,date:date,page:page,type:type})
 }
 
 export const fetchOrderDetail = async (id) => {
@@ -158,4 +158,24 @@ export const getSummary = async () => {
 
 		console.log('请求总结接口...')
 		return fly.get('/order/summary')
+}
+
+export const wishComplete = async (level) => {
+
+		console.log('请求确认愿望接口...')
+		return fly.post('/wish/complete',{level:level})
+}
+
+export const wishSet = async (list) => {
+
+		console.log('请求新建愿望接口...')
+		return fly.post('/wish/set',{
+			wishlist:list
+			})
+}
+
+export const wishGet = async (list) => {
+
+		console.log('请求愿望列表接口...')
+		return fly.get('/wish/detail')
 }

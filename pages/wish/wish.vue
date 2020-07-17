@@ -2,30 +2,28 @@
 	<view class="wish-container">
 		<my-bar :nav="setNav"></my-bar>
 		<view class="wish-header">
-			<text v-if="showSaveBtn == false">设置愿望，按照上下顺序优先完成哦~</text>
-			<view v-else class="save-btn" @tap="post()">
+			<text v-if="showSaveBtn == false">设置愿望，记得点击保存哦~</text>
+			<view v-if="showSaveBtn != false" class="save-btn" @tap="post()">
 				保存修改
+			</view>
+			<view v-if="showSaveBtn != false" class="save-btn" @tap="cancelSave()">
+				取消修改
 			</view>
 		</view>
 		<view class="wrapper">
 			<view class="wish-content" v-for="item in wishList" :key="item.level">
-				<view class="wish-card card-active">
+				
+				<view class="wish-card card-active" :class="{'complete-card':item.complete == 1}">
 					<view class="level">
 						No.{{item.level}}
 					</view>
 					<view class="title">
 						{{item.name}}
 					</view>
-					<view class="money-content">
-						已存金额/目标金额:<br />
+					<view v-if="item.complete == 1" class="complete-text">已完成</view>
+					<view v-else class="money-content">
+						目标金额:<br />
 						<view class="money">
-							<view class="curmoney">
-								{{nowsave}}
-							</view>
-							<view class="line">
-								/
-							</view>
-							
 							<view class="totalmoney">
 								{{item.money}}
 							</view>
@@ -37,8 +35,11 @@
 							
 						</view>
 					</view>	
+					<view class="complete-btn" @tap="completeWish(item.complete,item.level)">
+						点击完成
+					</view>
 				</view>
-				<view class="menu">
+				<view class="menu" v-if="item.complete == 0">
 					<view class="btn up" v-if="item.level != 1" @tap="up(item.level)">
 						上移
 					</view>
@@ -83,7 +84,7 @@
 					</view>
 				</view>
 				<view class="btn-container">
-					<button class="wish-btn" type="default" @tap="addWish()">添加愿望</button>
+					<button class="wish-btn" type="default" @tap="wish()">{{wishData.level == -1?'添加愿望':'编辑愿望'}}</button>
 				</view>
 			</view>
 		</view>
@@ -97,38 +98,23 @@
 				setNav:{
 					'color':'red',  //字体颜色
 					'isdisPlayNavTitle':true, //是否显示返回按钮，由于导航栏是共用的，把所有的东西封装好，
-					'navTitle':'本月愿望单' //导航标题
+					'navTitle':'本月支出愿望单' //导航标题
 				},
 				nowsave:0,
 				showDetail:false,
 				showSaveBtn:false,
 				wishData:{
 					name:'',
-					money:0
+					money:0,
+					level:-1,
+					complete:0
 				},
-				wishList:[
-					{
-						name:'买一把吉他买一把吉他买一把吉他买一把吉他买一把吉他买一把吉他',
-						money :200,
-						level:1
-					},
-					{
-						name:'捐款200元',
-						money :200,
-						level:2
-					},
-					{
-						name:'口红',
-						money :200,
-						level:3
-					},
-					{
-						name:'口红',
-						money :200,
-						level:4
-					}
-				]
+				backup:[],
+				wishList:[]
 			};
+		},
+		onLoad() {
+			this.fetchWishList()
 		},
 		methods:{
 			up(level){ 
@@ -154,6 +140,7 @@
 			editItem(level){
 				this.showSaveBtn = true;
 				let index = level -1
+				console.log(index)
 				this.wishData = {
 					name:this.wishList[index].name,
 					money:this.wishList[index].money,
@@ -163,15 +150,65 @@
 			　　　　　　duration: 0,//过渡时间必须为0，否则运行到手机会报错
 			　　　　　　scrollTop:0 //滚动到实际距离是元素距离顶部的距离减去最外层盒子的滚动距离（如res.top - data.top）
 		　　　　})
-				this.showDetail =true
+				this.showDetail = true
 			},
 			deleteItem(level){
-				this.showSaveBtn = true;
-				let index = level -1
-				for(let i = index;i<this.wishList.length;i++){
-					this.wishList[i].level--;
+				let that = this
+				uni.showModal({
+				    title: '删除愿望',
+				    content: '确定要删除该愿望？',
+				    success: function (res) {
+				        if (res.confirm) {
+				            console.log('用户确定删除');
+							that.showSaveBtn = true;
+							let index = level -1
+							for(let i = index;i<that.wishList.length;i++){
+								that.wishList[i].level--;
+							}
+							that.wishList.splice(index, 1);
+							
+				        } else if (res.cancel) {
+				            console.log('用户取消删除');
+				        }
+				    }
+				});
+				
+			},
+			completeWish(complete,level){
+				if(complete == 1) {
+					return 
 				}
-				this.wishList.splice(index, 1);
+				let that = this
+				uni.showModal({
+					title:'修改愿望状态',
+					content:'确定要将该愿望状态修改为已完成吗？此操作不可更改。',
+					showCancel:true,
+					cancelText:'取消',
+					confirmText:'确定',
+					success:async function(res){
+						if (res.confirm) {
+								const result = await that.$api.wishComplete(level)
+								if(result.data == '修改状态成功')
+								{
+									uni.showModal({
+										title:'哦耶',
+										content:'您已完成该愿望',
+										showCancel:false,
+										confirmText:'知道了',
+									})
+								} else {
+									uni.showModal({
+										title:'啊哦',
+										content:'修改愿望状态，请重试',
+										showCancel:false,
+										confirmText:'知道了',
+									})
+								}
+								console.log('用户点击确定');
+						}
+						that.fetchWishList()
+					}
+				})
 			},
 			closeDetail(){
 				this.showDetail = false;
@@ -180,7 +217,9 @@
 			addNewWish(){
 				this.wishData={
 					name:'',
-					money:0
+					money:0,
+					level:-1,
+					complete:0
 				}
 				uni.pageScrollTo({
 					　　　　　　duration: 0,//过渡时间必须为0，否则运行到手机会报错
@@ -188,13 +227,52 @@
 		　　　　})
 				this.showDetail = true
 			},
-			addWish(){
+			wish(){
 				this.showSaveBtn = true;
-				this.wishList.push(this.wishData)
+				let level = this.wishData.level
+				if(level != -1){
+					this.wishList[level-1] = this.wishData
+				} else {
+					let length = this.wishList.length
+					this.wishData.level = length+1,
+					this.wishList.push(this.wishData)
+				}
+				
+				this.showDetail = false
 				console.log(this.wishData)
 			},
-			post(){
-				
+			async post(){
+				const res = await this.$api.wishSet(this.wishList)
+				if(res.data == '新建愿望物品成功！')
+				{
+					uni.showModal({
+					title:'哦耶',
+					content:'已保存',					showCancel:false,
+					confirmText:'知道了',					
+				})
+				this.showSaveBtn = false
+				} else {
+					uni.showModal({
+						title:'哎呀',
+						content:'保存失败，请重试！',
+						showCancel:false,
+						confirmText:'知道了',
+					})
+				}
+				this.fetchWishList()
+				console.log(res)
+				this.wishData = {}
+			},
+			async fetchWishList(){
+				const res = await this.$api.wishGet()
+				if(res.data != '无愿望单') {
+					this.backup = res.data.wishList
+					this.wishList = res.data.wishList
+				}
+			},
+			cancelSave(){
+				this.wishList = this.backup
+				this.showSaveBtn = false
 			}
 		}
 	}
@@ -213,6 +291,8 @@
 		text-align: center;
 		margin: 40rpx 0 20rpx;
 		font-weight: bold;
+		display: flex;
+		justify-content: space-around;
 		.save-btn{
 			width: 200rpx;
 			margin: 0 auto;
@@ -233,12 +313,13 @@
 			display: flex;
 			justify-content: space-between;
 			.wish-card{
+				position: relative;
 				width:80%;
 				box-sizing: border-box;
 				padding: 40rpx;
 				border-radius: 28rpx;
 				height: auto;
-				min-height: 300rpx;
+				min-height: 320rpx;
 				.level{
 					font-size: 26rpx;
 					color: #808080;
@@ -274,10 +355,32 @@
 						}
 					}
 				}
-				
+				.complete-text{
+					font-weight: bold;
+					font-size: 48rpx;
+				}
+				.complete-btn{
+					box-shadow:15rpx 15rpx 20rpx rgba(50,50,93,.1),5rpx 15rpx 20rpx rgba(0,0,0,.1);
+					box-sizing: border-box;
+					padding: 6rpx 12rpx;
+					text-align: center;
+					background: rgb(255,227,108);
+					width: 156rpx;
+					height: 72rpx;
+					line-height: 60rpx;
+					position: absolute;
+					border-top-left-radius: 28rpx;
+					border-bottom-right-radius: 28rpx;
+					bottom: 0;
+					right: 0;
+				}
+			}
+			.complete-card{
+				-webkit-filter: brightness(.5);
+				filter: brightness(.5);
 			}
 			.menu{
-				height: 300rpx;
+				height: 320rpx;
 				width: 16%;
 				display: flex;
 				flex-direction: column;
@@ -329,7 +432,7 @@
 	.wishdetail-container{
 		position:absolute;
 		left:50%;
-		top:30%;
+		top:25%;
 		background: #fff;
 		width: 600rpx;
 		margin-left: -300rpx;

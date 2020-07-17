@@ -33,7 +33,7 @@
 								导出Excel
 							</view>
 							<view class="bottom">
-								选择时间段以下载账单。
+								选择下方时间段后，点击下载按钮。
 							</view>
 						</view>
 						<view class="date-btn"  @tap="showDatePicker()">

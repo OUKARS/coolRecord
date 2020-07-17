@@ -215,7 +215,7 @@
 					uni.showLoading({
 					    title: '加载中...'
 					});
-				const res = await this.$api.fetchOrderList(nowdate,page,categoryid)
+				const res = await this.$api.fetchOrderList(nowdate,page,categoryid,1)
 				if(res.data.message!='无账单'){
 					this.totalPage = res.data.totalPage
 					var list = res.data.data
@@ -253,6 +253,7 @@
 			clearSelectItem(){
 				this.selectCategoryItem = ''
 				this.selectCategoryId = ''
+				this.fetchOrderList(this.nowdate,1,this.selectCategoryId)
 			},
 			changeSelectType(type){
 				this.selectType = !type

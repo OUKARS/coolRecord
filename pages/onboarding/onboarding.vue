@@ -26,10 +26,10 @@
 					</view>
 					<view class="detail">
 						<view class="header">
-							记录流水 查看收支
+							记录流水 统计多样
 						</view>
 						<view class="name">
-							小巧轻量
+							“麻雀虽小，五脏俱全”
 						</view>
 
 					</view>
@@ -41,10 +41,10 @@
 					</view>
 					<view class="detail">
 						<view class="header">
-							数据安全 目标定制
+							实时收支，目标定制
 						</view>
 						<view class="name">
-							为你制定每月计划
+							助力培养良好消费习惯
 						</view>
 						<view class="text">
 							<view class="top">
@@ -348,7 +348,7 @@
 			}
 			.name{
 				margin-top: 20rpx;
-				font-size: 60rpx;
+				font-size: 48rpx;
 				font-weight: bold;
 				color: rgb(255,227,108);
 			}

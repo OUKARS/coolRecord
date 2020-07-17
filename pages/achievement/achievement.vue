@@ -63,7 +63,7 @@
 								name:'studyNum',
 								id:1,
 								title:'学习小将',
-								desc:'本月学习金额超过50',
+								desc:'本月学习金额超过30',
 								num:30,
 								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/co-study.png?x-oss-process=style/blog_img'
 							},
@@ -89,7 +89,7 @@
 								name:'societyNum',
 								id:1,
 								title:'点头之交',
-								desc:'本月社交金额超过50',
+								desc:'本月社交金额超过100',
 								num:100,
 								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/co-shejiao.png?x-oss-process=style/blog_img'
 							},
@@ -97,7 +97,7 @@
 								name:'societyNum',
 								id:2,
 								title:'社交能手',
-								desc:'本月社交金额超过100',
+								desc:'本月社交金额超过200',
 								num:200,
 								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/silver-shejiao.png?x-oss-process=style/blog_img'
 							},
@@ -105,7 +105,7 @@
 								name:'societyNum',
 								id:3,
 								title:'大朋友圈',
-								desc:'本月社交金额超过200',
+								desc:'本月社交金额超过300',
 								num:300,
 								url:'https://oukarsblog.oss-cn-hangzhou.aliyuncs.com/weixin_miniapp_img/icon/achievement/gold-shejiao.png?x-oss-process=style/blog_img'
 							},

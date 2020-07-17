@@ -454,6 +454,7 @@
 
 		}
 		.headerctive{
+			
 			height: 120rpx !important;
 			transition: all 1s;
 			-webkit-transition: all 1s;

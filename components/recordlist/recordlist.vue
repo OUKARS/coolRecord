@@ -174,7 +174,7 @@
 			async fetchTodayOrderList(currPage = 1,categoryId = '',refresh = false){
 				let date = new Date()
 				let formatdate = formatDate(date)
-				const res = await this.$api.fetchOrderList(formatdate,currPage,categoryId)
+				const res = await this.$api.fetchOrderList(formatdate,currPage,categoryId,0)
 				
 				if(res.data && res.data.data.length>=0){
 					this.totalPage = res.data.totalPage
